@@ -6,11 +6,10 @@ use App\Traits\UserLogoTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
-    use Notifiable, HasRoles, UserLogoTrait;
+    use Notifiable, UserLogoTrait;
 
     /**
      * The attributes that are mass assignable.
