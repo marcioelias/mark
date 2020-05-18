@@ -1,0 +1,85 @@
+{
+    "menu": [
+        {
+            "url": "admin.index",
+            "name": "Home",
+            "slug": "home",
+            "badge": "",
+            "badgeClass": "badge badge-warning badge-pill float-right",
+            "icon": "feather icon-home"
+        },
+        {
+            "url": "",
+            "name": "Cadastros",
+            "icon": "feather icon-zap",
+            "submenu": [
+                {
+                    "url": "user.index",
+                    "name": "Clientes",
+                    "activeUrls": ["admin/user", "admin/user/create", "admin/user/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "plan.index",
+                    "activeUrls": ["admin/plan", "admin/plan/create", "admin/plan/edit"],
+                    "name": "Planos",
+                    "i18n": "nav.sk_layout_fixed_navbar"
+                }
+            ]
+        },
+        {
+            "url": "",
+            "name": "Text",
+            "icon": "feather icon-message-square",
+            "submenu": [
+                {
+                    "url": "sms_buy.index",
+                    "activeUrls": ["admin/sms_buy", "admin/sms_buy/create"],
+                    "name": "Buy",
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "sms_package.index",
+                    "activeUrls": ["admin/sms_package", "admin/sms_package/create", "admin/sms_package/edit"],
+                    "name": "Packages",
+                    "i18n": "nav.sk_layout_fixed_navbar"
+                }
+            ]
+        },
+        {
+            "url": "",
+            "navheader": "Movimentação",
+            "icon": ""
+        },
+        {
+            "url": "",
+            "name": "Starter kit",
+            "icon": "feather icon-zap",
+            "submenu": [
+                {
+                    "url": "",
+                    "name": "Clientes",
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "",
+                    "name": "Planos",
+                    "i18n": "nav.sk_layout_fixed_navbar"
+                }
+            ]
+        },
+
+        {
+            "url": "",
+            "name": "Documentation",
+            "icon": "feather icon-folder",
+            "i18n": "nav.documentation"
+        },
+        {
+            "url": "",
+            "name": "Raise Support",
+            "icon": "feather icon-life-buoy",
+            "i18n": "nav.raise_support"
+        }
+    ]
+}

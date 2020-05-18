@@ -1,0 +1,72 @@
+{
+    "chave_unica": "82e98fd17562ae451ba4f9e3b9c2eab6",
+    "produto": {
+        "chave": "d166bc9efec4b99953fa17aa5912d648",
+        "codigo": "123",
+        "nome": "Plano 1000"
+    },
+    "tipoPostback": {
+        "codigo": 1,
+        "descricao": "Sistema"
+    },
+    "tipoEvento": {
+        "codigo": 1,
+        "descricao": "Aguardando Pagamento"
+    },
+    "venda": {
+        "codigo": "abc123",
+        "plano": 35553,
+        "cupom": 12312,
+        "dataInicio": "2020-05-10 19:30:45",
+        "dataFinalizada": "2020-05-10 19:35:13",
+        "meioPagamento": "Monetizze",
+        "formaPagamento": "Cartão de crédito",
+        "garantiaRestante": 0,
+        "status": "Finalizada",
+        "valor": 129.90,
+        "quantidade": 1,
+        "valorRecebido": 129.90,
+        "tipo_frete": 999999,
+        "descr_tipo_frete": "",
+        "frete": 0,
+        "onebuyclick": "",
+        "venda_upsell": "",
+        "src": "",
+        "utm_source": "",
+        "utm_medium": "",
+        "utm_content": "",
+        "utm_campaign": "",
+        "linkBoleto": "https://www.google.com.br",
+        "linha_digitavel": "75681.44871 01002.680823 00450.520002 1 71890000030070"
+    },
+    "plano": {
+        "codigo": 35553,
+        "referencia": "ABC35553",
+        "nome": "Plano 1000",
+        "quantidade": 1,
+        "periodicidade": "Mensal"
+    },
+    "assinatura": {
+        "codigo": 199,
+        "status": "Ativa",
+        "data_assinatura": "2020-05-10 19:35:13",
+        "parcela": 1
+    },
+    "comprador": {
+        "nome": "João da Silva Nascimento",
+        "email": "joao.silva@email.com",
+        "data_nascimento": "1987-8-15",
+        "cnpj_cpf": "999.999.999-99",
+        "telefone": "48999999999",
+        "cep": "88888000",
+        "endereco": "Rua Airton Senna",
+        "numero": "115",
+        "complemento": "Casa",
+        "bairro": "Centro",
+        "cidade": "São João do PHP",
+        "estado": "SC",
+        "pais": "Brasil"
+    },
+    "order_bump": 1,
+    "url_recuperacao": "https://www.google.com.br"
+}
