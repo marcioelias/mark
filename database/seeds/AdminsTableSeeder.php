@@ -12,7 +12,6 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins')->truncate();
         DB::table('admins')->insert([
             'id' => 'e3a1758a-bd31-4ce1-91cb-49ca9a5bf276',
             'name' => 'Administrator',

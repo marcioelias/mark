@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Notifications\CustomVerifyEmailNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -37,7 +39,21 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmailNotification($this));
+    }
+
     public function plan() {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function temp_password() {
+        return $this->hasOne(TempPassword::class);
     }
 }

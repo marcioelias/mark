@@ -2,8 +2,6 @@
 
 use App\Models\Plan;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 class PlansTableSeeder extends Seeder
 {
@@ -14,9 +12,6 @@ class PlansTableSeeder extends Seeder
      */
     public function run()
     {
-        Schema::disableForeignKeyConstraints();
-        DB::table('plans')->truncate();
-        Schema::enableForeignKeyConstraints();
         Plan::create([
             'marketplace_code' => 'd166bc9efec4b99953fa17aa5912d648',
             'plan_name' => 'Plano 1000',

@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'failed' => 'Essas credenciais não foram encontradas em nossos registros.',
+    'deactivated' => 'Esta conta foi desativada, verifique o pagamento de sua mensalidade',
+    'failed' => 'E-mail/Senha inválidos, verifique os dados informados.',
     'throttle' => 'Muitas tentativas de login. Tente novamente em :seconds segundos.',
 
 ];

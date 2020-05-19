@@ -16,7 +16,7 @@
                     <div class="d-flex align-items-end mb-2">
                         <img src="{{ asset('images/logo/logo-success.png') }}" alt="" srcset="" class="mr-2">
                         <p>
-                            Olá, <strong>{{ $user->name }}</strong>! Seja bem vindo ao Mark.
+                            Olá, <strong>teste</strong>! Seja bem vindo ao Mark.
                         </p>
                     </div>
                 </div>
@@ -28,8 +28,8 @@
                 <p>
                     Para ter acesso ao sistema utilize os seguites dados:
                     <ul>
-                        <li><strong>Login:</strong> {{ $user->email }}</li>
-                        <li><strong>Senha:</strong> {{ $password }}</li>
+                        <li><strong>Login:</strong> teste</li>
+                        <li><strong>Senha:</strong> teste</li>
                     </ul>
                 </p>
                 <hr>

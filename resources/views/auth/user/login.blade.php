@@ -19,10 +19,10 @@
           <div class="card rounded-0 mb-0 px-2">
             <div class="card-header pb-1">
               <div class="card-title">
-                <h4 class="mb-0">Acesso ao MARK</h4>
+                <h4 class="mb-0">Bem vindo a <strong>{{ config('app.name') }}</strong></h4>
               </div>
             </div>
-            <p class="px-2">Bem vindo, informe seus dados para continuar</p>
+            <p class="px-2">Informe seus dados de acesso para continuar</p>
             <div class="card-content">
               <div class="card-body pt-1">
                 <form method="POST" action="{{ route('login') }}">
@@ -89,7 +89,7 @@
                 <div class="divider-text">Não é nosso cliente?</div>
               </div>
               <div class="footer-btn d-inline">
-                <a href="#" class="btn btn-success btn-block">Adquira já seu acesso!</a>
+                <a href="{{ env('APP_URL_BUY') }}" class="btn btn-info btn-block">Contrate agora mesmo!</a>
               </div>
             </div>
           </div>

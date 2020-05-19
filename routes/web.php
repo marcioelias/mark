@@ -3,10 +3,14 @@
 
 
 
+Route::get('/teste', function() {
+	return view('mail.html.layout');
+});
+
 //Auth::routes(['verify' => true]);
 
 /* Webhook routes */
-Route::post('webhook/system/monetizze', 'WebhookController@systemWebhook');
+Route::post('webhook/system/monetizze', 'WebhookMonetizzeController@receive');
 
 /* Administrative routes */
 Route::prefix('admin')->group(function() {
@@ -56,11 +60,6 @@ Route::prefix('')->group(function() {
 		Route::get('password/confirm', 'Auth\User\ConfirmPasswordController@showConfirmForm')->name('password.confirm');
 		Route::post('password/confirm', 'Auth\User\ConfirmPasswordController@confirm');
 	});
-
-	Route::get('/teste', function() {
-		return view('mail.html.layout');
-	})->middleware('verified');
-
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {
 		Route::get('email/verify/{id}/{hash}', 'Auth\User\VerificationController@verify')->name('verification.verify');
