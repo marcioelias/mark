@@ -48,17 +48,19 @@ Route::prefix('')->group(function() {
 		Route::get('password/reset/{token}', 'Auth\User\ResetPasswordController@showResetForm')->name('password.reset');
 	});
 
-	Route::middleware(['auth:web'])->group(function() {
+	Route::middleware(['auth:web', 'active'])->group(function() {
 		Route::get('email/verify', 'Auth\User\VerificationController@show')->name('verification.notice');
 		Route::get('email/resend', 'Auth\User\VerificationController@resend')->name('verification.resend');
 	});
 
-	Route::middleware(['auth:web', 'verified'])->group(function() {
+	Route::middleware(['auth:web', 'verified', 'active'])->group(function() {
 		Route::get('/', 'HomeController@index')->name('index');
 
 		Route::post('logout', 'Auth\User\LoginController@logout')->name('logout');
 		Route::get('password/confirm', 'Auth\User\ConfirmPasswordController@showConfirmForm')->name('password.confirm');
 		Route::post('password/confirm', 'Auth\User\ConfirmPasswordController@confirm');
+		Route::get('password/change', 'Auth\User\LoginController@showChangePasswordForm')->name('password.change');
+		Route::post('password/change', 'Auth\User\LoginController@changePassword');
 	});
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {

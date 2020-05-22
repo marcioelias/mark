@@ -37,9 +37,10 @@
             'inputValue' => $smsPackage->sms_amount
         ],
         [
-            'type' => 'number',
+            'type' => 'text',
             'field' => 'package_value',
             'label' => 'Valor',
+            'css' => 'money',
             'required' => true,
             'inputSize' => 6,
             'icon' => [

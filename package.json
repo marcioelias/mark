@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "apexcharts": "^3.19.0",
+        "jquery-mask-plugin": "^1.14.16",
         "select2": "^4.0.13",
         "sweetalert2": "^9.10.13"
     }

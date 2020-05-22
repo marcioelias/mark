@@ -124,7 +124,21 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $this->breadcrumbs = [
+            [
+                'name' => 'Cadastros'
+            ],
+            [
+                'link'=>"/admin/user",
+                'name'=>"Clientes"
+            ],
+            [
+                'name'=>"Alterar"
+            ]
+        ];
+
+        $plans = Plan::orderBy('plan_name', 'asc')->get();
+        return $this->getView('users.edit')->withPlans($plans)->withUser($user);
     }
 
     /**
@@ -136,7 +150,16 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'customer_code' => "required|unique:users,customer_code,$user->id,id",
+            'phone_number' => 'required',
+            'plan_id' => 'required',
+        ]);
+
+        $user->fill($request->all());
+        $user->active = ($request->active ?? false) ? true : false;
+        return response()->json($user->save());
     }
 
     /**

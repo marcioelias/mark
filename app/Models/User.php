@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone_number', 'customer_code', 'plan_id', 'password',
+        'name', 'email', 'phone_number', 'customer_code', 'plan_id', 'password', 'first_login_at'
     ];
 
     /**
@@ -48,6 +48,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmailNotification($this));
+    }
+
+    public function scopeActive($query) {
+        return $query->where('active', true);
     }
 
     public function plan() {

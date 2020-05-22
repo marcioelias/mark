@@ -37,17 +37,18 @@
                 'inputValue' => $plan->num_postbacks
             ],
             [
-                'type' => 'number',
+                'type' => 'text',
                 'field' => 'plan_value',
                 'label' => 'Valor',
                 'required' => true,
                 'inputSize' => 6,
+                'css' => 'money',
                 'icon' => [
                     'side' => 'left',
                     'type' => 'dollar-sign',
                     'divider' => true
                 ],
-                'inputValue' => $plan->value
+                'inputValue' => $plan->plan_value
             ],
         ]
     ])

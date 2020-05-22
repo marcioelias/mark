@@ -64,6 +64,7 @@ mix.copy('node_modules/sweetalert2/dist/sweetalert2.min.js', 'public/js/scripts'
 mix.copy('node_modules/sweetalert2/dist/sweetalert2.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/css/select2.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/js/select2.full.min.js', 'public/js/scripts');
+mix.copy('node_modules/jquery-mask-plugin/dist/jquery.mask.min.js', 'public/js/scripts');
 
 mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .js('resources/js/core/app.js', 'public/js/core')

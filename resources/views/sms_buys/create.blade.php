@@ -15,11 +15,12 @@
                 'inputSize' => 6
             ],
             [
-                'type' => 'number',
+                'type' => 'text',
                 'field' => 'unitary_value',
                 'label' => 'Valor Unitário',
                 'required' => true,
                 'inputSize' => 6,
+                'css' => 'money',
                 'icon' => [
                     'side' => 'left',
                     'type' => 'dollar-sign',

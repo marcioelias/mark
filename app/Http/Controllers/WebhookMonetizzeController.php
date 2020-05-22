@@ -38,7 +38,7 @@ class WebhookMonetizzeController extends Controller implements Postback
 
         $user = $this->getUser($postback);
 
-        if (!$user->count() ?? false) {
+        if (!$user) {
             /* novo usuário, trata da criação do mesmo no sistema */
             $this->createNewUser($postback, $plan);
         } else {

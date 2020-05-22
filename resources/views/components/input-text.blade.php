@@ -16,7 +16,7 @@
     <x-label :label="$label" :field="$field" />
     @endisset
     <fieldset class="position-relative has-icon-{{ $icon['side'] }} {{ $icon['divider'] ? 'input-divider-left' : '' }}">
-        <input type="text" name="{{ $field }}" class="form-control" id="{{$id}}" value="{{ isset($inputValue) ? $inputValue : old($field) }}" placeholder="{{ isset($label) ? $label : '' }}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }} {{ $readOnly ? 'readonly' : '' }}>
+        <input type="text" name="{{ $field }}" class="form-control {{ $css }}" id="{{$id}}" value="{{ isset($inputValue) ? $inputValue : old($field) }}" placeholder="{{ isset($label) ? $label : '' }}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }} {{ $readOnly ? 'readonly' : '' }}>
         <div class="form-control-position">
             <i class="feather icon-{{ $icon['type'] }}"></i>
         </div>

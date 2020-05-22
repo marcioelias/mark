@@ -1,55 +1,99 @@
 @extends('layouts.crud.edit', [
-    'title' => 'Alterar Pacote',
-    'route' => route('sms_package.update', $smsPackage->id),
-    'redirect' => route('sms_package.index')
+    'title' => 'Alterar Cliente',
+    'route' => route('user.update', $user->id),
+    'redirect' => route('user.index')
 ])
 
 @section('create-form')
-@component('components.form-group', [
-    'inputs' => [
-        [
-            'type' => 'text',
-            'field' => 'sms_package_name',
-            'label' => 'Pacote',
-            'required' => true,
-            'inputSize' => 10,
-            'inputValue' => $smsPackage->sms_package_name
-        ],
-        [
-            'type' => 'checkbox',
-            'field' => 'active',
-            'label' => 'Ativo',
-            'required' => true,
-            'inputSize' => 2,
-            'checked' => $smsPackage->active
-        ]
-    ]
-])
-@endcomponent
-@component('components.form-group', [
-    'inputs' => [
-        [
-            'type' => 'number',
-            'field' => 'sms_amount',
-            'label' => 'Quantidade de SMS',
-            'required' => true,
-            'inputSize' => 6,
-            'inputValue' => $smsPackage->sms_amount
-        ],
-        [
-            'type' => 'number',
-            'field' => 'package_value',
-            'label' => 'Valor',
-            'required' => true,
-            'inputSize' => 6,
-            'icon' => [
-                'side' => 'left',
-                'type' => 'dollar-sign',
-                'divider' => true
+    @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'text',
+                'field' => 'name',
+                'label' => 'Nome',
+                'required' => true,
+                'inputSize' => 6,
+                'inputValue' => $user->name
             ],
-            'inputValue' => $smsPackage->package_value
+            [
+                'type' => 'text',
+                'field' => 'customer_code',
+                'label' => 'Código do cliente',
+                'required' => true,
+                'inputSize' => 4,
+                'inputValue' => $user->customer_code
+            ],
+            [
+                'type' => 'checkbox',
+                'field' => 'active',
+                'label' => 'Ativo',
+                'checked' => true,
+                'required' => true,
+                'inputSize' => 2,
+                'checked' => $user->active
+            ]
         ]
-    ]
-])
-@endcomponent
+    ])
+    @endcomponent
+    @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'text',
+                'field' => 'email',
+                'label' => 'E-mail',
+                'required' => true,
+                'inputSize' => 6,
+                'icon' => [
+                    'side' => 'left',
+                    'type' => 'mail',
+                    'divider' => true
+                ],
+                'readOnly' => true,
+                'inputValue' => $user->email
+            ],
+            [
+                'type' => 'text',
+                'field' => 'phone_number',
+                'label' => 'Telefone',
+                'required' => true,
+                'inputSize' => 6,
+                'icon' => [
+                    'side' => 'left',
+                    'type' => 'phone',
+                    'divider' => true
+                ],
+                'inputValue' => $user->phone_number
+            ],
+        ]
+    ])
+    @endcomponent
+    @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'select',
+                'field' => 'plan_id',
+                'label' => 'Plano',
+                'items' => $plans,
+                'displayField' => 'plan_name',
+                'keyField' => 'id',
+                'inputSize' => 4,
+                'indexSelected' => $user->plan_id
+            ]/* ,
+            [
+                'type' => 'password',
+                'field' => 'password',
+                'label' => 'Senha',
+                'required' => true,
+                'inputSize' => 4
+            ],
+            [
+                'type' => 'password',
+                'field' => 'password_confirmation',
+                'label' => 'Confirmação',
+                'required' => true,
+                'inputSize' => 4
+            ] */
+        ]
+    ])
+    @endcomponent
 @endsection

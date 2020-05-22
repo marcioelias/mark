@@ -52,6 +52,7 @@
                 'label' => 'Telefone',
                 'required' => true,
                 'inputSize' => 6,
+                'css' => 'phone_with_ddd',
                 'icon' => [
                     'side' => 'left',
                     'type' => 'phone',

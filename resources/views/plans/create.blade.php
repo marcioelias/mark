@@ -34,11 +34,12 @@
                 'inputSize' => 6
             ],
             [
-                'type' => 'number',
+                'type' => 'text',
                 'field' => 'plan_value',
                 'label' => 'Valor',
                 'required' => true,
                 'inputSize' => 6,
+                'css' => 'money',
                 'icon' => [
                     'side' => 'left',
                     'type' => 'dollar-sign',
