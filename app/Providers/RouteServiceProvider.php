@@ -9,6 +9,7 @@ class RouteServiceProvider extends ServiceProvider
 {
 
     const HOME = '/';
+    const FIRST_LOGIN = '/password/change';
     const ADMIN_HOME = '/admin';
 
     /**

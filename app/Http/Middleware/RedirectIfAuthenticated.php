@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RedirectIfAuthenticated
 {
@@ -20,13 +21,13 @@ class RedirectIfAuthenticated
     {
         switch ($guard) {
             case 'admin':
-                if (Auth::guard($guard)->check()) {
+                if (Auth::guard('admin')->check()) {
                     return redirect(RouteServiceProvider::ADMIN_HOME);
                 }
                 break;
 
             default:
-                if (Auth::guard($guard)->check()) {
+                if (Auth::guard('web')->check()) {
                     return redirect(RouteServiceProvider::HOME);
                 }
                 break;

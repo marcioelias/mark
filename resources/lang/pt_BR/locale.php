@@ -8,5 +8,10 @@ return [
     "Home" => "Home",
     "Text" => "SMS",
     "Buy" => "Comprar",
-    "Packages" => "Pacotes"
+    "Packages" => "Pacotes",
+    "Tags" => "Tags",
+    "Produts" => "Produtos",
+    "Configurations" => "Configurações",
+    "Plataforms" => "Plataformas",
+    'Funnels' => "Funis"
 ];

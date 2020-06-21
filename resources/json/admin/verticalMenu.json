@@ -45,41 +45,6 @@
                     "i18n": "nav.sk_layout_fixed_navbar"
                 }
             ]
-        },
-        {
-            "url": "",
-            "navheader": "Movimentação",
-            "icon": ""
-        },
-        {
-            "url": "",
-            "name": "Starter kit",
-            "icon": "feather icon-zap",
-            "submenu": [
-                {
-                    "url": "",
-                    "name": "Clientes",
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "",
-                    "name": "Planos",
-                    "i18n": "nav.sk_layout_fixed_navbar"
-                }
-            ]
-        },
-
-        {
-            "url": "",
-            "name": "Documentation",
-            "icon": "feather icon-folder",
-            "i18n": "nav.documentation"
-        },
-        {
-            "url": "",
-            "name": "Raise Support",
-            "icon": "feather icon-life-buoy",
-            "i18n": "nav.raise_support"
         }
     ]
 }

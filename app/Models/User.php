@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\User\PlataformConfig;
+use App\Models\User\Product;
+use App\Models\User\Tag;
 use App\Notifications\CustomVerifyEmailNotification;
+use App\Traits\ActiveRecordsTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
@@ -10,7 +14,7 @@ use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
+    use Notifiable, ActiveRecordsTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone_number', 'customer_code', 'plan_id', 'password', 'first_login_at'
+        'name', 'email', 'phone_number', 'customer_code', 'plan_id', 'password', 'first_login_at', 'active'
     ];
 
     /**
@@ -37,7 +41,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'first_login_at' => 'datetime'
+        'first_login_at' => 'datetime',
+        'active' => 'boolean'
     ];
 
     /**
@@ -60,5 +65,21 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function temp_password() {
         return $this->hasOne(TempPassword::class);
+    }
+
+    public function tags() {
+        return $this->hasMany(Tag::class);
+    }
+
+    public function products() {
+        return $this->hasMany(Product::class);
+    }
+
+    public function plataformConfigs() {
+        return $this->hasMany(PlataformConfig::class);
+    }
+
+    public function plataform() {
+        return $this->hasOneThrough(Plataform::class, PlataformConfig::class);
     }
 }

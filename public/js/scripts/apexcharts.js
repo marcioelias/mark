@@ -240,10 +240,9 @@ class ApexCharts {
     gl.comboCharts = combo.comboCharts
     gl.comboBarCount = combo.comboBarCount
 
-    if (
-      ser.length === 0 ||
-      (ser.length === 1 && ser[0].data && ser[0].data.length === 0)
-    ) {
+    const allSeriesAreEmpty = ser.every((s) => s.data && s.data.length === 0)
+
+    if (ser.length === 0 || allSeriesAreEmpty) {
       this.series.handleNoData()
     }
 
@@ -265,7 +264,11 @@ class ApexCharts {
 
     // legend is calculated here before coreCalculations because it affects the plottable area
     // if there is some data to show or user collapsed all series, then proceed drawing legend
-    if (!gl.noData || gl.collapsedSeries.length === gl.series.length) {
+    if (
+      !gl.noData ||
+      gl.collapsedSeries.length === gl.series.length ||
+      w.config.legend.showForSingleSeries
+    ) {
       this.legend.init()
     }
 
@@ -473,6 +476,11 @@ class ApexCharts {
     overwriteInitialConfig = true
   ) {
     const w = this.w
+
+    // when called externally, clear some global variables
+    // fixes apexcharts.js#1488
+    w.globals.selection = undefined
+
     if (options.series) {
       this.series.resetSeries(false, true, false)
       if (options.series.length && options.series[0].data) {
@@ -1672,7 +1680,8 @@ class BarStacked extends _Bar__WEBPACK_IMPORTED_MODULE_1__["default"] {
 
       barWidth = xDivision
 
-      if (w.globals.isXNumeric) {
+      if (w.globals.isXNumeric && w.globals.dataPoints > 1) {
+        // the check (w.globals.dataPoints > 1) fixes apexcharts.js #1617
         xDivision = w.globals.minXDiff / this.xRatio
         barWidth = (xDivision * parseInt(this.barOptions.columnWidth, 10)) / 100
       } else {
@@ -3328,6 +3337,7 @@ class Pie {
   constructor(ctx) {
     this.ctx = ctx
     this.w = ctx.w
+    const w = this.w
 
     this.chartType = this.w.config.chart.type
 
@@ -3340,8 +3350,6 @@ class Pie {
     this.animDur = 0
 
     this.donutDataLabels = this.w.config.plotOptions.pie.donut.labels
-
-    const w = this.w
 
     this.lineColorArr =
       w.globals.stroke.colors !== undefined
@@ -3510,10 +3518,11 @@ class Pie {
       class: 'apexcharts-slices'
     })
 
-    let startAngle = 0
-    let prevStartAngle = 0
-    let endAngle = 0
-    let prevEndAngle = 0
+    const initialAngle = w.config.plotOptions.pie.startAngle % this.fullAngle
+    let startAngle = initialAngle
+    let prevStartAngle = initialAngle
+    let endAngle = initialAngle
+    let prevEndAngle = initialAngle
 
     this.strokeWidth = w.config.stroke.show ? w.config.stroke.width : 0
 
@@ -3533,7 +3542,10 @@ class Pie {
       endAngle = startAngle + sectorAngleArr[i]
       prevEndAngle = prevStartAngle + this.prevSectorAngleArr[i]
 
-      let angle = endAngle - startAngle
+      const angle =
+        endAngle < startAngle
+          ? this.fullAngle + endAngle - startAngle
+          : endAngle - startAngle
 
       let pathFill = fill.fillPath({
         seriesNumber: i,
@@ -3585,7 +3597,7 @@ class Pie {
           this.centerY,
           w.globals.radialSize / 1.25 +
             w.config.plotOptions.pie.dataLabels.offset,
-          startAngle + (endAngle - startAngle) / 2
+          (startAngle + angle / 2) % this.fullAngle
         )
       } else if (this.chartType === 'donut') {
         labelPosition = _utils_Utils__WEBPACK_IMPORTED_MODULE_2__["default"].polarToCartesian(
@@ -3593,7 +3605,7 @@ class Pie {
           this.centerY,
           (w.globals.radialSize + this.donutSize) / 2 +
             w.config.plotOptions.pie.dataLabels.offset,
-          startAngle + (endAngle - startAngle) / 2
+          (startAngle + angle / 2) % this.fullAngle
         )
       }
 
@@ -3602,9 +3614,7 @@ class Pie {
       // Animation code starts
       let dur = 0
       if (this.initialAnim && !w.globals.resized && !w.globals.dataChanged) {
-        dur =
-          ((endAngle - startAngle) / this.fullAngle) *
-          w.config.chart.animations.speed
+        dur = (angle / this.fullAngle) * w.config.chart.animations.speed
 
         if (dur === 0) dur = 1
         this.animDur = dur + this.animDur
@@ -3649,7 +3659,7 @@ class Pie {
       if (w.config.dataLabels.enabled) {
         let xPos = labelPosition.x
         let yPos = labelPosition.y
-        let text = (100 * (endAngle - startAngle)) / 360 + '%'
+        let text = (100 * angle) / this.fullAngle + '%'
 
         if (
           angle !== 0 &&
@@ -3738,7 +3748,10 @@ class Pie {
     let w = this.w
     let me = this
 
-    let angle = opts.endAngle - opts.startAngle
+    let angle =
+      opts.endAngle < opts.startAngle
+        ? this.fullAngle + opts.endAngle - opts.startAngle
+        : opts.endAngle - opts.startAngle
     let prevAngle = angle
 
     let fromStartAngle = opts.startAngle
@@ -3746,7 +3759,10 @@ class Pie {
 
     if (opts.prevStartAngle !== undefined && opts.prevEndAngle !== undefined) {
       fromStartAngle = opts.prevEndAngle
-      prevAngle = opts.prevEndAngle - opts.prevStartAngle
+      prevAngle =
+        opts.prevEndAngle < opts.prevStartAngle
+          ? this.fullAngle + opts.prevEndAngle - opts.prevStartAngle
+          : opts.prevEndAngle - opts.prevStartAngle
     }
     if (opts.i === w.config.series.length - 1) {
       // some adjustments for the last overlapping paths
@@ -3780,7 +3796,10 @@ class Pie {
 
     let currAngle = angle
     let startAngle = toStartAngle
-    let fromAngle = fromStartAngle - toStartAngle
+    let fromAngle =
+      fromStartAngle < toStartAngle
+        ? this.fullAngle + fromStartAngle - toStartAngle
+        : fromStartAngle - toStartAngle
 
     if (w.globals.dataChanged && opts.shouldSetPrevPaths) {
       // to avoid flicker when updating, set prev path first and then animate from there
@@ -3788,7 +3807,10 @@ class Pie {
         path = me.getPiePath({
           me,
           startAngle: opts.prevStartAngle,
-          angle: opts.prevEndAngle - opts.prevStartAngle,
+          angle:
+            opts.prevEndAngle < opts.prevStartAngle
+              ? this.fullAngle + opts.prevEndAngle - opts.prevStartAngle
+              : opts.prevEndAngle - opts.prevStartAngle,
           size
         })
         el.attr({ d: path })
@@ -3927,7 +3949,18 @@ class Pie {
     let startRadians = (Math.PI * (startDeg - 90)) / 180
 
     let endDeg = angle + startAngle
-    if (Math.ceil(endDeg) >= 360) endDeg = 359.99
+    // prevent overlap
+    if (
+      Math.ceil(endDeg) >=
+      this.fullAngle +
+        (this.w.config.plotOptions.pie.startAngle % this.fullAngle)
+    ) {
+      endDeg =
+        this.fullAngle +
+        (this.w.config.plotOptions.pie.startAngle % this.fullAngle) -
+        0.01
+    }
+    if (Math.ceil(endDeg) > this.fullAngle) endDeg -= this.fullAngle
 
     let endRadians = (Math.PI * (endDeg - 90)) / 180
 
@@ -4887,11 +4920,6 @@ class Radial extends _Pie__WEBPACK_IMPORTED_MODULE_0__["default"] {
     if (!this.trackEndAngle) this.trackEndAngle = this.endAngle
 
     if (this.endAngle === 360) this.endAngle = 359.99
-
-    this.fullAngle =
-      360 -
-      w.config.plotOptions.radialBar.endAngle -
-      w.config.plotOptions.radialBar.startAngle
 
     this.margin = parseInt(w.config.plotOptions.radialBar.track.margin, 10)
   }
@@ -7903,8 +7931,6 @@ class Core {
       transform: 'translate(' + tX + ', ' + tY + ')'
     }
     _Graphics__WEBPACK_IMPORTED_MODULE_13__["default"].setAttrs(gl.dom.elGraphical.node, scalingAttrs)
-
-    gl.x2SpaceAvailable = gl.svgWidth - gl.dom.elGraphical.x() - gl.gridWidth
   }
 
   // To prevent extra spacings in the bottom of the chart, we need to recalculate the height for pie/donut/radialbar charts
@@ -8091,17 +8117,28 @@ class Core {
             const scale = new _Scales__WEBPACK_IMPORTED_MODULE_16__["default"](targetChart)
             yaxis = scale.autoScaleY(targetChart, yaxis, e)
           }
+
+          const multipleYaxis = targetChart.w.config.yaxis.reduce(
+            (acc, curr, index) => {
+              return [
+                ...acc,
+                {
+                  ...targetChart.w.config.yaxis[index],
+                  min: yaxis[0].min,
+                  max: yaxis[0].max
+                }
+              ]
+            },
+            []
+          )
+
           targetChart.ctx.updateHelpers._updateOptions(
             {
               xaxis: {
                 min: e.xaxis.min,
                 max: e.xaxis.max
               },
-              yaxis: {
-                ...targetChart.w.config.yaxis[0],
-                min: yaxis[0].min,
-                max: yaxis[0].max
-              }
+              yaxis: multipleYaxis
             },
             false,
             false,
@@ -12446,6 +12483,7 @@ class Range {
           }
         })
         if (gl.dataPoints === 1 && gl.minXDiff === Number.MAX_VALUE) {
+          // fixes apexcharts.js #1221
           gl.minXDiff = 0.5
         }
       })
@@ -15362,12 +15400,14 @@ class ZoomPanSelection extends _Toolbar__WEBPACK_IMPORTED_MODULE_2__["default"] 
       ? w.config.chart.zoom.type
       : w.config.chart.selection.type
 
+    const autoSelected = w.config.chart.toolbar.autoSelected
+
     if (e.shiftKey) {
       this.shiftWasPressed = true
-      toolbar.enableZoomPanFromToolbar('pan')
+      toolbar.enableZoomPanFromToolbar(autoSelected === 'pan' ? 'zoom' : 'pan')
     } else {
       if (this.shiftWasPressed) {
-        toolbar.enableZoomPanFromToolbar('zoom')
+        toolbar.enableZoomPanFromToolbar(autoSelected)
         this.shiftWasPressed = false
       }
     }
@@ -15603,11 +15643,11 @@ class ZoomPanSelection extends _Toolbar__WEBPACK_IMPORTED_MODULE_2__["default"] 
 
     let startX = me.startX - 1
     let startY = me.startY
+    let inversedX = false
+    let inversedY = false
 
     let selectionWidth = me.clientX - gridRectDim.left - startX
     let selectionHeight = me.clientY - gridRectDim.top - startY
-    let translateX = 0
-    let translateY = 0
 
     let selectionRect = {}
 
@@ -15621,42 +15661,36 @@ class ZoomPanSelection extends _Toolbar__WEBPACK_IMPORTED_MODULE_2__["default"] 
 
     // inverse selection X
     if (startX > me.clientX - gridRectDim.left) {
+      inversedX = true
       selectionWidth = Math.abs(selectionWidth)
-      translateX = -selectionWidth
     }
 
     // inverse selection Y
     if (startY > me.clientY - gridRectDim.top) {
+      inversedY = true
       selectionHeight = Math.abs(selectionHeight)
-      translateY = -selectionHeight
     }
 
     if (zoomtype === 'x') {
       selectionRect = {
-        x: startX,
+        x: inversedX ? startX - selectionWidth : startX,
         y: 0,
         width: selectionWidth,
-        height: w.globals.gridHeight,
-        translateX,
-        translateY: 0
+        height: w.globals.gridHeight
       }
     } else if (zoomtype === 'y') {
       selectionRect = {
         x: 0,
-        y: startY,
+        y: inversedY ? startY - selectionHeight : startY,
         width: w.globals.gridWidth,
-        height: selectionHeight,
-        translateX: 0,
-        translateY
+        height: selectionHeight
       }
     } else {
       selectionRect = {
-        x: startX,
-        y: startY,
+        x: inversedX ? startX - selectionWidth : startX,
+        y: inversedY ? startY - selectionHeight : startY,
         width: selectionWidth,
-        height: selectionHeight,
-        translateX,
-        translateY
+        height: selectionHeight
       }
     }
 
@@ -19423,6 +19457,11 @@ class DimGrid {
             parseInt(w.config.yaxis[index].labels.style.fontSize, 10) / 1.2 -
             12
         }
+
+        // fixes apexcharts.js#1599
+        if (w.globals.translateX < 2) {
+          w.globals.translateX = 2
+        }
       }
     })
   }
@@ -22537,7 +22576,6 @@ class Globals {
     gl.xaxisLabelsCount = 0
     gl.skipLastTimelinelabel = false
     gl.skipFirstTimelinelabel = false
-    gl.x2SpaceAvailable = 0
     gl.isDataXYZ = false
     gl.isMultiLineX = false
     gl.isMultipleYAxis = false
@@ -22635,6 +22673,7 @@ class Globals {
       yAxisSameScaleIndices: [],
       maxValsInArrayIndex: 0,
       radialSize: 0,
+      selection: undefined,
       zoomEnabled:
         config.chart.toolbar.autoSelected === 'zoom' &&
         config.chart.toolbar.tools.zoom &&
@@ -22679,7 +22718,6 @@ class Globals {
       // format is - [[x,y],[x,y]... [x,y]]
       dataLabelsRects: [], // store the positions of datalabels to prevent collision
       lastDrawnDataLabelsIndexes: [],
-      x2SpaceAvailable: 0, // space available on the right side after grid area
       hasNullValues: false, // bool: whether series contains null values
       easing: null, // function: animation effect to apply
       zoomed: false, // whether user has zoomed or not
@@ -23248,6 +23286,7 @@ class Options {
           customScale: 1,
           offsetX: 0,
           offsetY: 0,
+          startAngle: 0,
           expandOnClick: true,
           dataLabels: {
             // These are the percentage values which are displayed on slice
@@ -23438,7 +23477,7 @@ class Options {
         formatter: undefined,
         tooltipHoverFormatter: undefined,
         offsetX: -20,
-        offsetY: 0,
+        offsetY: 4,
         labels: {
           colors: undefined,
           useSeriesColors: false
@@ -23457,7 +23496,7 @@ class Options {
         },
         itemMargin: {
           horizontal: 5,
-          vertical: 0
+          vertical: 2
         },
         onItemClick: {
           toggleDataSeries: true
@@ -26220,11 +26259,15 @@ class Utils {
     const seriesBound = elGrid.getBoundingClientRect()
 
     const hasBars = this.hasBars()
-    if (w.globals.comboCharts || hasBars) {
+
+    if (
+      (w.globals.comboCharts || hasBars) &&
+      !w.config.xaxis.convertedCatToNumeric
+    ) {
       xDivisor = hoverWidth / w.globals.dataPoints
     }
 
-    let hoverX = clientX - seriesBound.left
+    let hoverX = clientX - seriesBound.left - w.globals.barPadForNumericAxis
     let hoverY = clientY - seriesBound.top
 
     const notInRect =
@@ -26248,7 +26291,7 @@ class Utils {
 
     let j = Math.round(hoverX / xDivisor)
 
-    if (hasBars) {
+    if (hasBars && !w.config.xaxis.convertedCatToNumeric) {
       j = Math.ceil(hoverX / xDivisor)
       j = j - 1
     }
@@ -30789,6 +30832,9 @@ class Utils {
         cloneResult[i] = this.clone(source[i])
       }
       return cloneResult
+    } else if (Object.prototype.toString.call(source) === '[object Null]') {
+      // fixes an issue where null values were converted to {}
+      return null
     } else if (typeof source === 'object') {
       let cloneResult = {}
       for (let prop in source) {

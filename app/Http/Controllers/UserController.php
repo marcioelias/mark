@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\Models\TempPassword;
 use App\Models\User;
 use App\Traits\LayoutConfigTrait;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -102,7 +104,16 @@ class UserController extends Controller
         ]);
 
         $user = new User($request->all());
-        return response()->json($user->save());
+        $user->password = bcrypt($request->password);
+
+        if ($user->save()) {
+            $tempPassword = new TempPassword;
+            $tempPassword->temp_password = $request->password;
+            $user->temp_password()->save($tempPassword);
+        }
+
+        event(new Registered($user));
+        return response()->json($user);
     }
 
     /**

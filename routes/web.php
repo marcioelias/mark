@@ -1,16 +1,13 @@
 <?php
   use App\Http\Controllers\LanguageController;
 
-
-
-Route::get('/teste', function() {
-	return view('mail.html.layout');
-});
-
 //Auth::routes(['verify' => true]);
 
 /* Webhook routes */
 Route::post('webhook/system/monetizze', 'WebhookMonetizzeController@receive');
+
+/* Webhook user routes */
+Route::post('webhook/{plataformConfig}', 'WebhookCallController@receiveUserWebhook')->name('webhook.url');
 
 /* Administrative routes */
 Route::prefix('admin')->group(function() {
@@ -34,6 +31,10 @@ Route::prefix('admin')->group(function() {
 		Route::resource('sms_buy', 'SmsBuyController')->except(['show', 'edit', 'update']);
 		Route::resource('sms_package', 'SmsPackageController')->except('show');
 		Route::resource('user', 'UserController')->except('show');
+
+		/* routes that response only json, to use with vuejs */
+		Route::get('dasboard/charts/faturamento', 'AdminHomeController@getMounthlyInvoicing');
+		Route::get('dasboard/charts/clientes_plano', 'AdminHomeController@getCustomerByPlan');
 	});
 });
 
@@ -61,6 +62,17 @@ Route::prefix('')->group(function() {
 		Route::post('password/confirm', 'Auth\User\ConfirmPasswordController@confirm');
 		Route::get('password/change', 'Auth\User\LoginController@showChangePasswordForm')->name('password.change');
 		Route::post('password/change', 'Auth\User\LoginController@changePassword');
+
+		Route::resource('tag', 'TagController')->except('show');
+		Route::resource('product', 'ProductController')->except('show');
+		Route::resource('plataform_config', 'PlataformConfigController')->except('show');
+		Route::resource('funnel', 'FunnelController')->except('show');
+
+		Route::get('plataform_config/get_url/{plataformConfig}', 'PlataformConfigController@getWebhookUrl');
+
+		/* Routes to be comsumed by Vue (JSON Response) */
+		Route::get('products/json', 'ProductController@getProductsJson');
+		Route::get('tags/json', 'TagController@getTagsJson');
 	});
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {

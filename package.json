@@ -26,9 +26,14 @@
         "webpack-cli": "^3.3.5"
     },
     "dependencies": {
-        "apexcharts": "^3.19.0",
+        "@fortawesome/fontawesome-free": "^5.13.0",
+        "apexcharts": "^3.19.2",
         "jquery-mask-plugin": "^1.14.16",
         "select2": "^4.0.13",
-        "sweetalert2": "^9.10.13"
+        "sweetalert2": "^9.10.13",
+        "v-select2-component": "^0.4.3",
+        "vue-apexcharts": "^1.5.3",
+        "vuesax": "^3.11.15",
+        "vuex": "^3.4.0"
     }
 }

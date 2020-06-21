@@ -74,9 +74,11 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if (!$user->first_login_at) {
-            return redirect()->action('Auth\User\LoginController@showChangePasswordForm');
-        }
+        /* if ($user->mail_verified_at) {
+            if (!$user->first_login_at) {
+                return redirect()->action('Auth\User\LoginController@showChangePasswordForm');
+            }
+        } */
     }
 
     public function showChangePasswordForm() {
@@ -99,7 +101,7 @@ class LoginController extends Controller
         $user->password = bcrypt($request->password);
         $user->first_login_at = now();
         $user->save();
-        return redirect()->action('HomeController@index');
+        return redirect()->route('index');
     }
 
 }

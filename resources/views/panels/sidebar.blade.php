@@ -8,7 +8,7 @@ $configData = Helper::applClasses();
     <ul class="nav navbar-nav flex-row">
       <li class="nav-item mr-auto"><a class="navbar-brand" href="dashboard-analytics">
           <div class="brand-logo"></div>
-          <h2 class="brand-text mb-0">Mark</h2>
+          <h2 class="brand-text mb-0">{{ config('app.name', 'Laravel') }}</h2>
         </a></li>
       <li class="nav-item nav-toggle">
         <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
@@ -23,8 +23,8 @@ $configData = Helper::applClasses();
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       {{-- Foreach menu item starts --}}
-      @if(isset($menuData[0]))
-      @foreach($menuData[0]->menu as $menu)
+      @if(isset($menuData['user'][0]))
+      @foreach($menuData['user'][0]->menu as $menu)
       @if(isset($menu->navheader))
       <li class="navigation-header">
         <span>{{ $menu->navheader }}</span>
@@ -41,8 +41,8 @@ $configData = Helper::applClasses();
       $translation = $menu->i18n;
       }
       @endphp
-      <li class="nav-item {{ (request()->is($menu->url)) ? 'active' : '' }} {{ $custom_classes }}">
-        <a href="{{ $menu->url }}">
+      <li class="nav-item {{ in_array(Route::current()->uri, $menu->activeUrls ?? []) ? 'active' : '' }} {{ $custom_classes }}">
+        <a href="{{ $menu->url ? route($menu->url) : '' }}">
           <i class="{{ $menu->icon }}"></i>
           <span class="menu-title" data-i18n="{{ $translation }}">{{ __('locale.'.$menu->name) }}</span>
           @if (isset($menu->badge))
