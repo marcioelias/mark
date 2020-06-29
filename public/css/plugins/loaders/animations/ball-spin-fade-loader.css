@@ -40,8 +40,8 @@
 }
 
 .ball-spin-fade-loader > div:nth-child(2) {
-  top: 17.04545px;
-  left: 17.04545px;
+  top: 17.0454545455px;
+  left: 17.0454545455px;
   -webkit-animation: ball-spin-fade-loader 1s -0.84s infinite linear;
           animation: ball-spin-fade-loader 1s -0.84s infinite linear;
 }
@@ -54,8 +54,8 @@
 }
 
 .ball-spin-fade-loader > div:nth-child(4) {
-  top: -17.04545px;
-  left: 17.04545px;
+  top: -17.0454545455px;
+  left: 17.0454545455px;
   -webkit-animation: ball-spin-fade-loader 1s -0.6s infinite linear;
           animation: ball-spin-fade-loader 1s -0.6s infinite linear;
 }
@@ -68,8 +68,8 @@
 }
 
 .ball-spin-fade-loader > div:nth-child(6) {
-  top: -17.04545px;
-  left: -17.04545px;
+  top: -17.0454545455px;
+  left: -17.0454545455px;
   -webkit-animation: ball-spin-fade-loader 1s -0.36s infinite linear;
           animation: ball-spin-fade-loader 1s -0.36s infinite linear;
 }
@@ -82,8 +82,8 @@
 }
 
 .ball-spin-fade-loader > div:nth-child(8) {
-  top: 17.04545px;
-  left: -17.04545px;
+  top: 17.0454545455px;
+  left: -17.0454545455px;
   -webkit-animation: ball-spin-fade-loader 1s -0.12s infinite linear;
           animation: ball-spin-fade-loader 1s -0.12s infinite linear;
 }

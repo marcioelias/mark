@@ -42,8 +42,8 @@
   margin-top: 18px;
 }
 
-.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref="lbCurrent"],
-.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref="lbTotal"] {
+.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbCurrent],
+.aggrid .ag-paging-panel .ag-paging-page-summary-panel [ref=lbTotal] {
   color: #fff;
   padding: 0.7rem 0.95rem;
   border-radius: 0.5rem;
@@ -66,11 +66,11 @@
   opacity: 0.5 !important;
 }
 
-.aggrid .ag-paging-panel span[ref="lbCurrent"] {
+.aggrid .ag-paging-panel span[ref=lbCurrent] {
   background-color: #7367f0;
 }
 
-.aggrid .ag-paging-panel span[ref="lbTotal"] {
+.aggrid .ag-paging-panel span[ref=lbTotal] {
   background-color: #dae1e7;
   color: #626262 !important;
 }

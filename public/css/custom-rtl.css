@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /*rtl:begin:ignore*/
 
 /*========================================================
@@ -31,7 +33,7 @@
 .header-navbar .dropdown .dropdown-menu.dropdown-menu-right::before,
 .header-navbar .dropup .dropdown-menu.dropdown-menu-right::before {
   right: auto;
-  left: .5rem;
+  left: 0.5rem;
 }
 
 .dropdown .dropdown-menu,
@@ -53,17 +55,17 @@
 }
 
 .dropleft .dropdown-toggle::before {
-  content: '\E844' !important;
+  content: "\E844" !important;
 }
 
 .dropright .dropdown-toggle::after {
-  content: '\E843' !important;
+  content: "\E843" !important;
 }
 
 .input-group .dropdown-menu.show {
   top: 0 !important;
   right: auto !important;
-  left: 0px  !important;
+  left: 0px !important;
 }
 
 .chartjs-render-monitor {
@@ -129,18 +131,18 @@ div.dataTables_wrapper div.dataTables_filter {
 
 .pagination .page-item.prev-item .page-link:before {
   content: "\E844";
-  font-family: 'feather';
+  font-family: "feather";
 }
 
 .pagination .page-item.next-item .page-link:after {
   content: "\E843";
-  font-family: 'feather';
+  font-family: "feather";
 }
 
 .pagination .page-item.prev .page-link:after,
 .pagination .page-item.previous .page-link:after {
   content: "\E844";
-  font-family: 'feather';
+  font-family: "feather";
 }
 
 .pagination .page-item.prev .page-link:before,
@@ -150,21 +152,21 @@ div.dataTables_wrapper div.dataTables_filter {
 
 .pagination .page-item.next .page-link:before {
   content: "\E843";
-  font-family: 'feather';
+  font-family: "feather";
 }
 
 .pagination .page-item.next .page-link:after {
   display: none;
 }
 
-code[class*="language-"],
-pre[class*="language-"] {
+code[class*=language-],
+pre[class*=language-] {
   direction: ltr;
 }
 
 @media print {
-  code[class*="language-"],
-  pre[class*="language-"] {
+  code[class*=language-],
+  pre[class*=language-] {
     text-shadow: none;
   }
 }
@@ -191,7 +193,7 @@ pre[class*="language-"] {
 
 .btn i {
   float: right;
-  margin-left: .25rem;
+  margin-left: 0.25rem;
 }
 
 .btn.btn-icon i {
@@ -209,25 +211,25 @@ pre[class*="language-"] {
 }
 
 .bs-tooltip-left .arrow::before,
-.bs-tooltip-auto[x-placement^='left'] .arrow::before {
+.bs-tooltip-auto[x-placement^=left] .arrow::before {
   border-width: 0.4rem 0 0.4rem 0.4rem;
   border-left-color: #323232;
 }
 
 .bs-tooltip-left .arrow,
-.bs-tooltip-auto[x-placement^='left'] .arrow {
+.bs-tooltip-auto[x-placement^=left] .arrow {
   right: 0;
   left: auto;
 }
 
 .bs-tooltip-right .arrow::before,
-.bs-tooltip-auto[x-placement^='right'] .arrow::before {
+.bs-tooltip-auto[x-placement^=right] .arrow::before {
   border-width: 0.4rem 0.4rem 0.4rem 0;
   border-right-color: #323232;
 }
 
 .bs-tooltip-right .arrow,
-.bs-tooltip-auto[x-placement^='right'] .arrow {
+.bs-tooltip-auto[x-placement^=right] .arrow {
   left: 0;
   right: auto;
 }

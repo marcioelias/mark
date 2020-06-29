@@ -15,10 +15,12 @@ class PlataformConfigController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'plataform_name' => 'Plataforma',
-        'active' => ['label' => 'Ativo', 'type' => 'bool']
-    );
+    public function fields() {
+        return array(
+            'plataform_name' => 'Plataforma',
+            'active' => ['label' => 'Ativo', 'type' => 'bool']
+        );
+    }
 
     /**
      * Display a listing of the resource.

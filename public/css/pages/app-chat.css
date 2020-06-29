@@ -16,20 +16,20 @@
   height: calc(100vh - 13rem);
   height: calc(var(--vh, 1vh) * 100 - 13rem);
   width: 400px;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   margin: 0;
   background-color: #fff;
   position: fixed;
   transform: translateX(-110%);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   z-index: 6;
 }
 
 .chat-application .chat-profile-sidebar.show {
   transform: translateX(0);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .chat-application .chat-profile-sidebar .chat-profile-header {
@@ -39,7 +39,7 @@
 }
 
 .chat-application .chat-profile-sidebar .chat-profile-header .header-profile-sidebar {
-  margin: 2rem auto .5rem;
+  margin: 2rem auto 0.5rem;
 }
 
 .chat-application .chat-profile-sidebar .chat-profile-header .avatar {
@@ -66,7 +66,7 @@
   height: calc(100vh - 13rem);
   height: calc(var(--vh, 1vh) * 100 - 13rem);
   width: 400px;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   margin: 0;
@@ -75,8 +75,8 @@
 
 .chat-application .sidebar-content .sidebar-close-icon {
   position: absolute;
-  right: .25rem;
-  top: .25rem;
+  right: 0.25rem;
+  top: 0.25rem;
   font-size: 1.25rem;
   z-index: 1;
   cursor: pointer;
@@ -87,7 +87,7 @@
   position: fixed;
   width: 400px;
   border-bottom: 1px solid #E4E7ED;
-  padding: .65rem;
+  padding: 0.65rem;
 }
 
 .chat-application .sidebar-content .chat-fixed-search .sidebar-profile-toggle .avatar {
@@ -96,7 +96,7 @@
 }
 
 .chat-application .sidebar-content .chat-fixed-search input.form-control {
-  padding: .9rem 1rem .9rem 3rem;
+  padding: 0.9rem 1rem 0.9rem 3rem;
   height: calc(1.25em + 1.4rem + 4px);
 }
 
@@ -123,7 +123,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.322rem .85rem;
+  padding: 1.322rem 0.85rem;
   margin-right: 1px;
 }
 
@@ -140,7 +140,7 @@
 
 .chat-application .sidebar-content .chat-user-list li .contact-info {
   width: calc(100vw - (100vw - 100%) - 1rem - 50px);
-  margin-top: .3rem;
+  margin-top: 0.3rem;
 }
 
 .chat-application .sidebar-content .chat-user-list li .contact-info .truncate {
@@ -256,12 +256,12 @@
   text-align: right;
   display: block;
   float: right;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   margin: 0 20px 10px 0;
   clear: both;
   color: #fff;
   background: linear-gradient(118deg, #7367f0, rgba(115, 103, 240, 0.7));
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
@@ -296,14 +296,14 @@
   height: calc(100vh - 13rem);
   height: calc(var(--vh, 1vh) * 100 - 13rem);
   width: 400px;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin: 0;
   background-color: #fff;
   position: fixed;
   transform: translateX(110%);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   z-index: 6;
   right: 4.2rem;
   bottom: 5.25rem;
@@ -313,7 +313,7 @@
 .chat-application .user-profile-sidebar.show {
   opacity: 1;
   transform: translateX(7%);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .chat-application .user-profile-sidebar .user-profile-header {
@@ -323,7 +323,7 @@
 }
 
 .chat-application .user-profile-sidebar .user-profile-header .header-profile-sidebar {
-  margin: 2rem auto .5rem;
+  margin: 2rem auto 0.5rem;
 }
 
 .chat-application .user-profile-sidebar .user-profile-header .avatar {
@@ -382,7 +382,7 @@
 
   .chat-application .sidebar-content {
     transform: translateX(-110%);
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     left: 0;
     position: fixed;
     z-index: 5;
@@ -391,7 +391,7 @@
 
   .chat-application .sidebar-content.show {
     transform: translateX(8.5%);
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     display: block;
   }
 }

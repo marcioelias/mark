@@ -8,11 +8,20 @@
     @component('components.form-group', [
         'inputs' => [
             [
+                'type' => 'select',
+                'field' => 'product_id',
+                'label' => 'Produto',
+                'items' => $products,
+                'displayField' => 'product_name',
+                'keyField' => 'id',
+                'inputSize' => 6
+            ],
+            [
                 'type' => 'text',
                 'field' => 'tag_name',
                 'label' => 'Tag',
                 'required' => true,
-                'inputSize' => 12
+                'inputSize' => 6
             ]
         ]
     ])

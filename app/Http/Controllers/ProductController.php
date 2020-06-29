@@ -15,12 +15,14 @@ class ProductController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'plataform_name' => 'Plataforma',
-        'product_name' => 'Produto',
-        'product_price' => 'Preço',
-        'active' => ['label' => 'Ativo', 'type' => 'bool']
-    );
+    public function fields() {
+        return array(
+            'plataform_name' => 'Plataforma',
+            'product_name' => 'Produto',
+            'product_price' => 'Preço',
+            'active' => ['label' => 'Ativo', 'type' => 'bool']
+        );
+    }
 
     /**
      * Display a listing of the resource.
@@ -83,8 +85,7 @@ class ProductController extends Controller
             ]
         ];
 
-        $plataforms = PlataformConfig::doesntHave('products')
-                                ->select('plataform_configs.id', 'plataforms.plataform_name')
+        $plataforms = PlataformConfig::select('plataform_configs.id', 'plataforms.plataform_name')
                                 ->join('plataforms', 'plataforms.id', 'plataform_configs.plataform_id')
                                 ->where('plataform_configs.active', true)
                                 ->orderBy('plataforms.plataform_name')
@@ -113,7 +114,17 @@ class ProductController extends Controller
 
         $product = new Product($request->all());
         $product->active = ($request->active ?? false) ? true : false;
-        return response()->json($product->save());
+
+        $product->save();
+
+        /* Create default tags for the new product */
+        $product->tags()->createMany([
+            ['tag_name' => 'Boleto Impresso'],
+            ['tag_name' => 'Compra Finalizada'],
+            ['tag_name' => 'Remarketing']
+        ]);
+
+        return response()->json($product);
     }
 
     /**

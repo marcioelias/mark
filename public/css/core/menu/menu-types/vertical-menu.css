@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /*=========================================================================================
     File Name: vertical-menu.scss
     Description: A calssic vertical modern style menu with expand and collops support. It support
@@ -93,7 +95,7 @@ body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation >
 
 body.vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub > a:not(.mm-next):after {
   content: "\F105";
-  font-family: 'FontAwesome';
+  font-family: "FontAwesome";
   font-size: 1.1rem;
   display: inline-block;
   position: absolute;
@@ -264,7 +266,7 @@ body.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu.expanded .na
 
 body.vertical-layout.vertical-menu-modern.menu-collapsed .main-menu.expanded .navigation li.has-sub > a:not(.mm-next):after {
   content: "\F105";
-  font-family: 'FontAwesome';
+  font-family: "FontAwesome";
   font-size: 1rem;
   display: inline-block;
   position: absolute;
@@ -500,7 +502,7 @@ body.vertical-layout.vertical-menu-modern.menu-collapsed.menu-flipped .footer {
 .vertical-overlay-menu.menu-hide .main-menu {
   opacity: 0;
   transform: translate3d(0, 0, 0);
-  transition: width .25s,opacity .25s,transform .25s;
+  transition: width 0.25s, opacity 0.25s, transform 0.25s;
   width: 260px;
   left: -260px;
 }
@@ -521,7 +523,7 @@ body.vertical-layout.vertical-menu-modern.menu-collapsed.menu-flipped .footer {
 
 .vertical-overlay-menu .main-menu .navigation li.has-sub > a:not(.mm-next):after {
   content: "\F105";
-  font-family: 'FontAwesome';
+  font-family: "FontAwesome";
   font-size: 1rem;
   display: inline-block;
   position: absolute;
@@ -550,7 +552,7 @@ body.vertical-layout.vertical-menu-modern.menu-collapsed.menu-flipped .footer {
 .vertical-overlay-menu.menu-open .main-menu {
   opacity: 1;
   transform: translate3d(260px, 0, 0);
-  transition: width .25s,opacity .25s,transform .25s;
+  transition: width 0.25s, opacity 0.25s, transform 0.25s;
 }
 
 .vertical-overlay-menu.menu-flipped .main-menu {

@@ -22,7 +22,7 @@
             @if(is_array($formButtons))
                 @foreach($formButtons as $formButton)
                     @if(($formButton['type'] == 'submit') || ($formButton['type'] == 'reset'))
-                        <button type="{{$formButton['type']}}" class="btn btn-outline-{{$btnColor[$formButton['type']]}}" data-toggle="tooltip" data-placement="top" title="{{ __($formButton['label']) }}" data-original-title="{{ __($formButton['label']) }}">
+                        <button type="{{$formButton['type']}}" class="btn btn-{{$btnColor[$formButton['type']]}}" data-toggle="tooltip" data-placement="top" title="{{ __($formButton['label']) }}" data-original-title="{{ __($formButton['label']) }}">
                             @if(isset($formButton['icon']))
                                 <i class="fa fa-{{$formButton['icon']}}"></i>
                             @else
@@ -30,7 +30,7 @@
                             @endif
                         </button>
                     @else
-                        <a href="{{ route($indexRoute, Request()->all() ?? []) }}" class="btn btn-outline-{{$btnColor[$formButton['type']]}}"  data-toggle="tooltip" data-placement="top" title="{{ __($formButton['label']) }}" data-original-title="{{ __($formButton['label']) }}">
+                        <a href="{{ route($indexRoute, Request()->all() ?? []) }}" class="btn btn-{{$btnColor[$formButton['type']]}}"  data-toggle="tooltip" data-placement="top" title="{{ __($formButton['label']) }}" data-original-title="{{ __($formButton['label']) }}">
                             @if(isset($formButton['icon']))
                                 <i class="fa fa-{{$formButton['icon']}}"></i>
                             @else

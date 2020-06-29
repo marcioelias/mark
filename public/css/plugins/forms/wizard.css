@@ -47,7 +47,7 @@
 }
 
 .app-content .wizard > .steps > ul > li:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   z-index: 9;
@@ -55,7 +55,7 @@
 }
 
 .app-content .wizard > .steps > ul > li:after {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   z-index: 9;
@@ -183,7 +183,7 @@
 }
 
 .app-content .wizard > .actions > ul:after {
-  content: '';
+  content: "";
   display: table;
   clear: both;
 }
@@ -306,7 +306,7 @@
   }
 
   .app-content .wizard > .steps > ul > li:last-child:after {
-    content: '';
+    content: "";
     background-color: #7367f0;
   }
 }

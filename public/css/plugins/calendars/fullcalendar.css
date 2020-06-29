@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /*========================================================
         DARK LAYOUT
 =========================================================*/
@@ -705,9 +707,9 @@ fieldset:disabled .fc a.fc-button,
   margin-top: 0.5rem;
 }
 
-input[type="submit"].btn-block,
-input[type="reset"].btn-block,
-input[type="button"].btn-block {
+input[type=submit].btn-block,
+input[type=reset].btn-block,
+input[type=button].btn-block {
   width: 100%;
 }
 
@@ -720,7 +722,7 @@ input[type="button"].btn-block {
   display: flex;
   align-items: center;
   margin-left: 0;
-  margin: .5rem auto;
+  margin: 0.5rem auto;
 }
 
 .fc .fc-header-toolbar .bullets-group-2 {
@@ -741,7 +743,7 @@ input[type="button"].btn-block {
 
 .fc .fc-header-toolbar .fc-right .fc-button {
   border-radius: 50%;
-  padding: .4rem .4rem;
+  padding: 0.4rem 0.4rem;
   height: 24px;
   width: 24px;
 }
@@ -767,7 +769,7 @@ input[type="button"].btn-block {
 }
 
 .fc .fc-header-toolbar .fc-addNew-button {
-  padding: .65rem 2rem;
+  padding: 0.65rem 2rem;
 }
 
 .fc .fc-header-toolbar .fc-addNew-button:before {
@@ -857,7 +859,7 @@ input[type="button"].btn-block {
 }
 
 .fc .fc-event .fc-title {
-  font-size: .85rem;
+  font-size: 0.85rem;
   color: #fff;
 }
 
@@ -870,7 +872,7 @@ input[type="button"].btn-block {
 }
 
 .modal-calendar #cal-start-date:disabled {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 @media (max-width: 900px) {
@@ -878,8 +880,8 @@ input[type="button"].btn-block {
     margin-bottom: 2rem;
   }
 
-  .fc .fc-header-toolbar .bullets-group-1 [class*="category-"] {
-    margin: .3rem 0;
+  .fc .fc-header-toolbar .bullets-group-1 [class*=category-] {
+    margin: 0.3rem 0;
   }
 }
 

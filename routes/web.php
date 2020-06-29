@@ -73,6 +73,7 @@ Route::prefix('')->group(function() {
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');
 		Route::get('tags/json', 'TagController@getTagsJson');
+		Route::get('variables/json', 'VariableController@getVariablesJson');
 	});
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {

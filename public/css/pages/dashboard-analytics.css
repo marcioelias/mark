@@ -35,7 +35,7 @@
 }
 
 #dashboard-analytics table td {
-  padding: .75rem;
+  padding: 0.75rem;
 }
 
 @media only screen and (max-width: 576px) {

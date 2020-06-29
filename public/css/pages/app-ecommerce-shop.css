@@ -46,31 +46,31 @@
 }
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal {
-  height: .285rem;
+  height: 0.285rem;
 }
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-base {
-  height: .285rem;
+  height: 0.285rem;
 }
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-handle {
   right: -1.071rem !important;
-  top: -.428rem;
+  top: -0.428rem;
   width: 16px;
   height: 16px;
-  border-width: .142rem;
+  border-width: 0.142rem;
   line-height: 1.15;
   cursor: pointer;
 }
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-handle .noUi-tooltip {
   opacity: 0;
-  font-size: .75rem;
+  font-size: 0.75rem;
   background-color: #7367f0;
   color: #fff;
-  border-radius: .357rem;
+  border-radius: 0.357rem;
   border: none;
-  padding: .142rem .357rem;
+  padding: 0.142rem 0.357rem;
   transform: translate(-50%, -50%);
 }
 
@@ -84,8 +84,8 @@
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-handle:active {
   transform: scale(1);
-  border-width: .5rem;
-  transition: .25s ease;
+  border-width: 0.5rem;
+  transition: 0.25s ease;
 }
 
 .ecommerce-application .sidebar-shop .range-slider.noUi-horizontal .noUi-handle:active .noUi-tooltip {
@@ -98,7 +98,7 @@
 }
 
 .ecommerce-application .sidebar-shop .ratings-list ~ .stars-received {
-  margin-top: .35rem;
+  margin-top: 0.35rem;
 }
 
 .ecommerce-application .sidebar-shop {
@@ -119,7 +119,7 @@
 .ecommerce-application .ecommerce-header-items .view-options .view-btn-option .btn.view-btn {
   margin-right: 10px;
   background-color: #fff;
-  padding: .5rem;
+  padding: 0.5rem;
   color: #626262;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14) !important;
 }
@@ -198,23 +198,23 @@
 }
 
 .ecommerce-application .search-product::-webkit-input-placeholder {
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .search-product::-moz-placeholder {
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .search-product:-ms-input-placeholder {
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .search-product::-ms-input-placeholder {
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .search-product::placeholder {
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .ecommerce-card:hover {
@@ -227,7 +227,7 @@
 }
 
 .ecommerce-application .ecommerce-card .item-rating i {
-  margin-left: .25rem;
+  margin-left: 0.25rem;
   vertical-align: top;
 }
 
@@ -237,22 +237,22 @@
 }
 
 .ecommerce-application .ecommerce-card .item-description {
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .ecommerce-application .ecommerce-card .wishlist,
 .ecommerce-application .ecommerce-card .cart {
-  padding: .8rem 1rem;
+  padding: 0.8rem 1rem;
   cursor: pointer;
   font-weight: 600;
-  font-size: .875rem;
+  font-size: 0.875rem;
   text-transform: uppercase;
 }
 
 .ecommerce-application .ecommerce-card .wishlist i,
 .ecommerce-application .ecommerce-card .cart i {
   font-size: 1rem;
-  margin-right: .25rem;
+  margin-right: 0.25rem;
 }
 
 .ecommerce-application .ecommerce-card p {
@@ -283,7 +283,7 @@
 
 .ecommerce-application .grid-view,
 .ecommerce-application .list-view {
-  margin-top: .7rem;
+  margin-top: 0.7rem;
 }
 
 .ecommerce-application .grid-view {
@@ -298,7 +298,7 @@
 }
 
 .ecommerce-application .grid-view .ecommerce-card .card-content .item-img {
-  padding-top: .5rem;
+  padding-top: 0.5rem;
   min-height: 15.85rem;
 }
 
@@ -331,7 +331,7 @@
 }
 
 .ecommerce-application .grid-view .ecommerce-card .card-content .item-options .wishlist {
-  padding: .8rem 2rem;
+  padding: 0.8rem 2rem;
 }
 
 .ecommerce-application .grid-view .ecommerce-card .card-content .item-options .item-wrapper .item-rating {
@@ -384,7 +384,7 @@
 
 .ecommerce-application .list-view .ecommerce-card .card-content .card-body {
   padding: 1rem;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
   border-right: 1px solid #dae1e7;
 }
 
@@ -397,14 +397,14 @@
 }
 
 .ecommerce-application .list-view .ecommerce-card .card-content .card-body .item-name {
-  margin-bottom: .25rem;
-  font-size: .95rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
 }
 
 .ecommerce-application .list-view .ecommerce-card .card-content .card-body .item-company {
   display: block;
   cursor: pointer;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .ecommerce-application .list-view .ecommerce-card .card-content .card-body .item-company .company-name {
@@ -453,18 +453,18 @@
 .ecommerce-application .checkout-items .ecommerce-card .card-content .stock-status-in {
   color: #28c76f;
   font-weight: 400;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .ecommerce-application .checkout-items .ecommerce-card .card-content .stock-status-out {
   color: #ea5455;
   font-weight: 400;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .ecommerce-application .checkout-items .ecommerce-card .card-content .item-quantity {
   font-weight: 700;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .ecommerce-application .checkout-items .ecommerce-card .card-content .item-quantity .quantity-title {
@@ -505,7 +505,7 @@
 }
 
 .ecommerce-application .checkout-options .coupons .coupons-title p {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .ecommerce-application .checkout-options .coupons .apply-coupon {
@@ -515,18 +515,18 @@
 }
 
 .ecommerce-application .checkout-options .coupons .apply-coupon p {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .ecommerce-application .checkout-options .price-details {
   font-weight: 600;
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 
 .ecommerce-application .checkout-options .detail {
   display: flex;
   justify-content: space-between;
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 
 .ecommerce-application .checkout-options .detail .detail-title {
@@ -597,12 +597,12 @@
 
   .ecommerce-application .sidebar-left .sidebar .sidebar-shop {
     transform: translateX(-112%);
-    transition: all .25s ease;
+    transition: all 0.25s ease;
     position: absolute;
   }
 
   .ecommerce-application .sidebar-left .sidebar .sidebar-shop.show {
-    transition: all .25s ease;
+    transition: all 0.25s ease;
     transform: translateX(0);
   }
 
@@ -622,19 +622,19 @@
   }
 
   .ecommerce-application .ecommerce-header-items .result-toggler .shop-sidebar-toggler {
-    top: .5rem;
+    top: 0.5rem;
   }
 
   .ecommerce-application .ecommerce-header-items .sidebar-shop {
     transform: translateX(-123%);
-    transition: all .2s ease;
+    transition: all 0.2s ease;
     z-index: 5;
   }
 
   .ecommerce-application .ecommerce-header-items .sidebar-shop.show {
     position: absolute;
     transform: translateX(0);
-    transition: all .2s ease;
+    transition: all 0.2s ease;
   }
 
   .ecommerce-application .list-view .ecommerce-card .card-content {
@@ -705,7 +705,7 @@
 
   .ecommerce-application .list-view .ecommerce-card .card-content .item-options .wishlist,
   .ecommerce-application .list-view .ecommerce-card .card-content .item-options .cart {
-    padding: .8rem 3rem;
+    padding: 0.8rem 3rem;
     display: flex;
     justify-content: center;
   }

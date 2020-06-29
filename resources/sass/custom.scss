@@ -50,3 +50,8 @@
 .select2-container--default.select2-container--open .select2-selection--single {
     box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
 }
+
+/* Froala */
+.second-toolbar a[id="logo"] {
+    display: none;
+}

@@ -34,8 +34,8 @@
 }
 
 .ball-spin-loader > span:nth-child(2) {
-  top: 30.68182px;
-  left: 30.68182px;
+  top: 30.6818181818px;
+  left: 30.6818181818px;
   -webkit-animation: ball-spin-loader 2s 1.8s infinite linear;
           animation: ball-spin-loader 2s 1.8s infinite linear;
 }
@@ -48,8 +48,8 @@
 }
 
 .ball-spin-loader > span:nth-child(4) {
-  top: -30.68182px;
-  left: 30.68182px;
+  top: -30.6818181818px;
+  left: 30.6818181818px;
   -webkit-animation: ball-spin-loader 2s 3.6s infinite linear;
           animation: ball-spin-loader 2s 3.6s infinite linear;
 }
@@ -62,8 +62,8 @@
 }
 
 .ball-spin-loader > span:nth-child(6) {
-  top: -30.68182px;
-  left: -30.68182px;
+  top: -30.6818181818px;
+  left: -30.6818181818px;
   -webkit-animation: ball-spin-loader 2s 5.4s infinite linear;
           animation: ball-spin-loader 2s 5.4s infinite linear;
 }
@@ -76,8 +76,8 @@
 }
 
 .ball-spin-loader > span:nth-child(8) {
-  top: 30.68182px;
-  left: -30.68182px;
+  top: 30.6818181818px;
+  left: -30.6818181818px;
   -webkit-animation: ball-spin-loader 2s 7.2s infinite linear;
           animation: ball-spin-loader 2s 7.2s infinite linear;
 }

@@ -11,29 +11,34 @@
     },
     "devDependencies": {
         "axios": "^0.19",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^4.5.0",
         "cross-env": "^5.2.1",
-        "jquery": "^3.2",
+        "jquery": "^3.5.1",
         "laravel-mix": "^4.1.4",
         "lodash": "^4.17.15",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
         "rtlcss": "^2.4.0",
-        "sass": "^1.22.12",
+        "sass": "^1.26.9",
         "sass-loader": "^7.3.1",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10",
-        "webpack-cli": "^3.3.5"
+        "webpack-cli": "^3.3.12"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.13.0",
-        "apexcharts": "^3.19.2",
+        "@fortawesome/fontawesome-free": "^5.13.1",
+        "animate.css": "^4.1.0",
+        "apexcharts": "^3.19.3",
+        "insert-text-at-cursor": "^0.3.0",
         "jquery-mask-plugin": "^1.14.16",
         "select2": "^4.0.13",
-        "sweetalert2": "^9.10.13",
+        "sweet-modal-vue": "^2.0.0",
+        "sweetalert2": "^9.15.2",
         "v-select2-component": "^0.4.3",
         "vue-apexcharts": "^1.5.3",
-        "vuesax": "^3.11.15",
+        "vue-froala-wysiwyg": "^3.1.1-1",
+        "vue-sweetalert2": "^3.0.5",
+        "vuesax": "^3.11.17",
         "vuex": "^3.4.0"
     }
 }

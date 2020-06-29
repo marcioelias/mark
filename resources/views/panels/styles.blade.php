@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="{{ asset(mix('css/themes/semi-dark-layout.css')) }}">
         <link rel="stylesheet" href="{{ asset(mix('css/sweetalert2.min.css')) }}">
         <link rel="stylesheet" href="{{ asset(mix('css/select2.min.css')) }}">
+        <link rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
         <link rel="stylesheet" href="{{ asset(mix('css/custom.css')) }}">
         {{-- {!! Helper::applClasses() !!} --}}
 @php

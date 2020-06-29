@@ -3,22 +3,21 @@
 namespace App\Models\User;
 
 use App\Models\User;
-use App\Traits\ActiveRecordsTrait;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Product extends Model
 {
 
-    use MultiTenantable, ActiveRecordsTrait;
+    use MultiTenantable;
 
     protected $fillable = [
         'user_id', 'plataform_config_id', 'plataform_code', 'product_name', 'product_price', 'active'
     ];
 
-    protected $casts = [
-        'active' => 'boolean'
-    ];
+    public function scopeActive($query) {
+        return $query->where('active', true);
+    }
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -30,5 +29,9 @@ class Product extends Model
 
     public function plataform() {
         return $this->hasOneThrough(Plataform::class, PlataformConfig::class);
+    }
+
+    public function tags() {
+        return $this->hasMany(Tag::class);
     }
 }

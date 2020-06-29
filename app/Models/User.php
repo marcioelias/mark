@@ -6,7 +6,6 @@ use App\Models\User\PlataformConfig;
 use App\Models\User\Product;
 use App\Models\User\Tag;
 use App\Notifications\CustomVerifyEmailNotification;
-use App\Traits\ActiveRecordsTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
@@ -14,7 +13,7 @@ use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, ActiveRecordsTrait;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

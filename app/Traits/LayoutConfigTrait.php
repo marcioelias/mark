@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Arr;
 
 trait LayoutConfigTrait {
     public $paginate = 15;
@@ -21,6 +22,12 @@ trait LayoutConfigTrait {
     public $orderField = 'id';
     public $orderType = 'asc';
 
+    public function fields() {
+        return array(
+            'id'
+        );
+    }
+
     public function getOrderData() {
         return [
             'order_by' => $this->orderField,
@@ -29,9 +36,9 @@ trait LayoutConfigTrait {
     }
 
     public function setOrder(HttpRequest $request, $default = false) {
-        if ($request->order_by) {
+        if ($request->order_by && Arr::has($this->fields(), $request->order_by)) {
             $this->orderField = $request->order_by;
-            $this->orderType = $request->order_type ?? 'ASC';
+            $this->orderType = in_array($request->order_type, ['ASC', 'DESC']) ? $request->order_type : 'ASC';
         } else if ($default) {
             $this->orderField = $default['order_by'];
             $this->orderType = $default['order_type'] ?? 'ASC';
@@ -65,7 +72,7 @@ trait LayoutConfigTrait {
 
     public function getIndex(string $view) {
         return $this->getView($view)
-                    ->withFields($this->fields)
+                    ->withFields($this->fields())
                     ->withOrderData($this->getOrderData());
     }
 }

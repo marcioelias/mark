@@ -13,12 +13,14 @@ class SmsPackageController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'sms_package_name' => 'Pacote SMS',
-        'sms_amount' => 'Quantidade',
-        'package_value' => ['label' => 'Valor', 'type' => 'decimal', 'decimais' => 2],
-        'active' => ['label' => 'Ativo', 'type' => 'bool']
-    );
+    public function fields() {
+        return array(
+            'sms_package_name' => 'Pacote SMS',
+            'sms_amount' => 'Quantidade',
+            'package_value' => ['label' => 'Valor', 'type' => 'decimal', 'decimais' => 2],
+            'active' => ['label' => 'Ativo', 'type' => 'bool']
+        );
+    }
 
     /**
      * Display a listing of the resource.

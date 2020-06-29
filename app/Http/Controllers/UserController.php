@@ -16,12 +16,14 @@ class UserController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'name' => 'Nome',
-        'email' => 'E-mail',
-        'plan_name' => 'Plano',
-        'active' => ['label' => 'Ativo', 'type' => 'bool']
-    );
+    public function fields() {
+        return array(
+            'name' => 'Nome',
+            'email' => 'E-mail',
+            'plan_name' => 'Plano',
+            'active' => ['label' => 'Ativo', 'type' => 'bool']
+        );
+    }
 
     /**
      * Display a listing of the resource.

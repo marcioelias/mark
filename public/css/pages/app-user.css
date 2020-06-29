@@ -57,7 +57,7 @@
 }
 
 .page-users-view table td {
-  padding-bottom: .8rem;
+  padding-bottom: 0.8rem;
   min-width: 140px;
   word-break: break-word;
 }

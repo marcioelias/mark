@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /*========================================================
         DARK LAYOUT
 =========================================================*/
@@ -44,7 +46,7 @@
 .swiper-button-next:after,
 .swiper-container-rtl .swiper-button-prev:after,
 .swiper-container-rtl .swiper-button-next:after {
-  font-family: 'feather';
+  font-family: "feather";
 }
 
 .swiper-button-prev {
@@ -76,7 +78,7 @@
   border-radius: 50%;
   position: relative;
   cursor: pointer;
-  padding: .3rem;
+  padding: 0.3rem;
 }
 
 .product-color-options .color-option .filloption {

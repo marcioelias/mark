@@ -4,5 +4,6 @@ return [
     'Search' => 'Buscar',
     'New' => 'Novo',
     'Clear' => 'Limpar',
-    'Save' => 'Salvar'
+    'Save' => 'Salvar',
+    'NothingSelected' => 'Nenhum item selecionado'
 ];

@@ -5,5 +5,6 @@
     'tableTitle' => 'Tags',
     'displayField' => 'tag_name',
     'actions' => ['edit', 'destroy'],
-    'orderData' => $orderData ?? false
+    'orderData' => $orderData ?? false,
+    'searchParms' => 'user.tags.search_parms'
 ]])

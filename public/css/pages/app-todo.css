@@ -14,13 +14,13 @@
   background-color: #fff;
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .todo-application .content-area-wrapper .sidebar .todo-sidebar .sidebar-close-icon {
   position: absolute;
-  right: .25rem;
-  top: .25rem;
+  right: 0.25rem;
+  top: 0.25rem;
   cursor: pointer;
   font-size: 1.25rem;
   z-index: 5;
@@ -30,7 +30,7 @@
 .todo-application .content-area-wrapper .sidebar .todo-sidebar .todo-app-menu {
   width: 100%;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
-  padding: .5rem 0;
+  padding: 0.5rem 0;
   z-index: 3;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .todo-application .content-area-wrapper .modal .todo-item-action .dropdown .dropdown-menu .dropdown-item {
-  padding: .14rem 1.428rem;
+  padding: 0.14rem 1.428rem;
 }
 
 .todo-application .content-area-wrapper .modal .todo-item-action .dropdown-toggle::after {
@@ -120,7 +120,7 @@
 }
 
 .todo-application .content-area-wrapper .content-right .app-fixed-search {
-  padding: .35rem .1rem;
+  padding: 0.35rem 0.1rem;
   border-bottom: 1px solid #dae1e7;
   background-color: #fff;
   border-top-right-radius: 0.5rem;
@@ -161,15 +161,15 @@
   z-index: 2;
   visibility: hidden;
   opacity: 0;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 .todo-application .content-area-wrapper .content-right .app-content-overlay.show {
   visibility: visible;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
   opacity: 1;
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .todo-application .content-area-wrapper .content-right .todo-task-list {
@@ -185,7 +185,7 @@
 
 .todo-application .content-area-wrapper .content-right .todo-task-list .todo-task-list-wrapper li {
   cursor: pointer;
-  transition: all .2s;
+  transition: all 0.2s;
   -webkit-animation: fadeIn 0.5s linear;
           animation: fadeIn 0.5s linear;
   -webkit-animation-fill-mode: both;
@@ -198,7 +198,7 @@
 .todo-application .content-area-wrapper .content-right .todo-task-list .todo-task-list-wrapper li:hover {
   transform: translateY(-4px);
   box-shadow: 0 3px 10px 0 #ccc;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
 .todo-application .content-area-wrapper .content-right .todo-task-list .todo-task-list-wrapper li .chip-wrapper {
@@ -25263,7 +25263,7 @@
 @media (max-width: 991.98px) {
   .todo-application .app-content .sidebar-left .todo-sidebar {
     transform: translateX(-110%);
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     left: 0;
     position: fixed;
     z-index: 5;
@@ -25272,7 +25272,7 @@
 
   .todo-application .app-content .sidebar-left.show .todo-sidebar {
     transform: translateX(13%);
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     display: block;
   }
 
@@ -25299,7 +25299,7 @@
     float: none !important;
     width: 100% !important;
     display: block !important;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
   }
 
   .content-right .todo-task-list .todo-title-wrapper .todo-item-action a {

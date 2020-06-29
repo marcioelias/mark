@@ -3,18 +3,18 @@
 =========================================================*/
 
 .sr-only,
-.bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="incrementMinutes"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="decrementHours"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="decrementMinutes"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="showHours"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="showMinutes"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="togglePeriod"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="clear"]::after,
-.bootstrap-datetimepicker-widget .btn[data-action="today"]::after,
-.bootstrap-datetimepicker-widget .picker-switch::after,
+.bootstrap-datetimepicker-widget table th.next::after,
 .bootstrap-datetimepicker-widget table th.prev::after,
-.bootstrap-datetimepicker-widget table th.next::after {
+.bootstrap-datetimepicker-widget .picker-switch::after,
+.bootstrap-datetimepicker-widget .btn[data-action=today]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=clear]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=togglePeriod]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=showMinutes]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=showHours]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=decrementMinutes]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=decrementHours]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=incrementMinutes]::after,
+.bootstrap-datetimepicker-widget .btn[data-action=incrementHours]::after {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -61,7 +61,7 @@
 
 .bootstrap-datetimepicker-widget.dropdown-menu:before,
 .bootstrap-datetimepicker-widget.dropdown-menu:after {
-  content: '';
+  content: "";
   display: inline-block;
   position: absolute;
 }
@@ -135,39 +135,39 @@
   padding: 6px;
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=incrementHours]::after {
   content: "Increment Hours";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="incrementMinutes"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=incrementMinutes]::after {
   content: "Increment Minutes";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="decrementHours"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=decrementHours]::after {
   content: "Decrement Hours";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="decrementMinutes"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=decrementMinutes]::after {
   content: "Decrement Minutes";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="showHours"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=showHours]::after {
   content: "Show Hours";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="showMinutes"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=showMinutes]::after {
   content: "Show Minutes";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="togglePeriod"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=togglePeriod]::after {
   content: "Toggle AM/PM";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="clear"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=clear]::after {
   content: "Clear the picker";
 }
 
-.bootstrap-datetimepicker-widget .btn[data-action="today"]::after {
+.bootstrap-datetimepicker-widget .btn[data-action=today]::after {
   content: "Set the date to today";
 }
 
@@ -244,7 +244,7 @@
 }
 
 .bootstrap-datetimepicker-widget table td.cw {
-  font-size: .8em;
+  font-size: 0.8em;
   height: 20px;
   line-height: 20px;
   color: #1e1e1e;
@@ -274,7 +274,7 @@
 }
 
 .bootstrap-datetimepicker-widget table td.today:before {
-  content: '';
+  content: "";
   display: inline-block;
   border: 0 0 7px 7px solid transparent;
   border-bottom-color: #7367f0;

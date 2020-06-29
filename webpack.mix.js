@@ -63,6 +63,7 @@ mix.copyDirectory('resources/fonts', 'public/fonts');
 mix.copy('node_modules/sweetalert2/dist/sweetalert2.min.js', 'public/js/scripts');
 mix.copy('node_modules/sweetalert2/dist/sweetalert2.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/css/select2.min.css', 'public/css');
+mix.copy('node_modules/animate.css/animate.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/js/select2.full.min.js', 'public/js/scripts');
 mix.copy('node_modules/jquery-mask-plugin/dist/jquery.mask.min.js', 'public/js/scripts');
 mix.copy('node_modules/apexcharts/dist/apexcharts.min.js', 'public/vendors/js/charts');

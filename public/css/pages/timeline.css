@@ -110,7 +110,7 @@
 }
 
 #timeline.timeline-center .timeline-item:nth-child(even):after {
-  content: '';
+  content: "";
   position: absolute;
   right: 19px;
   top: 10px;
@@ -126,7 +126,7 @@
 }
 
 #timeline.timeline-center .timeline-item:nth-child(even):before {
-  content: '';
+  content: "";
   position: absolute;
   right: 24px;
   top: 20px;
@@ -147,7 +147,7 @@
 }
 
 #timeline.timeline-center .timeline-item:nth-child(odd):after {
-  content: '';
+  content: "";
   position: absolute;
   left: 19px;
   top: 10px;
@@ -163,7 +163,7 @@
 }
 
 #timeline.timeline-center .timeline-item:nth-child(odd):before {
-  content: '';
+  content: "";
   position: absolute;
   left: 24px;
   top: 20px;
@@ -192,7 +192,7 @@
   border-radius: 50%;
   text-align: center;
   text-decoration: none;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 #timeline.timeline-center .timeline-item > .timeline-badge > span i {
@@ -253,7 +253,7 @@
 }
 
 #timeline.timeline-right .timeline-item:after {
-  content: '';
+  content: "";
   position: absolute;
   right: 33px;
   top: 21px;
@@ -266,7 +266,7 @@
 }
 
 #timeline.timeline-right .timeline-item:before {
-  content: '';
+  content: "";
   position: absolute;
   right: 32px;
   top: 20px;
@@ -295,7 +295,7 @@
   border-radius: 50%;
   text-align: center;
   text-decoration: none;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 #timeline.timeline-right .timeline-item > .timeline-badge > span i {
@@ -371,7 +371,7 @@
 }
 
 #timeline.timeline-left .timeline-item:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 33px;
   top: 21px;
@@ -384,7 +384,7 @@
 }
 
 #timeline.timeline-left .timeline-item:before {
-  content: '';
+  content: "";
   position: absolute;
   left: 32px;
   top: 20px;
@@ -413,7 +413,7 @@
   border-radius: 50%;
   text-align: center;
   text-decoration: none;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
 #timeline.timeline-left .timeline-item > .timeline-badge > span i {

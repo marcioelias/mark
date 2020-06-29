@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User\Product;
 use App\Models\User\Tag;
 use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
@@ -13,9 +14,12 @@ class TagController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'tag_name' => 'Tag'
-    );
+    public function fields() {
+        return array(
+            'product_name' => 'Produto',
+            'tag_name' => 'Tag'
+        );
+    }
 
     /**
      * Display a listing of the resource.
@@ -34,16 +38,22 @@ class TagController extends Controller
         ];
 
         $this->setOrder($request, [
-            'order_by' => 'tag_name',
+            'order_by' => 'product_name',
             'order_type' => 'ASC'
         ]);
 
         if ($request->searchField) {
-            $tags = Tag::where('tag_name', 'like', "%$request->searchField%")
+            $tags = Tag::select('tags.*', 'products.product_name')
+                        ->join('products', 'products.id', 'tags.product_id')
+                        ->whereRaw("((tags.product_id = ?) || (? is null))", [$request->product_id, $request->product_id])
+                        ->where('tag_name', 'like', "%$request->searchField%")
                         ->OrderBy($this->orderField, $this->orderType)
                         ->paginate($this->paginate);
         } else {
-            $tags = Tag::OrderBy($this->orderField, $this->orderType)
+            $tags = Tag::select('tags.*', 'products.product_name')
+                        ->join('products', 'products.id', 'tags.product_id')
+                        ->whereRaw("((tags.product_id = ?) || (? is null))", [$request->product_id, $request->product_id])
+                        ->OrderBy($this->orderField, $this->orderType)
                         ->paginate($this->paginate);
         }
 
@@ -70,7 +80,11 @@ class TagController extends Controller
                 'name' => "Nova"
             ]
         ];
-        return $this->getView('user.tags.create');
+        $products = Product::Active()
+                        ->orderBy('product_name')
+                        ->get();
+
+        return $this->getView('user.tags.create')->withProducts($products);
     }
 
     /**
@@ -85,6 +99,7 @@ class TagController extends Controller
         $userId = Auth::user()->id;
         $this->validate($request, [
             'tag_name' => "required|unique:tags,tag_name,NULL,NULL,user_id,$userId",
+            'product_id' => 'required'
         ]);
 
         $tag = new Tag($request->all());
@@ -112,7 +127,12 @@ class TagController extends Controller
             ]
         ];
 
-        return $this->getView('user.tags.edit')->withTag($tag);
+        $products = Product::Active()
+                        ->orWhere('product_id', $tag->product_id)
+                        ->orderBy('product_name', 'asc')
+                        ->get();
+
+        return $this->getView('user.tags.edit')->withTag($tag)->withProducts($products);
     }
 
     /**

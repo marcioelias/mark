@@ -12,11 +12,13 @@ class PlanController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'plan_name' => 'Plano',
-        'num_postbacks' => 'Mum. Postbacks',
-        'plan_value' => ['label' => 'Valor', 'type' => 'decimal', 'decimais' => 2]
-    );
+    public function fields() {
+        return array(
+            'plan_name' => 'Plano',
+            'num_postbacks' => 'Mum. Postbacks',
+            'plan_value' => ['label' => 'Valor', 'type' => 'decimal', 'decimais' => 2]
+        );
+    }
 
     /**
      * Display a listing of the resource.

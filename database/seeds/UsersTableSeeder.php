@@ -22,9 +22,11 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('user'),
             'customer_code' => 'A12BC34',
             'plan_id' => Arr::random(Plan::pluck('id')->toArray()),
+            'email_verified_at' => now(),
+            'first_login_at' => now(),
             'created_at' => now()
         ]);
 
-        factory(User::class, 500)->create();
+        factory(User::class, 100)->create();
     }
 }

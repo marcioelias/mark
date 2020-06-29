@@ -15,21 +15,19 @@
         <form id="searchForm" class="form w-100" method="GET" action="{{ route($model.'.index') }}">
             @csrf
             <div class="d-flex justify-content-between align-items-center mb-1">
-                {{-- <div class="form-group"> --}}
-                    <div class="input-group mr-1">
-                        <input type="text" class="form-control" id="searchField" name="searchField" placeholder="Digite aqui para buscar" value="{{isset($_GET['searchField']) ? $_GET['searchField'] : ''}}">
-                        @if(request('searchField', false))
-                        <span class="input-group-append" data-toggle="tooltip" data-placement="top" title="{{__('strings.Clear')}}" data-original-title="{{__('Clear')}}">
-                            <button type="button" id="clear-search-form" class="btn btn-secondary icon-btn-sm-padding"><i class="fa fa-times"></i></span></button>
-                        </span>
-                        @endif
-                        <span class="input-group-append" data-toggle="tooltip" data-placement="top" title="{{__('strings.Search')}}" data-original-title="{{__('Search')}}">
-                            <button type="submit" class="btn btn-primary icon-btn-sm-padding" style="border-bottom-right-radius: 0.4285rem; border-top-right-radius: 0.4285rem"><i class="fa fa-search"></i></span></button>
-                        </span>
-                        <input type="hidden" name="order_by" value="{{ $_GET['order_by'] ?? $orderData['order_by'] ?? null }}">
-                        <input type="hidden" name="order_type" value="{{ $_GET['order_type'] ?? $orderData['order_type'] ?? null }}">
-                    </div>
-                {{-- </div> --}}
+                <div class="input-group mr-1">
+                    <input type="text" class="form-control" id="searchField" name="searchField" placeholder="Digite aqui para buscar" value="{{isset($_GET['searchField']) ? $_GET['searchField'] : ''}}">
+                    @if(request('searchField', false))
+                    <span class="input-group-append" data-toggle="tooltip" data-placement="top" title="{{__('strings.Clear')}}" data-original-title="{{__('Clear')}}">
+                        <button type="button" id="clear-search-form" class="btn btn-secondary icon-btn-sm-padding"><i class="fa fa-times"></i></span></button>
+                    </span>
+                    @endif
+                    <span class="input-group-append" data-toggle="tooltip" data-placement="top" title="{{__('strings.Search')}}" data-original-title="{{__('Search')}}">
+                        <button type="submit" class="btn btn-primary icon-btn-sm-padding" style="border-bottom-right-radius: 0.4285rem; border-top-right-radius: 0.4285rem"><i class="fa fa-search"></i></span></button>
+                    </span>
+                    <input type="hidden" name="order_by" value="{{ $_GET['order_by'] ?? $orderData['order_by'] ?? null }}">
+                    <input type="hidden" name="order_type" value="{{ $_GET['order_type'] ?? $orderData['order_type'] ?? null }}">
+                </div>
                 <div>
                     @if(Route::has($model.'.create'))
                     <a href="{{ route($model.'.create', Request()->request->all() ?? []) }}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="{{__('strings.New')}}" data-original-title="{{__('New')}}">
@@ -38,25 +36,15 @@
                     @endif
                 </div>
             </div>
-            {{-- <div class="row mr-1">
-                <div class="col-10">
-
-                </div>
-                <div class="col12">
-                    @if(Route::has($model.'.create'))
-                    <a href="{{ route($model.'.create', Request()->request->all() ?? []) }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="{{__('strings.New')}}" data-original-title="{{__('New')}}">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                    @endif
-                    @foreach($customMethods as $customMethod)
-                        @component($customMethod['component'])
-                        @endcomponent
-                    @endforeach
-                </div>
-            </div> --}}
+            <div class="row mr-1">
+                @foreach($customMethods as $customMethod)
+                    @component($customMethod['component'])
+                    @endcomponent
+                @endforeach
+            </div>
             <div class="row">
             @if(isset($searchParms))
-                @component($searchParms)
+                @component($searchParms, $searchParmsData ?? [])
                 @endcomponent
             @endif
             </div>

@@ -15,11 +15,13 @@ class SmsBuyController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'created_at' => ['label' => 'Data da Compra', 'type' => 'datetime'],
-        'amount' => 'Quantidade',
-        'unitary_value' => ['label' => 'Vlr. Unitário', 'type' => 'decimal', 'decimais' => 3]
-    );
+    public function fields() {
+        return array(
+            'created_at' => ['label' => 'Data da Compra', 'type' => 'datetime'],
+            'amount' => 'Quantidade',
+            'unitary_value' => ['label' => 'Vlr. Unitário', 'type' => 'decimal', 'decimais' => 3]
+        );
+    }
 
     /**
      * Display a listing of the resource.

@@ -56,7 +56,7 @@
 }
 
 #user-profile .user-latest-img {
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 #user-profile .user-latest-img:hover {

@@ -226,8 +226,8 @@
   border-color: #FFFFFF !important;
 }
 
-input[type="checkbox"].bg-white + .custom-control-label:before,
-input[type="radio"].bg-white + .custom-control-label:before {
+input[type=checkbox].bg-white + .custom-control-label:before,
+input[type=radio].bg-white + .custom-control-label:before {
   background-color: #FFFFFF !important;
 }
 
@@ -250,7 +250,7 @@ input:focus ~ .bg-white {
 .custom-switch-white .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #FFFFFF !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-white input:checked ~ .vs-radio .vs-radio--circle {
@@ -486,8 +486,8 @@ input:focus ~ .bg-white {
   border-color: #000000 !important;
 }
 
-input[type="checkbox"].bg-black + .custom-control-label:before,
-input[type="radio"].bg-black + .custom-control-label:before {
+input[type=checkbox].bg-black + .custom-control-label:before,
+input[type=radio].bg-black + .custom-control-label:before {
   background-color: #000000 !important;
 }
 
@@ -510,7 +510,7 @@ input:focus ~ .bg-black {
 .custom-switch-black .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #000000 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-black input:checked ~ .vs-radio .vs-radio--circle {
@@ -746,8 +746,8 @@ input:focus ~ .bg-black {
   border-color: #1e1e1e !important;
 }
 
-input[type="checkbox"].bg-dark + .custom-control-label:before,
-input[type="radio"].bg-dark + .custom-control-label:before {
+input[type=checkbox].bg-dark + .custom-control-label:before,
+input[type=radio].bg-dark + .custom-control-label:before {
   background-color: #1e1e1e !important;
 }
 
@@ -770,7 +770,7 @@ input:focus ~ .bg-dark {
 .custom-switch-dark .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #1e1e1e !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-dark input:checked ~ .vs-radio .vs-radio--circle {
@@ -1069,8 +1069,8 @@ input:focus ~ .bg-dark {
   border-color: #babfc7 !important;
 }
 
-input[type="checkbox"].bg-light + .custom-control-label:before,
-input[type="radio"].bg-light + .custom-control-label:before {
+input[type=checkbox].bg-light + .custom-control-label:before,
+input[type=radio].bg-light + .custom-control-label:before {
   background-color: #babfc7 !important;
 }
 
@@ -1093,7 +1093,7 @@ input:focus ~ .bg-light {
 .custom-switch-light .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #babfc7 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-light input:checked ~ .vs-radio .vs-radio--circle {
@@ -1770,8 +1770,8 @@ input:focus ~ .bg-primary {
   border-color: #7367f0 !important;
 }
 
-input[type="checkbox"].bg-primary + .custom-control-label:before,
-input[type="radio"].bg-primary + .custom-control-label:before {
+input[type=checkbox].bg-primary + .custom-control-label:before,
+input[type=radio].bg-primary + .custom-control-label:before {
   background-color: #7367f0 !important;
 }
 
@@ -1794,7 +1794,7 @@ input:focus ~ .bg-primary {
 .custom-switch-primary .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #7367f0 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-primary input:checked ~ .vs-radio .vs-radio--circle {
@@ -2975,8 +2975,8 @@ input:focus ~ .bg-secondary {
   border-color: #b8c2cc !important;
 }
 
-input[type="checkbox"].bg-secondary + .custom-control-label:before,
-input[type="radio"].bg-secondary + .custom-control-label:before {
+input[type=checkbox].bg-secondary + .custom-control-label:before,
+input[type=radio].bg-secondary + .custom-control-label:before {
   background-color: #b8c2cc !important;
 }
 
@@ -2999,7 +2999,7 @@ input:focus ~ .bg-secondary {
 .custom-switch-secondary .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #b8c2cc !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-secondary input:checked ~ .vs-radio .vs-radio--circle {
@@ -3928,8 +3928,8 @@ input:focus ~ .bg-success {
   border-color: #28c76f !important;
 }
 
-input[type="checkbox"].bg-success + .custom-control-label:before,
-input[type="radio"].bg-success + .custom-control-label:before {
+input[type=checkbox].bg-success + .custom-control-label:before,
+input[type=radio].bg-success + .custom-control-label:before {
   background-color: #28c76f !important;
 }
 
@@ -3952,7 +3952,7 @@ input:focus ~ .bg-success {
 .custom-switch-success .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #28c76f !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-success input:checked ~ .vs-radio .vs-radio--circle {
@@ -5133,8 +5133,8 @@ input:focus ~ .bg-info {
   border-color: #00cfe8 !important;
 }
 
-input[type="checkbox"].bg-info + .custom-control-label:before,
-input[type="radio"].bg-info + .custom-control-label:before {
+input[type=checkbox].bg-info + .custom-control-label:before,
+input[type=radio].bg-info + .custom-control-label:before {
   background-color: #00cfe8 !important;
 }
 
@@ -5157,7 +5157,7 @@ input:focus ~ .bg-info {
 .custom-switch-info .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #00cfe8 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-info input:checked ~ .vs-radio .vs-radio--circle {
@@ -6338,8 +6338,8 @@ input:focus ~ .bg-warning {
   border-color: #ff9f43 !important;
 }
 
-input[type="checkbox"].bg-warning + .custom-control-label:before,
-input[type="radio"].bg-warning + .custom-control-label:before {
+input[type=checkbox].bg-warning + .custom-control-label:before,
+input[type=radio].bg-warning + .custom-control-label:before {
   background-color: #ff9f43 !important;
 }
 
@@ -6362,7 +6362,7 @@ input:focus ~ .bg-warning {
 .custom-switch-warning .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #ff9f43 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-warning input:checked ~ .vs-radio .vs-radio--circle {
@@ -7543,8 +7543,8 @@ input:focus ~ .bg-danger {
   border-color: #ea5455 !important;
 }
 
-input[type="checkbox"].bg-danger + .custom-control-label:before,
-input[type="radio"].bg-danger + .custom-control-label:before {
+input[type=checkbox].bg-danger + .custom-control-label:before,
+input[type=radio].bg-danger + .custom-control-label:before {
   background-color: #ea5455 !important;
 }
 
@@ -7567,7 +7567,7 @@ input:focus ~ .bg-danger {
 .custom-switch-danger .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #ea5455 !important;
   color: #fff;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 .vs-radio-danger input:checked ~ .vs-radio .vs-radio--circle {

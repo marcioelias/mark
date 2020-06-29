@@ -14,15 +14,15 @@
             "icon": "feather icon-zap",
             "submenu": [
                 {
-                    "url": "tag.index",
-                    "name": "Tags",
-                    "activeUrls": ["tag", "tag/create", "tag/{tag}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
                     "url": "product.index",
                     "name": "Produts",
                     "activeUrls": ["product", "product/create", "product/{product}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "tag.index",
+                    "name": "Tags",
+                    "activeUrls": ["tag", "tag/create", "tag/{tag}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {

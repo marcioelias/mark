@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /*========================================================
         DARK LAYOUT
 =========================================================*/
@@ -22,7 +24,7 @@
 
 .dropzone .dz-message:before {
   content: "\E864";
-  font-family: 'feather';
+  font-family: "feather";
   font-size: 80px;
   position: absolute;
   top: 48px;
@@ -62,7 +64,7 @@
 
 .dropzone .dz-preview .dz-remove:before {
   content: "\E8F6";
-  font-family: 'feather';
+  font-family: "feather";
   display: inline-block;
   line-height: 1;
   z-index: 2;
