@@ -69,11 +69,15 @@ export default {
     mounted() {
         this.ActionGetProducts({ vm: this })
         this.ActionGetTags({ vm: this })
+        this.ActionGetVariablesFromApi({ vm: this })
     },
     methods: {
         ...mapActions('funnel', [
             'ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags'
         ]),
+        ...mapActions('variables', [
+            'ActionGetVariablesFromApi'
+        ])
     }
 }
 </script>

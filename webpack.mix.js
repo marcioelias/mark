@@ -67,7 +67,8 @@ mix.copy('node_modules/animate.css/animate.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/js/select2.full.min.js', 'public/js/scripts');
 mix.copy('node_modules/jquery-mask-plugin/dist/jquery.mask.min.js', 'public/js/scripts');
 mix.copy('node_modules/apexcharts/dist/apexcharts.min.js', 'public/vendors/js/charts');
-mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts')
+mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts');
+
 
 mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .js('resources/js/core/app.js', 'public/js/core')

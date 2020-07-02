@@ -25,6 +25,10 @@ export const ActionEditAction = ({ state, commit }, payload) => {
             commit(types.SET_ACTIVE_COMPONENT, componentTypes.COMPONENT_NEW_SMS)
             break;
 
+        case 'email':
+            commit(types.SET_ACTIVE_COMPONENT, componentTypes.COMPONENT_NEW_EMAIL)
+            break;
+
         default:
             commit(types.SET_ACTIVE_COMPONENT, componentTypes.COMPONENT_TABLE)
             break;

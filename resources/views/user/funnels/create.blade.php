@@ -11,5 +11,6 @@
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('js/scripts/DynamicQuillTools.js') }}"></script>
     <script src="{{ asset('js/user/funnel.js') }}"></script>
 @endsection

@@ -6,23 +6,15 @@ import FunnelComponent from '../src/funnel/components/FunnelComponent'
 
 import 'vuesax/dist/vuesax.css'
 
-// Require Froala Editor js file.
-//require('froala-editor/js/froala_editor.pkgd.min.js')
-import 'froala-editor/js/froala_editor.pkgd.min.js'
-/* import 'froala-editor/js/plugins/link.min.js'
-import 'froala-editor/js/plugins/image.min.js' */
-import 'froala-editor/js/plugins.pkgd.min.js';
-import 'froala-editor/js/plugins/font_family.min.js';
+import VueQuillEditor from 'vue-quill-editor'
+
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
+
+Vue.use(VueQuillEditor)
 
 
-// Require Froala Editor css files.
-require('froala-editor/css/froala_editor.pkgd.min.css')
-require('froala-editor/css/froala_style.min.css')
-
-// Import and use Vue Froala lib.
-import VueFroala from 'vue-froala-wysiwyg'
-
-Vue.use(VueFroala)
 
 Vue.use(Vuesax, {})
 Vue.use(VueSweetAlert2)

@@ -36,7 +36,7 @@
         "sweetalert2": "^9.15.2",
         "v-select2-component": "^0.4.3",
         "vue-apexcharts": "^1.5.3",
-        "vue-froala-wysiwyg": "^3.1.1-1",
+        "vue-quill-editor": "^3.0.6",
         "vue-sweetalert2": "^3.0.5",
         "vuesax": "^3.11.17",
         "vuex": "^3.4.0"

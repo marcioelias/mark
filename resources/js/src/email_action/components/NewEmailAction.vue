@@ -10,17 +10,23 @@
                     <input type="text" name="action_description" id="action_description" class="form-control" v-model="emailAction.description" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
-            <!-- <div class="row mb-1">
-                <div class="col">
-                    <select-variables :component="'email_body'" />
-                    <small><i class="fas fa-exclamation text-info"></i> Selecione variáveis para incluir dados pessoais, como Nome do Cliente, Link do Boleto, etc.</small>
-                </div>
-            </div> -->
             <div class="row">
                 <div class="col">
-                    <label for="exampleFormControlTextarea1">Texto do E-mail</label>
-                    <froala :tag="'textarea'" :config="config" v-model="emailAction.emailMessage"></froala>
-                    <!-- <textarea class="form-control" ref="email_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="emailAction.textMessage"></textarea> -->
+                    <label for="email-message-editor">Texto do E-mail</label>
+                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="emailAction.emailMessage" :options="variablesDWConfig"></quill-editor>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <hr />
+                    <fieldset>
+                        <label>Enviar somente no horário entre:</label>
+                        <div class="d-flex justify-content-between">
+                            <div class="form-control mr-1" style="width: 7rem">{{ emailAction.timeSendMail[0] }} Horas</div>
+                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 v-model="emailAction.timeSendMail"/></div>
+                            <div class="form-control ml-1" style="width: 7rem">{{ emailAction.timeSendMail[1] }} Horas</div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
         </div>
@@ -36,8 +42,8 @@
 </template>
 
 <script>
-import VueFroala from 'vue-froala-wysiwyg';
-import { mapActions } from 'vuex'
+import { quillEditor } from 'vue-quill-editor'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import * as componentTypes from '../../steps/components/component-types'
 
 const iniData = {
@@ -45,52 +51,74 @@ const iniData = {
     type: 'email',
     description: 'Enviar Email',
     emailMessage: '',
-}
-
-const toolBtns = {
-    'moreText': {
-        'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting']
-    },
-    'moreParagraph': {
-        'buttons': ['alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote']
-    },
-    'moreRich': {
-        'buttons': ['insertLink', 'insertImage', 'insertVideo', 'insertTable', 'emoticons', 'fontAwesome', 'specialCharacters', 'embedly', 'insertFile', 'insertHR']
-    },
-    'moreMisc': {
-        'buttons': ['undo', 'redo', 'fullscreen', 'print', 'getPDF', 'spellChecker', 'selectAll', 'html', 'help'],
-        'align': 'right',
-        'buttonsVisible': 2
-    }
+    isEditing: false,
+    timeSendMail: [0,23]
 }
 
 export default {
     data() {
         return {
             emailAction: { ...iniData },
-            config: {
-                toolbarButtons: { ...toolBtns },
-                toolbarButtonsMD: { ...toolBtns },
-                toolbarButtonsSM: { ...toolBtns },
-                toolbarButtonsXS: { ...toolBtns }
+            variablesDWConfig: {
+                placeholder: 'Digite a mensagem a ser enviada...',
+                theme: 'snow'
             }
         }
     },
+    components: {
+        quillEditor
+    },
+    computed: {
+        ...mapState('steps', [
+            'isEditing', 'editingIndex'
+        ]),
+        ...mapGetters('variables', [
+            'GetVariablesAsObject'
+        ]),
+        ...mapGetters('steps', [
+            'GetActionByIndex'
+        ])
+    },
     methods: {
         ...mapActions('steps', [
-            'ActionSetActiveComponent'
+            'ActionSetActiveComponent', 'ActionSetNewAction', 'ActionSetUpdateAction'
         ]),
         saveEmailAction() {
             this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
-           /*  if (this.isEditing) {
+            if (this.isEditing) {
                 this.ActionSetUpdateAction(this.emailAction)
             } else {
                 this.ActionSetNewAction(this.emailAction)
-            } */
+            }
         },
         cancelNewEmailAction() {
             this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
         },
+        addCustomSelectToEditor() {
+            const quill = this.$refs.emailMessageEditor.quill
+
+            const variablesDW = new QuillToolbarDropDown({
+                label: "Variáveis",
+                rememberSelection: false
+            })
+
+            variablesDW.setItems(this.GetVariablesAsObject)
+
+            variablesDW.onSelect = function(label, value, quill) {
+                const { index, length } = quill.selection.savedRange
+                quill.deleteText(index, length)
+                quill.insertText(index, value)
+                quill.setSelection(index + value.length)
+            }
+
+            variablesDW.attach(quill)
+        }
+    },
+    mounted() {
+        this.addCustomSelectToEditor()
+        if (this.isEditing) {
+            this.emailAction = { ...this.GetActionByIndex(this.editingIndex) }
+        }
     }
 }
 </script>

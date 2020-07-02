@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->truncate();
         DB::table('plans')->truncate();
         DB::table('plataforms')->truncate();
+        DB::table('variables')->truncate();
     }
 }

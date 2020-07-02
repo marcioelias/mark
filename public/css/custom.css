@@ -6132,7 +6132,8 @@ readers do not read off random characters that represent icons */
 
 /* Froala */
 
-.second-toolbar a[id=logo] {
-  display: none;
+#email-message-editor {
+  height: 25rem;
+  margin-bottom: 4rem;
 }
 
