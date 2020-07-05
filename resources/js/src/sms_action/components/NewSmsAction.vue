@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col">
                     <label for="exampleFormControlTextarea1">Texto da Mensagem</label>
-                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="smsAction.textMessage"></textarea>
+                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="smsAction.actionData.data"></textarea>
                 </div>
             </div>
         </div>
@@ -43,7 +43,11 @@ const iniData = {
     id: null,
     type: 'sms',
     description: 'Enviar SMS',
-    textMessage: '',
+    actionData: {
+        data: '',
+        options: {}
+    },
+    actionType: null
 }
 
 export default {
@@ -61,6 +65,9 @@ export default {
         ]),
         ...mapGetters('steps', [
             'GetActionByIndex'
+        ]),
+        ...mapGetters('funnel', [
+            'GetActionTypeByName'
         ])
     },
     methods: {
@@ -76,13 +83,26 @@ export default {
             }
         },
         cancelNewSmsAction() {
-            this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+            this.$swal.fire({
+                    title: 'Cancelar cadastro da ação?',
+                    text: `Os dados informados serão perdidos...`,
+                    icon: 'warning',
+                    heightAuto: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, Cancelar!',
+                    cancelButtonText: 'Não, Continuar.'
+                }).then(result => {
+                    if (result.value) {
+                        this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+                    }
+                })
         },
         clearForm() {
             this.smsAction = { ...iniData }
         }
     },
     mounted() {
+        this.smsAction.actionType = this.GetActionTypeByName('sms')
         if (this.isEditing) {
             this.smsAction = { ...this.GetActionByIndex(this.editingIndex) }
         }

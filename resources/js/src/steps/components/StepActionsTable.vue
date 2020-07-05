@@ -1,9 +1,9 @@
 <template>
-    <table class="table table-sm table-hover bg-white">
+    <table class="table table-sm table-hover bg-white mb-0">
         <tbody>
             <tr v-for="(item, index) in listActions" :key="index">
                 <td class="align-middle" scope="row">
-                    <i class="fas" :class="{'fa-envelope': item.type == 'email', 'fa-sms': item.type == 'sms'}"></i> {{ item.description }}
+                    <i class="fas" :class="{'fa-envelope': item.actionType.action_type_name == 'email', 'fa-sms': item.actionType.action_type_name == 'sms'}"></i> {{ item.description }}
                 </td>
                 <td class="align-middle text-right" scope="row">
                     <span data-toggle="tooltip" data-placement="top" title="Editar">

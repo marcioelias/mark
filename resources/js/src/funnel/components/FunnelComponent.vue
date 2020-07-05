@@ -3,11 +3,11 @@
         <div class="row">
             <div class="col-md-5">
                 <label for="product_id">Produto</label>
-                <Select2 v-model="myValue" name="product_id" id="product_id" :options="GetProductsForSelect" :settings="{  }" @change="myChangeEvent($event)" @select="mySelectEvent($event)" />
+                <Select2 v-model="funnelProduct" name="product_id" id="product_id" :options="GetProductsForSelect" :settings="{  }" />
             </div>
             <div class="col-md-5">
                 <label for="tag">Tag</label>
-                <Select2 v-model="tag" name="tag" id="tag" :setting="{dropdownCssClass: 'form-control'}" :options="GetTagsForSelect" />
+                <Select2 v-model="funnelTag" name="tag" id="tag" :setting="{dropdownCssClass: 'form-control'}" :options="GetTagsForSelect" />
             </div>
             <div class="col-md-2">
                 <label>Ativo</label>
@@ -27,7 +27,7 @@
             <div class="card-body p-0" v-if="showCrudStep || steps.length > 0">
                 <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in" apper>
                     <vs-tabs v-if="!showCrudStep" key="tabs">
-                        <vs-tab v-for="(step, index) in steps" :key="index" :label="step.name" icon-pack="fas" icon="fa-angle-right" class="p-0">
+                        <vs-tab v-for="(step, index) in steps" :key="index" :label="step.data.name" icon-pack="fas" icon="fa-angle-right" class="p-0">
                             <show-step-component :step="step" />
                         </vs-tab>
                         <vs-tab label="Novo Passo" icon-pack="fas" icon="fa-plus-square" @click="ActionSetShowCrudStep(true)" class="p-0">
@@ -37,6 +37,16 @@
                 </transition>
             </div>
         </div>
+        <nav class="navbar navbar-expand-lg fixed-bottom p-0 mt-1" v-if="!showCrudStep && steps.length > 0">
+            <div class="ml-auto">
+                <button type="button" @click="saveFunnel" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="Salvar">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button type="button" @click="cancelFunnel" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </nav>
     </div>
 </template>
 
@@ -51,7 +61,6 @@ export default {
         return {
             active: true,
             myValue: '',
-            tag: null,
             myOptions: ['op1', 'op2', 'op3'], // or [{id: key, text: value}, {id: key, text: value}]
         }
     },
@@ -60,24 +69,61 @@ export default {
     },
     computed: {
         ...mapGetters('funnel', [
-            'GetProductsForSelect', 'GetTagsForSelect'
+            'GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect'
         ]),
         ...mapState('funnel', [
-            'showCrudStep', 'steps', 'products'
+            'showCrudStep', 'steps', 'products', 'tag', 'product'
         ]),
+        funnelTag: {
+            get() {
+                return this.tag
+            },
+            set(value) {
+                this.ActionSetTag(value)
+            }
+        },
+        funnelProduct: {
+            get() {
+                return this.product
+            },
+            set(value) {
+                this.ActionSetProduct(value)
+            }
+        }
     },
     mounted() {
         this.ActionGetProducts({ vm: this })
         this.ActionGetTags({ vm: this })
         this.ActionGetVariablesFromApi({ vm: this })
+        this.ActionGetActionTypes({ vm: this })
     },
     methods: {
         ...mapActions('funnel', [
-            'ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags'
+            'ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags', 'ActionClearState',
+            'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes'
         ]),
         ...mapActions('variables', [
             'ActionGetVariablesFromApi'
-        ])
+        ]),
+        cancelFunnel() {
+            this.$swal.fire({
+                    title: 'Cancelar cadastro do Funil?',
+                    text: `Os dados informados serão perdidos...`,
+                    icon: 'warning',
+                    heightAuto: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, Cancelar!',
+                    cancelButtonText: 'Não, Continuar.'
+                }).then(result => {
+                    if (result.value) {
+                        this.ActionClearState()
+                        window.location = '/funnel'
+                    }
+                })
+        },
+        saveFunnel() {
+            this.ActionSaveFunnel({ vm: this })
+        }
     }
 }
 </script>

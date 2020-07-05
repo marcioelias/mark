@@ -5,6 +5,6 @@ export default {
         state.description = payload
     },
     [types.SET_TEXT_MESSAGE] (state, payload) {
-        state.textMessage = payload
+        state.actionData = payload
     }
 }

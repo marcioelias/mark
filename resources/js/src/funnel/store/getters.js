@@ -31,3 +31,7 @@ export const GetNewTagsForSelect = (state, getters) => {
 export const GetStepByIndex = state => index => {
     return state.steps[index]
 }
+
+export const GetActionTypeByName = state => name => {
+    return state.actionTypes.find(action => action.action_type_name === name)
+}

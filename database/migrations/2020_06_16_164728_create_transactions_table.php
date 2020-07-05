@@ -1,14 +1,11 @@
 <?php
 
-use App\Traits\MultiTenantable;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
 {
-    use MultiTenantable;
-
     /**
      * Run the migrations.
      *

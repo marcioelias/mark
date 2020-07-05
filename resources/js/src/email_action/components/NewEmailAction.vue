@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     <label for="email-message-editor">Texto do E-mail</label>
-                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="emailAction.emailMessage" :options="variablesDWConfig"></quill-editor>
+                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="emailAction.actionData.data" :options="variablesDWConfig"></quill-editor>
                 </div>
             </div>
             <div class="row">
@@ -22,9 +22,9 @@
                     <fieldset>
                         <label>Enviar somente no horário entre:</label>
                         <div class="d-flex justify-content-between">
-                            <div class="form-control mr-1" style="width: 7rem">{{ emailAction.timeSendMail[0] }} Horas</div>
-                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 v-model="emailAction.timeSendMail"/></div>
-                            <div class="form-control ml-1" style="width: 7rem">{{ emailAction.timeSendMail[1] }} Horas</div>
+                            <div class="form-control mr-1" style="width: 7rem">{{ emailAction.actionData.options.period[0] }} Horas</div>
+                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 text-fixed="horas" v-model="emailAction.actionData.options.period"/></div>
+                            <div class="form-control ml-1" style="width: 7rem">{{ emailAction.actionData.options.period[1] }} Horas</div>
                         </div>
                     </fieldset>
                 </div>
@@ -48,11 +48,15 @@ import * as componentTypes from '../../steps/components/component-types'
 
 const iniData = {
     id: null,
-    type: 'email',
     description: 'Enviar Email',
-    emailMessage: '',
+    actionData: {
+        data: '',
+        options: {
+            period: [0,23]
+        }
+    },
     isEditing: false,
-    timeSendMail: [0,23]
+    actionType: null
 }
 
 export default {
@@ -77,6 +81,9 @@ export default {
         ]),
         ...mapGetters('steps', [
             'GetActionByIndex'
+        ]),
+        ...mapGetters('funnel', [
+            'GetActionTypeByName'
         ])
     },
     methods: {
@@ -92,7 +99,19 @@ export default {
             }
         },
         cancelNewEmailAction() {
-            this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+            this.$swal.fire({
+                    title: 'Cancelar cadastro da ação?',
+                    text: `Os dados informados serão perdidos...`,
+                    icon: 'warning',
+                    heightAuto: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, Cancelar!',
+                    cancelButtonText: 'Não, Continuar.'
+                }).then(result => {
+                    if (result.value) {
+                        this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+                    }
+                })
         },
         addCustomSelectToEditor() {
             const quill = this.$refs.emailMessageEditor.quill
@@ -116,6 +135,7 @@ export default {
     },
     mounted() {
         this.addCustomSelectToEditor()
+        this.emailAction.actionType = this.GetActionTypeByName('email')
         if (this.isEditing) {
             this.emailAction = { ...this.GetActionByIndex(this.editingIndex) }
         }

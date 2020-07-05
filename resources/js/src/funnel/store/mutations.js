@@ -19,16 +19,16 @@ export default {
     [types.SET_TAGS] (state, payload) {
         state.tags = payload
     },
-    [types.SET_ORIGINAL_TAG] (state, payload) {
-        state.originalTag = payload
-    },
-    [types.SET_NEW_TAG] (state, payload) {
-        state.newTag = payload
+    [types.SET_TAG] (state, payload) {
+        state.tag = payload
     },
     [types.SET_ACTIVE] (state, payload) {
         state.active = payload
     },
     [types.SET_SHOW_CRUD_STEPS] (state, payload) {
         state.showCrudStep = payload
+    },
+    [types.SET_ACTION_TYPES] (state, payload) {
+        state.actionTypes = payload
     }
 }

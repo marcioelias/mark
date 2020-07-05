@@ -2,12 +2,15 @@
 
 namespace App\Models\User;
 
+use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class FunnelStep extends Model
 {
+    use MultiTenantable;
+
     protected $fillable = [
-        'user_id', 'funnel_id', 'sequence', 'original_tag', 'new_tag'
+        'user_id', 'funnel_id', 'funnel_step_sequence', 'funnel_step_description', 'new_tag_id'
     ];
 
     public function user() {
@@ -18,11 +21,11 @@ class FunnelStep extends Model
         return $this->belongsTo(Funnel::class);
     }
 
-    public function originalTag() {
+    public function newTag() {
         return $this->belongsTo(Tag::class);
     }
 
-    public function newTag() {
-        return $this->belongsTo(Tag::class);
+    public function actions() {
+        return $this->hasMany(FunnelStepAction::class);
     }
 }

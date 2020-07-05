@@ -22,7 +22,7 @@
                 'field' => 'tag_name',
                 'label' => 'Tag',
                 'required' => true,
-                'inputSize' => 12,
+                'inputSize' => 6,
                 'inputValue' => $tag->tag_name
             ]
         ]

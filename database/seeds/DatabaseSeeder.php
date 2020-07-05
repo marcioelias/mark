@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminsTableSeeder::class);
         $this->call(PlataformSeeder::class);
         $this->call(VariablesTableSeeder::class);
+        $this->call(ActionTypesTableSeeder::class);
     }
 
     public function truncateTables() {
@@ -29,5 +30,6 @@ class DatabaseSeeder extends Seeder
         DB::table('plans')->truncate();
         DB::table('plataforms')->truncate();
         DB::table('variables')->truncate();
+        DB::table('action_types')->truncate();
     }
 }

@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User\Funnel;
+use App\Models\User\FunnelStep;
+use App\Models\User\FunnelStepAction;
 use App\Models\User\Product;
 use App\Traits\LayoutConfigTrait;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FunnelController extends Controller
 {
@@ -13,10 +18,13 @@ class FunnelController extends Controller
 
     public $breadcrumbs;
 
-    public $fields = array(
-        'product_name' => 'Produto',
-        'active' => ['label' => 'Ativo', 'type' => 'bool']
-    );
+    public function fields() {
+        return array(
+            'product_name' => 'Produto',
+            'tag_name' => 'Tag',
+            'active' => ['label' => 'Ativo', 'type' => 'bool']
+        );
+    }
 
     /**
      * Display a listing of the resource.
@@ -40,14 +48,16 @@ class FunnelController extends Controller
         ]);
 
         if ($request->searchField) {
-            $funnels = Funnel::select(['funnels.*', 'products.product_name'])
+            $funnels = Funnel::select(['funnels.*', 'products.product_name', 'tags.tag_name'])
                             ->join('products', 'products.id', 'funnels.product_id')
+                            ->join('tags', 'tags.id', 'funnels.tag_id')
                             ->where('products.produtct_name', 'like', "%$request->searchField%")
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         } else {
-            $funnels = Funnel::select(['funnels.*', 'products.product_name'])
+            $funnels = Funnel::select(['funnels.*', 'products.product_name', 'tags.tag_name'])
                             ->join('products', 'products.id', 'funnels.product_id')
+                            ->join('tags', 'tags.id', 'funnels.tag_id')
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         }
@@ -94,7 +104,49 @@ class FunnelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Log::debug($request->all());
+
+        DB::beginTransaction();
+
+        try {
+            $funnel = new Funnel([
+                'product_id' => $request->product_id,
+                'tag_id' => $request->tag_id,
+                'active' => $request->active
+            ]);
+
+            if ($funnel->save()) {
+                /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
+                foreach ($request->steps as $sequence => $step) {
+                    $newStep = new FunnelStep([
+                        'funnel_step_sequence' => $sequence,
+                        'funnel_step_description' => $step['data']['name'],
+                        'new_tag_id' => $step['data']['new_tag'] ?? null
+                    ]);
+                    $funnel->steps()->save($newStep);
+
+                    foreach ($step['actions'] as $actionSequence => $action) {
+                        $newStepAction = new FunnelStepAction([
+                            'action_type_id' => $action['actionType']['id'],
+                            'action_sequence' => $actionSequence,
+                            'action_data' => json_encode($action['actionData']),
+                        ]);
+                        $newStep->actions()->save($newStepAction);
+                    }
+                }
+
+                DB::commit();
+                //DB::rollBack();
+            } else {
+                throw new \Exception('Ocorreu um erro ao salvar o Funil.');
+            }
+
+        } catch (\Exception $e) {
+            Log::emergency($e->getMessage());
+            DB::rollBack();
+        }
+
+
     }
 
     /**

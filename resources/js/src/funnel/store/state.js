@@ -3,8 +3,8 @@ export default {
     tags: [],
     product: {},
     active: true,
-    originalTag: null,
-    newTag: null,
+    tag: null,
     steps: [],
-    showCrudStep: false
+    showCrudStep: false,
+    actionTypes: []
 }

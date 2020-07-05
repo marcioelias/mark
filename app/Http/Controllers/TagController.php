@@ -128,7 +128,7 @@ class TagController extends Controller
         ];
 
         $products = Product::Active()
-                        ->orWhere('product_id', $tag->product_id)
+                        ->Where('id', $tag->product_id)
                         ->orderBy('product_name', 'asc')
                         ->get();
 

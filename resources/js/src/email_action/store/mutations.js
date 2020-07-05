@@ -4,7 +4,7 @@ export default {
     [types.SET_DESCRIPTION] (state, payload) {
         state.description = payload
     },
-    [types.SET_EMAIL_MESSAGE] (state, payload) {
-        state.emailMessage = payload
+    [types.SET_ACTION_DATA] (state, payload) {
+        state.actionData = payload
     }
 }

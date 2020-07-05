@@ -10,11 +10,11 @@
                         <label for="delay_days">Executar Após Dias</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <button class="btn btn-secondary" @click="delayDays > 0 ? delayDays-- : 0"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-secondary" @click="data.delayDays > 0 ? data.delayDays-- : 0"><i class="fas fa-minus"></i></button>
                             </div>
-                            <input type="number" name="dalay_days" id="dalay_days" class="form-control" v-model="delayDays">
+                            <input type="number" name="dalay_days" id="dalay_days" class="form-control" v-model="data.delayDays">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" @click="delayDays < 30 ? delayDays++ : 30"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-secondary" @click="data.delayDays < 30 ? data.delayDays++ : 30"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -22,17 +22,17 @@
                         <label for="delay_hours">Horas</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <button class="btn btn-secondary" @click="delayHours > 0 ? delayHours-- : 0"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-secondary" @click="data.delayHours > 0 ? data.delayHours-- : 0"><i class="fas fa-minus"></i></button>
                             </div>
-                            <input type="number" name="dalay_hours" id="dalay_hours" class="form-control" max="23" v-model="delayHours">
+                            <input type="number" name="dalay_hours" id="dalay_hours" class="form-control" max="23" v-model="data.delayHours">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" @click="delayHours < 23 ? delayHours++ : 23"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-secondary" @click="data.delayHours < 23 ? data.delayHours++ : 23"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <label for="new_tag">Nova Tag</label>
-                        <Select2 v-model="newTag" name="new_tag" id="new_tag" :options="GetNewTagsForSelect" />
+                        <Select2 v-model="data.newTag" name="new_tag" id="new_tag" :options="GetNewTagsForSelect" />
                     </div>
                 </div>
             </div>
@@ -56,7 +56,8 @@
             <div class="card-footer" v-if="activeComponent == 'StepActionsTable'">
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-success float-right" @click="saveStep"><i class="fas fa-save"></i> Salvar passo</button>
+                        <button class="btn btn-secondary float-right" @click="cancelSaveStep"><i class="fas fa-times"></i> Cancelar</button>
+                        <button class="btn btn-success float-right mr-1" @click="saveStep"><i class="fas fa-save"></i> Salvar passo</button>
                     </div>
                 </div>
             </div>
@@ -72,25 +73,22 @@ import NewSmsAction from '../../sms_action/components/NewSmsAction'
 import NewEmailAction from '../../email_action/components/NewEmailAction'
 import * as componentTypes from './component-types'
 
+const iniData = {
+        data: {
+            id: null,
+            sequence: 0,
+            name: '',
+            delayDays: 0,
+            delayHours: 0,
+            newTag: null
+        },
+        options: {},
+    }
+
 export default {
     data() {
         return {
-            tags: ['tag 1', 'tag 2', 'tag 3', 'tag 4', 'tag 5'],
-            data: [
-                {
-                    id: 1,
-                    name: 'Enviar SMS'
-                },
-                {
-                    id: 2,
-                    name: 'Enviar E-mail'
-                }
-            ],
-            dias: 0,
-            horas: 0,
-            delayDays: 0,
-            delayHours: 0,
-            actionIndex: null
+            ...iniData
         }
     },
     components: {
@@ -145,11 +143,26 @@ export default {
         },
         saveStep() {
             this.ActionAddNewStep({
-                id: 321,
-                name: `Passo ${this.steps.length + 1}`,
-                data: { ...this.listActions }
+                data: { ...this.data },
+                options: { ...this.options },
+                actions: { ...this.listActions }
             })
             this.ActionSetShowCrudStep(false)
+        },
+        cancelSaveStep() {
+            this.$swal.fire({
+                    title: 'Cancelar cadastro do passo?',
+                    text: `Os dados informados serão perdidos...`,
+                    icon: 'warning',
+                    heightAuto: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, Cancelar!',
+                    cancelButtonText: 'Não, Continuar.'
+                }).then(result => {
+                    if (result.value) {
+                        this.ActionSetShowCrudStep(false)
+                    }
+                })
         }
     }
 }

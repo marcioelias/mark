@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFunnelsTable extends Migration
+class CreateFunnelStepActionsTable extends Migration
 {
     use MultiTenantable;
 
@@ -16,15 +16,16 @@ class CreateFunnelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('funnels', function (Blueprint $table) {
+        Schema::create('funnel_step_actions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
-            $table->uuid('product_id');
-            $table->uuid('tag_id');
-            $table->boolean('active')->default(true);
+            $table->uuid('funnel_step_id');
+            $table->uuid('action_type_id');
+            $table->unsignedInteger('action_sequence');
+            $table->json('action_data')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps');
+            $table->foreign('action_type_id')->references('id')->on('action_types');
             $table->timestamps();
         });
     }
@@ -36,6 +37,6 @@ class CreateFunnelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('funnels');
+        Schema::dropIfExists('funnel_step_actions');
     }
 }

@@ -4,6 +4,6 @@ export const ActionSetDescription = ({ commit }, payload) => {
     commit(types.SET_DESCRIPTION, payload)
 }
 
-export const ActionSetEmailMessage = ({ commit }, payload) => {
-    commit(types.SET_EMAIL_MESSAGE, payload)
+export const ActionSetActionData = ({ commit }, payload) => {
+    commit(types.SET_ACTION_DATA, payload)
 }

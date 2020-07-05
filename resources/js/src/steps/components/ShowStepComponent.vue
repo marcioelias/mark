@@ -3,17 +3,13 @@
         <div class="card mb-1">
             <div class="card-body p-0">
                 <div class="row">
-                    <div class="col-md-4">
-                        <label for="original_tag">Tag Atual</label>
-                        <div class="form-control">Tag 1</div>
+                    <div class="col-md-6">
+                        <label for="original_tag">Executar Após</label>
+                        <div class="form-control">{{ execAfter }}</div>
                     </div>
-                    <div class="col-md-4">
-                        <label for="new_tag">Nova Tag</label>
-                        <div class="form-control">Tag 2</div>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="delay">Executar após</label>
-                        <div class="form-control">1 Dia e 2 Horas</div>
+                    <div class="col-md-6">
+                        <label for="delay">Nova Tag</label>
+                        <div class="form-control">{{ newTagDescription }}</div>
                     </div>
                 </div>
             </div>
@@ -23,8 +19,8 @@
                 Ações a serem executadas
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="(item, index) in data" :key="index">
-                    <i class="fas fa-2x" :class="{'fa-envelope': item.type == 'email', 'fa-sms': item.type == 'sms'}"></i> {{ item.description }}
+                <li class="list-group-item" v-for="(item, index) in actions" :key="index">
+                    <i class="fas fa-2x" :class="{'fa-envelope': item.actionType.action_type_name == 'email', 'fa-sms': item.actionType.action_type_name == 'sms'}"></i> {{ item.description }}
                 </li>
             </ul>
             <div class="card-footer">
@@ -39,10 +35,26 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     data() {
         return {
             ...this.step
+        }
+    },
+    computed: {
+        ...mapGetters('funnel', [
+            'GetTagById'
+        ]),
+        execAfter() {
+            let dia = this.data.delayDays == 1 ? 'dia' : 'dias'
+            let hora= this.data.delayHours == 1 ? 'hora' : 'horas'
+            return `${this.data.delayDays} ${dia} e ${this.data.delayHours} ${hora}`
+        },
+        newTagDescription() {
+            let tag = this.GetTagById(this.step.data.newTag)
+            return  tag ? tag.tag_name : 'Nenhuma Tag informada'
         }
     },
     props: {
