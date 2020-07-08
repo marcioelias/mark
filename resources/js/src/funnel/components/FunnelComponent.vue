@@ -27,7 +27,7 @@
             <div class="card-body p-0" v-if="showCrudStep || steps.length > 0">
                 <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in" apper>
                     <vs-tabs v-if="!showCrudStep" key="tabs">
-                        <vs-tab v-for="(step, index) in steps" :key="index" :label="step.data.name" icon-pack="fas" icon="fa-angle-right" class="p-0">
+                        <vs-tab v-for="step in OrderedSteps" :key="step.funnel_step_sequence" :label="step.funnel_step_description" icon-pack="fas" icon="fa-angle-right" class="p-0">
                             <show-step-component :step="step" />
                         </vs-tab>
                         <vs-tab label="Novo Passo" icon-pack="fas" icon="fa-plus-square" @click="ActionSetShowCrudStep(true)" class="p-0">
@@ -59,9 +59,14 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 export default {
     data() {
         return {
+            isEditing: false,
             active: true,
-            myValue: '',
-            myOptions: ['op1', 'op2', 'op3'], // or [{id: key, text: value}, {id: key, text: value}]
+        }
+    },
+    props: {
+        funnelId: {
+            type: String,
+            default: null
         }
     },
     components: {
@@ -69,7 +74,7 @@ export default {
     },
     computed: {
         ...mapGetters('funnel', [
-            'GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect'
+            'GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect', 'OrderedSteps'
         ]),
         ...mapState('funnel', [
             'showCrudStep', 'steps', 'products', 'tag', 'product'
@@ -92,15 +97,24 @@ export default {
         }
     },
     mounted() {
-        this.ActionGetProducts({ vm: this })
-        this.ActionGetTags({ vm: this })
-        this.ActionGetVariablesFromApi({ vm: this })
-        this.ActionGetActionTypes({ vm: this })
+        try {
+            this.ActionGetProducts({ vm: this })
+            this.ActionGetTags({ vm: this })
+            this.ActionGetVariablesFromApi({ vm: this })
+            this.ActionGetActionTypes({ vm: this })
+            this.isEditing = (this.funnelId)
+        } finally {
+            if (this.isEditing) {
+                this.ActionLoadFunnel({ vm: this, id: this.funnelId })
+                this.ActionLoadActions()
+            }
+        }
     },
     methods: {
         ...mapActions('funnel', [
             'ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags', 'ActionClearState',
-            'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes'
+            'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes',
+            'ActionLoadFunnel'
         ]),
         ...mapActions('variables', [
             'ActionGetVariablesFromApi'

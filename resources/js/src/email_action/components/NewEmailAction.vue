@@ -7,13 +7,14 @@
             <div class="row mb-1">
                 <div class="col">
                     <label for="action_description">Descrição</label>
-                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="emailAction.description" placeholder="Exemplo: Enviar SMS">
+                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="action_description" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label for="email-message-editor">Texto do E-mail</label>
-                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="emailAction.actionData.data" :options="variablesDWConfig"></quill-editor>
+                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="action_data.data"
+                        :options="{placeholder: 'Digite a mensagem a ser enviada...', theme: 'snow' }"></quill-editor>
                 </div>
             </div>
             <div class="row">
@@ -22,9 +23,9 @@
                     <fieldset>
                         <label>Enviar somente no horário entre:</label>
                         <div class="d-flex justify-content-between">
-                            <div class="form-control mr-1" style="width: 7rem">{{ emailAction.actionData.options.period[0] }} Horas</div>
-                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 text-fixed="horas" v-model="emailAction.actionData.options.period"/></div>
-                            <div class="form-control ml-1" style="width: 7rem">{{ emailAction.actionData.options.period[1] }} Horas</div>
+                            <div class="form-control mr-1" style="width: 7rem">{{ action_data.options.period[0] }} Horas</div>
+                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 text-fixed="horas" v-model="action_data.options.period"/></div>
+                            <div class="form-control ml-1" style="width: 7rem">{{ action_data.options.period[1] }} Horas</div>
                         </div>
                     </fieldset>
                 </div>
@@ -48,25 +49,21 @@ import * as componentTypes from '../../steps/components/component-types'
 
 const iniData = {
     id: null,
-    description: 'Enviar Email',
-    actionData: {
+    action_description: 'Enviar Email',
+    action_sequence: 0,
+    action_data: {
         data: '',
         options: {
             period: [0,23]
         }
     },
-    isEditing: false,
-    actionType: null
+    action_type_id: null
 }
 
 export default {
     data() {
         return {
-            emailAction: { ...iniData },
-            variablesDWConfig: {
-                placeholder: 'Digite a mensagem a ser enviada...',
-                theme: 'snow'
-            }
+            ...iniData,
         }
     },
     components: {
@@ -74,7 +71,7 @@ export default {
     },
     computed: {
         ...mapState('steps', [
-            'isEditing', 'editingIndex'
+            'isEditing', 'editingIndex', 'listActions'
         ]),
         ...mapGetters('variables', [
             'GetVariablesAsObject'
@@ -93,9 +90,9 @@ export default {
         saveEmailAction() {
             this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
             if (this.isEditing) {
-                this.ActionSetUpdateAction(this.emailAction)
+                this.ActionSetUpdateAction(this.$data)
             } else {
-                this.ActionSetNewAction(this.emailAction)
+                this.ActionSetNewAction(this.$data)
             }
         },
         cancelNewEmailAction() {
@@ -135,9 +132,11 @@ export default {
     },
     mounted() {
         this.addCustomSelectToEditor()
-        this.emailAction.actionType = this.GetActionTypeByName('email')
         if (this.isEditing) {
-            this.emailAction = { ...this.GetActionByIndex(this.editingIndex) }
+            Object.assign(this.$data, { ...this.GetActionByIndex(this.editingIndex) })
+        } else {
+            this.action_type_id = this.GetActionTypeByName('email').id
+            this.action_sequence = (this.listActions.length ?? 0) + 1
         }
     }
 }

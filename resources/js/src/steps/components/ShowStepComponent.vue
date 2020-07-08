@@ -19,8 +19,8 @@
                 Ações a serem executadas
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="(item, index) in actions" :key="index">
-                    <i class="fas fa-2x" :class="{'fa-envelope': item.actionType.action_type_name == 'email', 'fa-sms': item.actionType.action_type_name == 'sms'}"></i> {{ item.description }}
+                <li class="list-group-item" v-for="(item, index) in OrderedListActions" :key="index">
+                    <i class="fas fa-2x" :class="getActionIcon(item)"></i> {{ item.action_description }}
                 </li>
             </ul>
             <div class="card-footer">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     data() {
@@ -47,13 +47,19 @@ export default {
         ...mapGetters('funnel', [
             'GetTagById'
         ]),
+        ...mapState('funnel', [
+            'actionTypes'
+        ]),
+        ...mapGetters('steps', [
+            'OrderedListActions'
+        ]),
         execAfter() {
-            let dia = this.data.delayDays == 1 ? 'dia' : 'dias'
-            let hora= this.data.delayHours == 1 ? 'hora' : 'horas'
-            return `${this.data.delayDays} ${dia} e ${this.data.delayHours} ${hora}`
+            let dia = this.delay_days == 1 ? 'dia' : 'dias'
+            let hora= this.delay_hours == 1 ? 'hora' : 'horas'
+            return `${this.delay_days} ${dia} e ${this.delay_hours} ${hora}`
         },
         newTagDescription() {
-            let tag = this.GetTagById(this.step.data.newTag)
+            let tag = this.GetTagById(this.step.new_tag_id)
             return  tag ? tag.tag_name : 'Nenhuma Tag informada'
         }
     },
@@ -63,5 +69,14 @@ export default {
             required: true
         }
     },
+    methods: {
+        getActionIcon(item) {
+            let act = this.actionTypes.find(a => a.id === item.action_type_id)
+            return {
+               'fa-envelope': act.action_type_name == 'email',
+               'fa-sms': act.action_type_name == 'sms',
+            }
+        }
+    }
 }
 </script>

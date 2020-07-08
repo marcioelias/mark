@@ -1,9 +1,9 @@
 <template>
     <table class="table table-sm table-hover bg-white mb-0">
         <tbody>
-            <tr v-for="(item, index) in listActions" :key="index">
+            <tr v-for="(item, index) in OrderedListActions" :key="index">
                 <td class="align-middle" scope="row">
-                    <i class="fas" :class="{'fa-envelope': item.actionType.action_type_name == 'email', 'fa-sms': item.actionType.action_type_name == 'sms'}"></i> {{ item.description }}
+                    <i class="fas" :class="getActionIcon(item)"></i> {{ item.action_description }}
                 </td>
                 <td class="align-middle text-right" scope="row">
                     <span data-toggle="tooltip" data-placement="top" title="Editar">
@@ -25,6 +25,12 @@ export default {
     computed: {
         ...mapState('steps', [
             'listActions'
+        ]),
+        ...mapGetters('steps', [
+            'OrderedListActions'
+        ]),
+        ...mapState('funnel', [
+            'actionTypes'
         ])
     },
     methods: {
@@ -48,6 +54,13 @@ export default {
         },
         editAction(index) {
             this.ActionEditAction(index)
+        },
+        getActionIcon(item) {
+            let act = this.actionTypes.find(a => a.id === item.action_type_id)
+            return {
+               'fa-envelope': act.action_type_name == 'email',
+               'fa-sms': act.action_type_name == 'sms',
+            }
         }
     }
 }

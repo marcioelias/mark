@@ -10,11 +10,11 @@
                         <label for="delay_days">Executar Após Dias</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <button class="btn btn-secondary" @click="data.delayDays > 0 ? data.delayDays-- : 0"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-secondary" @click="delay_days > 0 ? delay_days-- : 0"><i class="fas fa-minus"></i></button>
                             </div>
-                            <input type="number" name="dalay_days" id="dalay_days" class="form-control" v-model="data.delayDays">
+                            <input type="number" name="dalay_days" id="dalay_days" class="form-control" v-model="delay_days">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" @click="data.delayDays < 30 ? data.delayDays++ : 30"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-secondary" @click="delay_days < 30 ? delay_days++ : 30"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -22,17 +22,17 @@
                         <label for="delay_hours">Horas</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <button class="btn btn-secondary" @click="data.delayHours > 0 ? data.delayHours-- : 0"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-secondary" @click="delay_hours > 0 ? delay_hours-- : 0"><i class="fas fa-minus"></i></button>
                             </div>
-                            <input type="number" name="dalay_hours" id="dalay_hours" class="form-control" max="23" v-model="data.delayHours">
+                            <input type="number" name="dalay_hours" id="dalay_hours" class="form-control" max="23" v-model="delay_hours">
                             <div class="input-group-append">
-                                <button class="btn btn-secondary" @click="data.delayHours < 23 ? data.delayHours++ : 23"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-secondary" @click="delay_hours < 23 ? delay_hours++ : 23"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <label for="new_tag">Nova Tag</label>
-                        <Select2 v-model="data.newTag" name="new_tag" id="new_tag" :options="GetNewTagsForSelect" />
+                        <Select2 v-model="new_tag_id" name="new_tag" id="new_tag" :options="GetNewTagsForSelect" />
                     </div>
                 </div>
             </div>
@@ -74,15 +74,12 @@ import NewEmailAction from '../../email_action/components/NewEmailAction'
 import * as componentTypes from './component-types'
 
 const iniData = {
-        data: {
-            id: null,
-            sequence: 0,
-            name: '',
-            delayDays: 0,
-            delayHours: 0,
-            newTag: null
-        },
-        options: {},
+        id: null,
+        funnel_step_sequence: 0,
+        funnel_step_description: '',
+        new_tag_id: null,
+        delay_days: 0,
+        delay_hours: 0,
     }
 
 export default {
@@ -104,25 +101,8 @@ export default {
         ...mapGetters('funnel', [
             'GetTagsForSelect', 'GetNewTagsForSelect'
         ]),
-        originalTag: {
-            get() {
-                return this.$store.state.funnel.originalTag
-            },
-            set(value) {
-                this.$store.dispatch('funnel/ActionSetOriginalTag', value)
-            }
-        },
-        newTag: {
-            get() {
-                return this.$store.state.funnel.newTag
-            },
-            set(value) {
-                this.$store.dispatch('funnel/ActionSetNewTag', value)
-            }
-        }
     },
     mounted() {
-        this.$store.dispatch('funnel/ActionGetTags', { vm: this })
         this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
     },
     methods: {
@@ -143,8 +123,7 @@ export default {
         },
         saveStep() {
             this.ActionAddNewStep({
-                data: { ...this.data },
-                options: { ...this.options },
+                ...this.$data,
                 actions: { ...this.listActions }
             })
             this.ActionSetShowCrudStep(false)

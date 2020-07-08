@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use RecursiveArrayIterator;
 
 class FunnelController extends Controller
 {
@@ -104,7 +105,7 @@ class FunnelController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug($request->all());
+        //Log::debug($request->all());
 
         DB::beginTransaction();
 
@@ -116,22 +117,27 @@ class FunnelController extends Controller
             ]);
 
             if ($funnel->save()) {
+                //Log::debug($funnel);
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
-                foreach ($request->steps as $sequence => $step) {
+                foreach ($request->steps as $step) {
+                    Log::debug($step);
                     $newStep = new FunnelStep([
-                        'funnel_step_sequence' => $sequence,
-                        'funnel_step_description' => $step['data']['name'],
-                        'new_tag_id' => $step['data']['new_tag'] ?? null
+                        'funnel_step_sequence' => $step['funnel_step_sequence'],
+                        'funnel_step_description' => $step['funnel_step_description'],
+                        'new_tag_id' => $step['new_tag_id'] ?? null
                     ]);
                     $funnel->steps()->save($newStep);
+                    //Log::debug($newStep);
 
-                    foreach ($step['actions'] as $actionSequence => $action) {
+                    foreach ($step['actions'] as $action) {
                         $newStepAction = new FunnelStepAction([
-                            'action_type_id' => $action['actionType']['id'],
-                            'action_sequence' => $actionSequence,
-                            'action_data' => json_encode($action['actionData']),
+                            'action_type_id' => $action['action_type_id'],
+                            'action_sequence' => $action['action_sequence'],
+                            'action_description' => $action['action_description'],
+                            'action_data' => json_encode($action['action_data']),
                         ]);
                         $newStep->actions()->save($newStepAction);
+                        //Log::debug($newStepAction);
                     }
                 }
 
@@ -142,7 +148,7 @@ class FunnelController extends Controller
             }
 
         } catch (\Exception $e) {
-            Log::emergency($e->getMessage());
+            Log::emergency($e);
             DB::rollBack();
         }
 
@@ -168,7 +174,21 @@ class FunnelController extends Controller
      */
     public function edit(Funnel $funnel)
     {
-        //
+        $this->breadcrumbs = [
+            [
+                'name' => 'Cadastros'
+            ],
+            [
+                'link' => "/funnel",
+                'name' => "Funis"
+            ],
+            [
+                'name' => "Alterar"
+            ]
+        ];
+
+        return $this->getView('user.funnels.edit')
+                    ->withFunnel($funnel);
     }
 
     /**
@@ -192,5 +212,10 @@ class FunnelController extends Controller
     public function destroy(Funnel $funnel)
     {
         //
+    }
+
+    public function getFunnelJson(Funnel $funnel) {
+        $funnel = Funnel::with('steps.actions')->first();
+        return response()->json($funnel);
     }
 }

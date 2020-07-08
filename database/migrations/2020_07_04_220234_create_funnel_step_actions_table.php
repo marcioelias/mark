@@ -22,6 +22,7 @@ class CreateFunnelStepActionsTable extends Migration
             $table->uuid('funnel_step_id');
             $table->uuid('action_type_id');
             $table->unsignedInteger('action_sequence');
+            $table->string('action_description');
             $table->json('action_data')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('funnel_step_id')->references('id')->on('funnel_steps');

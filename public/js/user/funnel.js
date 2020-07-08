@@ -1973,43 +1973,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
 var iniData = {
   id: null,
-  description: 'Enviar Email',
-  actionData: {
+  action_description: 'Enviar Email',
+  action_sequence: 0,
+  action_data: {
     data: '',
     options: {
       period: [0, 23]
     }
   },
-  isEditing: false,
-  actionType: null
+  action_type_id: null
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      emailAction: _objectSpread({}, iniData),
-      variablesDWConfig: {
-        placeholder: 'Digite a mensagem a ser enviada...',
-        theme: 'snow'
-      }
-    };
+    return _objectSpread({}, iniData);
   },
   components: {
     quillEditor: vue_quill_editor__WEBPACK_IMPORTED_MODULE_0__["quillEditor"]
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('steps', ['isEditing', 'editingIndex'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('variables', ['GetVariablesAsObject'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('steps', ['GetActionByIndex'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('funnel', ['GetActionTypeByName'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('steps', ['isEditing', 'editingIndex', 'listActions'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('variables', ['GetVariablesAsObject'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('steps', ['GetActionByIndex'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('funnel', ['GetActionTypeByName'])),
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('steps', ['ActionSetActiveComponent', 'ActionSetNewAction', 'ActionSetUpdateAction'])), {}, {
     saveEmailAction: function saveEmailAction() {
       this.ActionSetActiveComponent(_steps_components_component_types__WEBPACK_IMPORTED_MODULE_2__["COMPONENT_TABLE"]);
 
       if (this.isEditing) {
-        this.ActionSetUpdateAction(this.emailAction);
+        this.ActionSetUpdateAction(this.$data);
       } else {
-        this.ActionSetNewAction(this.emailAction);
+        this.ActionSetNewAction(this.$data);
       }
     },
     cancelNewEmailAction: function cancelNewEmailAction() {
@@ -2051,10 +2046,14 @@ var iniData = {
   }),
   mounted: function mounted() {
     this.addCustomSelectToEditor();
-    this.emailAction.actionType = this.GetActionTypeByName('email');
 
     if (this.isEditing) {
-      this.emailAction = _objectSpread({}, this.GetActionByIndex(this.editingIndex));
+      Object.assign(this.$data, _objectSpread({}, this.GetActionByIndex(this.editingIndex)));
+    } else {
+      var _this$listActions$len;
+
+      this.action_type_id = this.GetActionTypeByName('email').id;
+      this.action_sequence = ((_this$listActions$len = this.listActions.length) !== null && _this$listActions$len !== void 0 ? _this$listActions$len : 0) + 1;
     }
   }
 });
@@ -2139,18 +2138,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      active: true,
-      myValue: '',
-      myOptions: ['op1', 'op2', 'op3'] // or [{id: key, text: value}, {id: key, text: value}]
-
+      isEditing: false,
+      active: true
     };
+  },
+  props: {
+    funnelId: {
+      type: String,
+      "default": null
+    }
   },
   components: {
     Select2: v_select2_component__WEBPACK_IMPORTED_MODULE_0__["default"],
     NewStepComponent: _steps_components_NewStepComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
     ShowStepComponent: _steps_components_ShowStepComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])('funnel', ['GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect'])), Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])('funnel', ['showCrudStep', 'steps', 'products', 'tag', 'product'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])('funnel', ['GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect', 'OrderedSteps'])), Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])('funnel', ['showCrudStep', 'steps', 'products', 'tag', 'product'])), {}, {
     funnelTag: {
       get: function get() {
         return this.tag;
@@ -2169,20 +2172,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   mounted: function mounted() {
-    this.ActionGetProducts({
-      vm: this
-    });
-    this.ActionGetTags({
-      vm: this
-    });
-    this.ActionGetVariablesFromApi({
-      vm: this
-    });
-    this.ActionGetActionTypes({
-      vm: this
-    });
+    try {
+      this.ActionGetProducts({
+        vm: this
+      });
+      this.ActionGetTags({
+        vm: this
+      });
+      this.ActionGetVariablesFromApi({
+        vm: this
+      });
+      this.ActionGetActionTypes({
+        vm: this
+      });
+      this.isEditing = this.funnelId;
+    } finally {
+      if (this.isEditing) {
+        this.ActionLoadFunnel({
+          vm: this,
+          id: this.funnelId
+        });
+        this.ActionLoadActions();
+      }
+    }
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapActions"])('funnel', ['ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags', 'ActionClearState', 'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes'])), Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapActions"])('variables', ['ActionGetVariablesFromApi'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapActions"])('funnel', ['ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags', 'ActionClearState', 'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes', 'ActionLoadFunnel'])), Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapActions"])('variables', ['ActionGetVariablesFromApi'])), {}, {
     cancelFunnel: function cancelFunnel() {
       var _this = this;
 
@@ -2271,19 +2285,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var iniData = {
   id: null,
-  type: 'sms',
-  description: 'Enviar SMS',
-  actionData: {
+  action_description: 'Enviar SMS',
+  action_sequence: 0,
+  action_data: {
     data: '',
     options: {}
   },
-  actionType: null
+  action_type_id: null
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      smsAction: _objectSpread({}, iniData)
-    };
+    return _objectSpread({}, iniData);
   },
   components: {
     SelectVariables: _variables_components_SelectVariables__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2294,9 +2306,9 @@ var iniData = {
       this.ActionSetActiveComponent(_steps_components_component_types__WEBPACK_IMPORTED_MODULE_2__["COMPONENT_TABLE"]);
 
       if (this.isEditing) {
-        this.ActionSetUpdateAction(this.smsAction);
+        this.ActionSetUpdateAction(this.$data);
       } else {
-        this.ActionSetNewAction(this.smsAction);
+        this.ActionSetNewAction(this.$data);
       }
     },
     cancelNewSmsAction: function cancelNewSmsAction() {
@@ -2321,10 +2333,10 @@ var iniData = {
     }
   }),
   mounted: function mounted() {
-    this.smsAction.actionType = this.GetActionTypeByName('sms');
-
     if (this.isEditing) {
-      this.smsAction = _objectSpread({}, this.GetActionByIndex(this.editingIndex));
+      Object.assign(this.$data, _objectSpread({}, this.GetActionByIndex(this.editingIndex)));
+    } else {
+      this.action_type_id = this.GetActionTypeByName('sms').id;
     }
   }
 });
@@ -2426,15 +2438,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var iniData = {
-  data: {
-    id: null,
-    sequence: 0,
-    name: '',
-    delayDays: 0,
-    delayHours: 0,
-    newTag: null
-  },
-  options: {}
+  id: null,
+  funnel_step_sequence: 0,
+  funnel_step_description: '',
+  new_tag_id: null,
+  delay_days: 0,
+  delay_hours: 0
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2446,28 +2455,8 @@ var iniData = {
     NewSmsAction: _sms_action_components_NewSmsAction__WEBPACK_IMPORTED_MODULE_3__["default"],
     NewEmailAction: _email_action_components_NewEmailAction__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('steps', ['activeComponent', 'listActions'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('funnel', ['steps'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('funnel', ['GetTagsForSelect', 'GetNewTagsForSelect'])), {}, {
-    originalTag: {
-      get: function get() {
-        return this.$store.state.funnel.originalTag;
-      },
-      set: function set(value) {
-        this.$store.dispatch('funnel/ActionSetOriginalTag', value);
-      }
-    },
-    newTag: {
-      get: function get() {
-        return this.$store.state.funnel.newTag;
-      },
-      set: function set(value) {
-        this.$store.dispatch('funnel/ActionSetNewTag', value);
-      }
-    }
-  }),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('steps', ['activeComponent', 'listActions'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('funnel', ['steps'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('funnel', ['GetTagsForSelect', 'GetNewTagsForSelect'])),
   mounted: function mounted() {
-    this.$store.dispatch('funnel/ActionGetTags', {
-      vm: this
-    });
     this.ActionSetActiveComponent(_component_types__WEBPACK_IMPORTED_MODULE_5__["COMPONENT_TABLE"]);
   },
   methods: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('steps', ['ActionSetActiveComponent'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('funnel', ['ActionSetShowCrudStep', 'ActionAddNewStep'])), {}, {
@@ -2481,11 +2470,9 @@ var iniData = {
       var act = this.listActions[index];
     },
     saveStep: function saveStep() {
-      this.ActionAddNewStep({
-        data: _objectSpread({}, this.data),
-        options: _objectSpread({}, this.options),
+      this.ActionAddNewStep(_objectSpread(_objectSpread({}, this.$data), {}, {
         actions: _objectSpread({}, this.listActions)
-      });
+      }));
       this.ActionSetShowCrudStep(false);
     },
     cancelSaveStep: function cancelSaveStep() {
@@ -2567,14 +2554,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return _objectSpread({}, this.step);
   },
-  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('funnel', ['GetTagById'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('funnel', ['GetTagById'])), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('funnel', ['actionTypes'])), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('steps', ['OrderedListActions'])), {}, {
     execAfter: function execAfter() {
-      var dia = this.data.delayDays == 1 ? 'dia' : 'dias';
-      var hora = this.data.delayHours == 1 ? 'hora' : 'horas';
-      return "".concat(this.data.delayDays, " ").concat(dia, " e ").concat(this.data.delayHours, " ").concat(hora);
+      var dia = this.delay_days == 1 ? 'dia' : 'dias';
+      var hora = this.delay_hours == 1 ? 'hora' : 'horas';
+      return "".concat(this.delay_days, " ").concat(dia, " e ").concat(this.delay_hours, " ").concat(hora);
     },
     newTagDescription: function newTagDescription() {
-      var tag = this.GetTagById(this.step.data.newTag);
+      var tag = this.GetTagById(this.step.new_tag_id);
       return tag ? tag.tag_name : 'Nenhuma Tag informada';
     }
   }),
@@ -2582,6 +2569,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     step: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    getActionIcon: function getActionIcon(item) {
+      var act = this.actionTypes.find(function (a) {
+        return a.id === item.action_type_id;
+      });
+      return {
+        'fa-envelope': act.action_type_name == 'email',
+        'fa-sms': act.action_type_name == 'sms'
+      };
     }
   }
 });
@@ -2626,7 +2624,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('steps', ['listActions'])),
+  computed: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('steps', ['listActions'])), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('steps', ['OrderedListActions'])), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('funnel', ['actionTypes'])),
   methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])('steps', ['ActionDelAction', 'ActionEditAction'])), {}, {
     removeAction: function removeAction(index) {
       var _this = this;
@@ -2647,6 +2645,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     editAction: function editAction(index) {
       this.ActionEditAction(index);
+    },
+    getActionIcon: function getActionIcon(item) {
+      var act = this.actionTypes.find(function (a) {
+        return a.id === item.action_type_id;
+      });
+      return {
+        'fa-envelope': act.action_type_name == 'email',
+        'fa-sms': act.action_type_name == 'sms'
+      };
     }
   })
 });
@@ -41552,8 +41559,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.emailAction.description,
-                expression: "emailAction.description"
+                value: _vm.action_description,
+                expression: "action_description"
               }
             ],
             staticClass: "form-control",
@@ -41563,13 +41570,13 @@ var render = function() {
               id: "action_description",
               placeholder: "Exemplo: Enviar SMS"
             },
-            domProps: { value: _vm.emailAction.description },
+            domProps: { value: _vm.action_description },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.emailAction, "description", $event.target.value)
+                _vm.action_description = $event.target.value
               }
             }
           })
@@ -41589,14 +41596,17 @@ var render = function() {
               ref: "emailMessageEditor",
               attrs: {
                 id: "email-message-editor",
-                options: _vm.variablesDWConfig
+                options: {
+                  placeholder: "Digite a mensagem a ser enviada...",
+                  theme: "snow"
+                }
               },
               model: {
-                value: _vm.emailAction.actionData.data,
+                value: _vm.action_data.data,
                 callback: function($$v) {
-                  _vm.$set(_vm.emailAction.actionData, "data", $$v)
+                  _vm.$set(_vm.action_data, "data", $$v)
                 },
-                expression: "emailAction.actionData.data"
+                expression: "action_data.data"
               }
             })
           ],
@@ -41618,12 +41628,7 @@ var render = function() {
                   staticClass: "form-control mr-1",
                   staticStyle: { width: "7rem" }
                 },
-                [
-                  _vm._v(
-                    _vm._s(_vm.emailAction.actionData.options.period[0]) +
-                      " Horas"
-                  )
-                ]
+                [_vm._v(_vm._s(_vm.action_data.options.period[0]) + " Horas")]
               ),
               _vm._v(" "),
               _c(
@@ -41638,15 +41643,11 @@ var render = function() {
                       "text-fixed": "horas"
                     },
                     model: {
-                      value: _vm.emailAction.actionData.options.period,
+                      value: _vm.action_data.options.period,
                       callback: function($$v) {
-                        _vm.$set(
-                          _vm.emailAction.actionData.options,
-                          "period",
-                          $$v
-                        )
+                        _vm.$set(_vm.action_data.options, "period", $$v)
                       },
-                      expression: "emailAction.actionData.options.period"
+                      expression: "action_data.options.period"
                     }
                   })
                 ],
@@ -41659,12 +41660,7 @@ var render = function() {
                   staticClass: "form-control ml-1",
                   staticStyle: { width: "7rem" }
                 },
-                [
-                  _vm._v(
-                    _vm._s(_vm.emailAction.actionData.options.period[1]) +
-                      " Horas"
-                  )
-                ]
+                [_vm._v(_vm._s(_vm.action_data.options.period[1]) + " Horas")]
               )
             ])
           ])
@@ -41882,14 +41878,14 @@ var render = function() {
                         "vs-tabs",
                         { key: "tabs" },
                         [
-                          _vm._l(_vm.steps, function(step, index) {
+                          _vm._l(_vm.OrderedSteps, function(step) {
                             return _c(
                               "vs-tab",
                               {
-                                key: index,
+                                key: step.funnel_step_sequence,
                                 staticClass: "p-0",
                                 attrs: {
-                                  label: step.data.name,
+                                  label: step.funnel_step_description,
                                   "icon-pack": "fas",
                                   icon: "fa-angle-right"
                                 }
@@ -42029,8 +42025,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.smsAction.description,
-                expression: "smsAction.description"
+                value: _vm.action_description,
+                expression: "action_description"
               }
             ],
             staticClass: "form-control",
@@ -42040,13 +42036,13 @@ var render = function() {
               id: "action_description",
               placeholder: "Exemplo: Enviar SMS"
             },
-            domProps: { value: _vm.smsAction.description },
+            domProps: { value: _vm.action_description },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.smsAction, "description", $event.target.value)
+                _vm.action_description = $event.target.value
               }
             }
           })
@@ -42077,8 +42073,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.smsAction.actionData.data,
-                expression: "smsAction.actionData.data"
+                value: _vm.action_data.data,
+                expression: "action_data.data"
               }
             ],
             ref: "sms_body",
@@ -42088,13 +42084,13 @@ var render = function() {
               rows: "3",
               placeholder: "Digite o texto para a mensagem SMS..."
             },
-            domProps: { value: _vm.smsAction.actionData.data },
+            domProps: { value: _vm.action_data.data },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.smsAction.actionData, "data", $event.target.value)
+                _vm.$set(_vm.action_data, "data", $event.target.value)
               }
             }
           })
@@ -42190,7 +42186,7 @@ var render = function() {
                     staticClass: "btn btn-secondary",
                     on: {
                       click: function($event) {
-                        _vm.data.delayDays > 0 ? _vm.data.delayDays-- : 0
+                        _vm.delay_days > 0 ? _vm.delay_days-- : 0
                       }
                     }
                   },
@@ -42203,19 +42199,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.data.delayDays,
-                    expression: "data.delayDays"
+                    value: _vm.delay_days,
+                    expression: "delay_days"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "number", name: "dalay_days", id: "dalay_days" },
-                domProps: { value: _vm.data.delayDays },
+                domProps: { value: _vm.delay_days },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.data, "delayDays", $event.target.value)
+                    _vm.delay_days = $event.target.value
                   }
                 }
               }),
@@ -42227,7 +42223,7 @@ var render = function() {
                     staticClass: "btn btn-secondary",
                     on: {
                       click: function($event) {
-                        _vm.data.delayDays < 30 ? _vm.data.delayDays++ : 30
+                        _vm.delay_days < 30 ? _vm.delay_days++ : 30
                       }
                     }
                   },
@@ -42248,7 +42244,7 @@ var render = function() {
                     staticClass: "btn btn-secondary",
                     on: {
                       click: function($event) {
-                        _vm.data.delayHours > 0 ? _vm.data.delayHours-- : 0
+                        _vm.delay_hours > 0 ? _vm.delay_hours-- : 0
                       }
                     }
                   },
@@ -42261,8 +42257,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.data.delayHours,
-                    expression: "data.delayHours"
+                    value: _vm.delay_hours,
+                    expression: "delay_hours"
                   }
                 ],
                 staticClass: "form-control",
@@ -42272,13 +42268,13 @@ var render = function() {
                   id: "dalay_hours",
                   max: "23"
                 },
-                domProps: { value: _vm.data.delayHours },
+                domProps: { value: _vm.delay_hours },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.data, "delayHours", $event.target.value)
+                    _vm.delay_hours = $event.target.value
                   }
                 }
               }),
@@ -42290,7 +42286,7 @@ var render = function() {
                     staticClass: "btn btn-secondary",
                     on: {
                       click: function($event) {
-                        _vm.data.delayHours < 23 ? _vm.data.delayHours++ : 23
+                        _vm.delay_hours < 23 ? _vm.delay_hours++ : 23
                       }
                     }
                   },
@@ -42313,11 +42309,11 @@ var render = function() {
                   options: _vm.GetNewTagsForSelect
                 },
                 model: {
-                  value: _vm.data.newTag,
+                  value: _vm.new_tag_id,
                   callback: function($$v) {
-                    _vm.$set(_vm.data, "newTag", $$v)
+                    _vm.new_tag_id = $$v
                   },
-                  expression: "data.newTag"
+                  expression: "new_tag_id"
                 }
               })
             ],
@@ -42507,16 +42503,13 @@ var render = function() {
       _c(
         "ul",
         { staticClass: "list-group list-group-flush" },
-        _vm._l(_vm.actions, function(item, index) {
+        _vm._l(_vm.OrderedListActions, function(item, index) {
           return _c("li", { key: index, staticClass: "list-group-item" }, [
             _c("i", {
               staticClass: "fas fa-2x",
-              class: {
-                "fa-envelope": item.actionType.action_type_name == "email",
-                "fa-sms": item.actionType.action_type_name == "sms"
-              }
+              class: _vm.getActionIcon(item)
             }),
-            _vm._v(" " + _vm._s(item.description) + "\n            ")
+            _vm._v(" " + _vm._s(item.action_description) + "\n            ")
           ])
         }),
         0
@@ -42570,17 +42563,11 @@ var render = function() {
     [
       _c(
         "tbody",
-        _vm._l(_vm.listActions, function(item, index) {
+        _vm._l(_vm.OrderedListActions, function(item, index) {
           return _c("tr", { key: index }, [
             _c("td", { staticClass: "align-middle", attrs: { scope: "row" } }, [
-              _c("i", {
-                staticClass: "fas",
-                class: {
-                  "fa-envelope": item.actionType.action_type_name == "email",
-                  "fa-sms": item.actionType.action_type_name == "sms"
-                }
-              }),
-              _vm._v(" " + _vm._s(item.description) + "\n            ")
+              _c("i", { staticClass: "fas", class: _vm.getActionIcon(item) }),
+              _vm._v(" " + _vm._s(item.action_description) + "\n            ")
             ]),
             _vm._v(" "),
             _c(
@@ -73365,7 +73352,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************!*\
   !*** ./resources/js/src/funnel/store/actions.js ***!
   \**************************************************/
-/*! exports provided: ActionSetProduct, ActionSetSteps, ActionAddNewStep, ActionUpdateStep, ActionGetProducts, ActionGetTags, ActionSetTag, ActionSetActive, ActionSetShowCrudStep, ActionClearState, ActionGetActionTypes, ActionSaveFunnel */
+/*! exports provided: ActionSetProduct, ActionSetSteps, ActionAddNewStep, ActionUpdateStep, ActionGetProducts, ActionGetTags, ActionSetTag, ActionSetActive, ActionSetShowCrudStep, ActionClearState, ActionGetActionTypes, ActionSaveFunnel, ActionLoadFunnel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -73382,6 +73369,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionClearState", function() { return ActionClearState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionGetActionTypes", function() { return ActionGetActionTypes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSaveFunnel", function() { return ActionSaveFunnel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionLoadFunnel", function() { return ActionLoadFunnel; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/src/funnel/store/mutation-types.js");
@@ -73411,8 +73399,8 @@ var ActionAddNewStep = function ActionAddNewStep(_ref3, payload) {
 
   var state = _ref3.state,
       commit = _ref3.commit;
-  payload.data.sequence = (_state$steps$length = state.steps.length) !== null && _state$steps$length !== void 0 ? _state$steps$length : 0;
-  payload.data.name = "Passo ".concat(payload.data.sequence + 1);
+  payload.funnel_step_sequence = ((_state$steps$length = state.steps.length) !== null && _state$steps$length !== void 0 ? _state$steps$length : 0) + 1;
+  payload.funnel_step_description = "Passo ".concat(payload.funnel_step_sequence);
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["ADD_NEW_STEP"], payload);
 };
 var ActionUpdateStep = function ActionUpdateStep(_ref4, payload) {
@@ -73551,6 +73539,37 @@ var ActionSaveFunnel = /*#__PURE__*/function () {
     return _ref20.apply(this, arguments);
   };
 }();
+var ActionLoadFunnel = /*#__PURE__*/function () {
+  var _ref23 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(_ref21, _ref22) {
+    var commit, dispatch, vm, id;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            commit = _ref21.commit, dispatch = _ref21.dispatch;
+            vm = _ref22.vm, id = _ref22.id;
+            _context5.next = 4;
+            return vm.$http.get("funnel/".concat(id, "/json")).then(function (res) {
+              console.log(res.data);
+              dispatch('ActionClearState');
+              commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_PRODUCT"], res.data.product_id);
+              commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_TAG"], res.data.tag_id);
+              commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_ACTIVE"], res.data.active);
+              commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_STEPS"], res.data.steps);
+            });
+
+          case 4:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+
+  return function ActionLoadFunnel(_x9, _x10) {
+    return _ref23.apply(this, arguments);
+  };
+}();
 
 /***/ }),
 
@@ -73558,7 +73577,7 @@ var ActionSaveFunnel = /*#__PURE__*/function () {
 /*!**************************************************!*\
   !*** ./resources/js/src/funnel/store/getters.js ***!
   \**************************************************/
-/*! exports provided: GetProductsForSelect, GetTagsForSelect, GetTagById, GetNewTagsForSelect, GetStepByIndex, GetActionTypeByName */
+/*! exports provided: GetProductsForSelect, GetTagsForSelect, GetTagById, GetNewTagsForSelect, GetStepByIndex, GetActionTypeByName, GetActionTypeById, OrderedSteps */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -73569,6 +73588,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetNewTagsForSelect", function() { return GetNewTagsForSelect; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetStepByIndex", function() { return GetStepByIndex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetActionTypeByName", function() { return GetActionTypeByName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetActionTypeById", function() { return GetActionTypeById; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OrderedSteps", function() { return OrderedSteps; });
 var GetProductsForSelect = function GetProductsForSelect(state) {
   var res = [];
   state.products.forEach(function (product) {
@@ -73608,10 +73629,22 @@ var GetStepByIndex = function GetStepByIndex(state) {
 };
 var GetActionTypeByName = function GetActionTypeByName(state) {
   return function (name) {
-    return state.actionTypes.find(function (action) {
-      return action.action_type_name === name;
+    return state.actionTypes.find(function (act) {
+      return act.action_type_name === name;
     });
   };
+};
+var GetActionTypeById = function GetActionTypeById(state) {
+  return function (id) {
+    return state.actiontypes.find(function (act) {
+      return act.id === id;
+    });
+  };
+};
+var OrderedSteps = function OrderedSteps(state) {
+  return state.steps.sort(function (a, b) {
+    return a.funnel_step_sequence - b.funnel_step_sequence;
+  });
 };
 
 /***/ }),
@@ -74221,7 +74254,7 @@ var ActionEditAction = function ActionEditAction(_ref5, payload) {
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["EDITING_INDEX"], payload);
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["IS_EDITING"], true);
 
-  switch (state.listActions[payload].type) {
+  switch (state.listActions[payload].actionType.action_type_name) {
     case 'sms':
       commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ACTIVE_COMPONENT"], _components_component_types__WEBPACK_IMPORTED_MODULE_1__["COMPONENT_NEW_SMS"]);
       break;
@@ -74252,16 +74285,22 @@ var ActionSetUpdateAction = function ActionSetUpdateAction(_ref6, payload) {
 /*!*************************************************!*\
   !*** ./resources/js/src/steps/store/getters.js ***!
   \*************************************************/
-/*! exports provided: GetActionByIndex */
+/*! exports provided: GetActionByIndex, OrderedListActions */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetActionByIndex", function() { return GetActionByIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OrderedListActions", function() { return OrderedListActions; });
 var GetActionByIndex = function GetActionByIndex(state) {
   return function (index) {
     return state.listActions[index];
   };
+};
+var OrderedListActions = function OrderedListActions(state) {
+  return state.listActions.sort(function (a, b) {
+    return a.action_sequence > b.action_sequence;
+  });
 };
 
 /***/ }),
@@ -74604,8 +74643,8 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  modules: _modules__WEBPACK_IMPORTED_MODULE_3__["default"],
-  plugins: _plugins__WEBPACK_IMPORTED_MODULE_2__["default"]
+  modules: _modules__WEBPACK_IMPORTED_MODULE_3__["default"] //plugins
+
 }));
 
 /***/ }),

@@ -7,7 +7,7 @@
             <div class="row mb-1">
                 <div class="col">
                     <label for="action_description">Descrição</label>
-                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="smsAction.description" placeholder="Exemplo: Enviar SMS">
+                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="action_description" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
             <div class="row mb-1">
@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col">
                     <label for="exampleFormControlTextarea1">Texto da Mensagem</label>
-                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="smsAction.actionData.data"></textarea>
+                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="action_data.data"></textarea>
                 </div>
             </div>
         </div>
@@ -41,19 +41,19 @@ import * as componentTypes from '../../steps/components/component-types'
 
 const iniData = {
     id: null,
-    type: 'sms',
-    description: 'Enviar SMS',
-    actionData: {
+    action_description: 'Enviar SMS',
+    action_sequence: 0,
+    action_data: {
         data: '',
         options: {}
     },
-    actionType: null
+    action_type_id: null
 }
 
 export default {
     data() {
         return {
-            smsAction: { ...iniData }
+            ...iniData
         }
     },
     components: {
@@ -77,9 +77,9 @@ export default {
         saveSmsAction() {
             this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
             if (this.isEditing) {
-                this.ActionSetUpdateAction(this.smsAction)
+                this.ActionSetUpdateAction(this.$data)
             } else {
-                this.ActionSetNewAction(this.smsAction)
+                this.ActionSetNewAction(this.$data)
             }
         },
         cancelNewSmsAction() {
@@ -102,9 +102,10 @@ export default {
         }
     },
     mounted() {
-        this.smsAction.actionType = this.GetActionTypeByName('sms')
         if (this.isEditing) {
-            this.smsAction = { ...this.GetActionByIndex(this.editingIndex) }
+            Object.assign(this.$data, { ...this.GetActionByIndex(this.editingIndex) })
+        } else {
+            this.action_type_id = this.GetActionTypeByName('sms').id
         }
     }
 }

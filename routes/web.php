@@ -75,6 +75,7 @@ Route::prefix('')->group(function() {
 		Route::get('tags/json', 'TagController@getTagsJson');
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
+		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');
 	});
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {

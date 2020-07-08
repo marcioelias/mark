@@ -20,7 +20,7 @@ export const ActionDelAction = ({ commit }, payload) => {
 export const ActionEditAction = ({ state, commit }, payload) => {
     commit(types.EDITING_INDEX, payload)
     commit(types.IS_EDITING, true)
-    switch (state.listActions[payload].type) {
+    switch (state.listActions[payload].actionType.action_type_name) {
         case 'sms':
             commit(types.SET_ACTIVE_COMPONENT, componentTypes.COMPONENT_NEW_SMS)
             break;

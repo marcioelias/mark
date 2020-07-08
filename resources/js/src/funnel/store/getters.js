@@ -33,5 +33,13 @@ export const GetStepByIndex = state => index => {
 }
 
 export const GetActionTypeByName = state => name => {
-    return state.actionTypes.find(action => action.action_type_name === name)
+    return state.actionTypes.find(act => act.action_type_name === name)
+}
+
+export const GetActionTypeById = state => id => {
+    return state.actiontypes.find(act => act.id === id)
+}
+
+export const OrderedSteps = state => {
+    return state.steps.sort((a, b) => a.funnel_step_sequence - b.funnel_step_sequence)
 }

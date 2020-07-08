@@ -9,8 +9,8 @@ export const ActionSetSteps = ({ commit }, payload) => {
 }
 
 export const ActionAddNewStep = ({ state, commit }, payload) => {
-    payload.data.sequence = state.steps.length ?? 0
-    payload.data.name = `Passo ${payload.data.sequence + 1}`
+    payload.funnel_step_sequence = (state.steps.length ?? 0) + 1
+    payload.funnel_step_description = `Passo ${payload.funnel_step_sequence}`
     commit(types.ADD_NEW_STEP, payload)
 }
 
@@ -64,4 +64,16 @@ export const ActionSaveFunnel = async ({ state, dispatch }, { vm }) => {
             })
             .then(res => res.status && console.log(res.data)) //dispatch('ActionClearState'))
 
+}
+
+export const ActionLoadFunnel = async ({ commit, dispatch }, { vm, id }) => {
+    await vm.$http.get(`funnel/${id}/json`)
+            .then(res => {
+                console.log(res.data)
+                dispatch('ActionClearState')
+                commit(types.SET_PRODUCT, res.data.product_id)
+                commit(types.SET_TAG, res.data.tag_id)
+                commit(types.SET_ACTIVE, res.data.active)
+                commit(types.SET_STEPS, res.data.steps)
+            })
 }
