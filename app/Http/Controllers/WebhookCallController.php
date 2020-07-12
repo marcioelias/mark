@@ -40,7 +40,8 @@ class WebhookCallController extends Controller
     }
 
     private function integracaoHotmart(Request $request) {
-
+        Log::info('### Novo evento de postback ###');
+        Log::debug($request->all());
     }
 
     private function integracaoMonetizze(Request $request) {
