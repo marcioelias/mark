@@ -19,14 +19,14 @@
                 Ações a serem executadas
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="(item, index) in OrderedListActions" :key="index">
+                <li class="list-group-item" v-for="(item, index) in orderedActions" :key="index">
                     <i class="fas fa-2x" :class="getActionIcon(item)"></i> {{ item.action_description }}
                 </li>
             </ul>
             <div class="card-footer">
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-warning float-right"><i class="fa fa-edit"></i> Alterar Passo</button>
+                        <button class="btn btn-warning float-right" @click="editStep"><i class="fa fa-edit"></i> Alterar Passo</button>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
 export default {
     data() {
@@ -50,9 +50,6 @@ export default {
         ...mapState('funnel', [
             'actionTypes'
         ]),
-        ...mapGetters('steps', [
-            'OrderedListActions'
-        ]),
         execAfter() {
             let dia = this.delay_days == 1 ? 'dia' : 'dias'
             let hora= this.delay_hours == 1 ? 'hora' : 'horas'
@@ -61,6 +58,9 @@ export default {
         newTagDescription() {
             let tag = this.GetTagById(this.step.new_tag_id)
             return  tag ? tag.tag_name : 'Nenhuma Tag informada'
+        },
+        orderedActions() {
+            return this.actions.sort((a, b) => a.action_sequence - b.action_sequence)
         }
     },
     props: {
@@ -70,6 +70,19 @@ export default {
         }
     },
     methods: {
+        ...mapActions('funnel', [
+            'ActionSetShowCrudStep', 'ActionIsEditingStep'
+        ]),
+        ...mapActions('step', [
+            'ActionLoadStep'
+        ]),
+        editStep() {
+            this.ActionLoadStep()
+                .then(() => {
+                    this.ActionIsEditingStep(true)
+                    this.ActionSetShowCrudStep(true)
+                })
+        },
         getActionIcon(item) {
             let act = this.actionTypes.find(a => a.id === item.action_type_id)
             return {

@@ -19,7 +19,8 @@ class CreateTransactionsTable extends Migration
             $table->uuid('product_id');
             $table->uuid('customer_id');
             $table->string('transaction_code');
-            $table->string('billet_url');
+            $table->string('billet_url')->nullable();
+            $table->string('billet_barcode')->nullable();
             $table->json('transaction_payload');
             $table->json('user_custom_mapping')->nullable();
             $table->foreign('user_id')->references('id')->on('users');

@@ -105,7 +105,15 @@ class FunnelController extends Controller
      */
     public function store(Request $request)
     {
-        //Log::debug($request->all());
+        //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
+        $this->validate($request, [
+            'product_id' => "required",
+            'tag_id' => "required|unique:funnels,tag_id,NULL,NULL,product_id,$request->product_id",
+        ], [],
+        [
+            'product_id' => 'Produto',
+            'tag_id' => 'Tag'
+        ]);
 
         DB::beginTransaction();
 
@@ -117,7 +125,6 @@ class FunnelController extends Controller
             ]);
 
             if ($funnel->save()) {
-                //Log::debug($funnel);
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
                 foreach ($request->steps as $step) {
                     Log::debug($step);
@@ -127,7 +134,6 @@ class FunnelController extends Controller
                         'new_tag_id' => $step['new_tag_id'] ?? null
                     ]);
                     $funnel->steps()->save($newStep);
-                    //Log::debug($newStep);
 
                     foreach ($step['actions'] as $action) {
                         $newStepAction = new FunnelStepAction([
@@ -137,12 +143,13 @@ class FunnelController extends Controller
                             'action_data' => json_encode($action['action_data']),
                         ]);
                         $newStep->actions()->save($newStepAction);
-                        //Log::debug($newStepAction);
                     }
                 }
 
                 DB::commit();
-                //DB::rollBack();
+
+                return response()->json(['redirect' => route('user.funnels.index')]);
+
             } else {
                 throw new \Exception('Ocorreu um erro ao salvar o Funil.');
             }
@@ -150,9 +157,8 @@ class FunnelController extends Controller
         } catch (\Exception $e) {
             Log::emergency($e);
             DB::rollBack();
+            return response()->json($e->getMessage());
         }
-
-
     }
 
     /**

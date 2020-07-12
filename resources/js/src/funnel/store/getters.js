@@ -43,3 +43,7 @@ export const GetActionTypeById = state => id => {
 export const OrderedSteps = state => {
     return state.steps.sort((a, b) => a.funnel_step_sequence - b.funnel_step_sequence)
 }
+
+export const GetProductById = state => id => {
+    return state.products.find(p => p.id === id)
+}

@@ -30,5 +30,14 @@ export default {
     },
     [types.SET_ACTION_TYPES] (state, payload) {
         state.actionTypes = payload
+    },
+    [types.SET_CURRENT_STEP] (state, payload) {
+        state.currentStep = payload
+    },
+    [types.SET_IS_EDITING_STEP] (state, payload) {
+        state.isEditingStep = payload
+    },
+    [types.SET_HTTP_ERRORS] (state, payload) {
+        state.httpErrors = payload
     }
 }

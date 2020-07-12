@@ -7,7 +7,7 @@
             <div class="row mb-1">
                 <div class="col">
                     <label for="action_description">Descrição</label>
-                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="action_description" placeholder="Exemplo: Enviar SMS">
+                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="actionDescription" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
             <div class="row mb-1">
@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col">
                     <label for="exampleFormControlTextarea1">Texto da Mensagem</label>
-                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="action_data.data"></textarea>
+                    <textarea class="form-control" ref="sms_body" id="exampleFormControlTextarea1" rows="3" placeholder="Digite o texto para a mensagem SMS..." v-model="data"></textarea>
                 </div>
             </div>
         </div>
@@ -37,49 +37,70 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import SelectVariables from '../../variables/components/SelectVariables'
-import * as componentTypes from '../../steps/components/component-types'
+import * as componentTypes from '../component-types'
 
-const iniData = {
-    id: null,
-    action_description: 'Enviar SMS',
-    action_sequence: 0,
-    action_data: {
+const iniData = () => {
+    return {
         data: '',
         options: {}
-    },
-    action_type_id: null
+    }
 }
 
 export default {
     data() {
         return {
-            ...iniData
+            ...iniData()
         }
     },
     components: {
         SelectVariables
     },
     computed: {
-        ...mapState('steps', [
-            'isEditing', 'editingIndex'
+        ...mapState('action', [
+            'id',
+            'action_type_id',
+            'action_sequence',
+            'action_description',
+            'action_data',
+            'editingIndex'
         ]),
-        ...mapGetters('steps', [
-            'GetActionByIndex'
+        ...mapState('step', [
+            'actions', 'actionEditingIndex'
         ]),
         ...mapGetters('funnel', [
             'GetActionTypeByName'
-        ])
+        ]),
+        actionDescription: {
+            get() {
+                return this.action_description
+            },
+            set(value) {
+                this.ActionSetActionDescription(value)
+            }
+        },
+        isEditing() {
+            return this.actionEditingIndex !== null
+        }
     },
     methods: {
-        ...mapActions('steps', [
-            'ActionSetActiveComponent', 'ActionSetNewAction', 'ActionSetUpdateAction'
+        ...mapActions('action', [
+            'ActionSetActionTypeId',
+            'ActionSetActionSequence',
+            'ActionSetActionDescription',
+            'ActionSetActionData',
+            'ActionClearState'
+        ]),
+        ...mapActions('step', [
+            'ActionAddNewAction', 'ActionSetActionComponent', 'ActionUpdateAction', 'ActionSetEditActionIndex'
         ]),
         saveSmsAction() {
-            this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
-            if (this.isEditing) {
-                this.ActionSetUpdateAction(this.$data)
+            this.ActionSetActionData({ ...this.$data })
+            if (!this.isEditing) {
+                this.ActionAddNewAction()
+                    .then(() => this.clearForm())
             } else {
-                this.ActionSetNewAction(this.$data)
+                this.ActionUpdateAction()
+                    .then(() => this.clearForm())
             }
         },
         cancelNewSmsAction() {
@@ -93,19 +114,26 @@ export default {
                     cancelButtonText: 'Não, Continuar.'
                 }).then(result => {
                     if (result.value) {
-                        this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+                        if (this.isEditing) {
+                            this.ActionSetEditActionIndex(null)
+                        }
+                        this.clearForm()
                     }
                 })
         },
         clearForm() {
-            this.smsAction = { ...iniData }
+            Object.assign(this.$data, { ...iniData() })
+            this.ActionClearState()
+            this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         }
     },
     mounted() {
         if (this.isEditing) {
-            Object.assign(this.$data, { ...this.GetActionByIndex(this.editingIndex) })
+            Object.assign(this.$data, { ...this.action_data })
         } else {
-            this.action_type_id = this.GetActionTypeByName('sms').id
+            this.actionDescription = 'Enviar SMS'
+            this.ActionSetActionTypeId(this.GetActionTypeByName('sms').id)
+            this.ActionSetActionSequence((this.actions.length ?? 0) + 1)
         }
     }
 }

@@ -7,13 +7,13 @@
             <div class="row mb-1">
                 <div class="col">
                     <label for="action_description">Descrição</label>
-                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="action_description" placeholder="Exemplo: Enviar SMS">
+                    <input type="text" name="action_description" id="action_description" class="form-control" v-model="actionDescription" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label for="email-message-editor">Texto do E-mail</label>
-                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="action_data.data"
+                    <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="data"
                         :options="{placeholder: 'Digite a mensagem a ser enviada...', theme: 'snow' }"></quill-editor>
                 </div>
             </div>
@@ -23,9 +23,9 @@
                     <fieldset>
                         <label>Enviar somente no horário entre:</label>
                         <div class="d-flex justify-content-between">
-                            <div class="form-control mr-1" style="width: 7rem">{{ action_data.options.period[0] }} Horas</div>
-                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 text-fixed="horas" v-model="action_data.options.period"/></div>
-                            <div class="form-control ml-1" style="width: 7rem">{{ action_data.options.period[1] }} Horas</div>
+                            <div class="form-control mr-1" style="width: 7rem">{{ options.period[0] }} Horas</div>
+                            <div class="flex-grow-1"><vs-slider step=1 :min=0 :max=23 text-fixed="horas" v-model="options.period"/></div>
+                            <div class="form-control ml-1" style="width: 7rem">{{ options.period[1] }} Horas</div>
                         </div>
                     </fieldset>
                 </div>
@@ -45,54 +45,75 @@
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import * as componentTypes from '../../steps/components/component-types'
+import * as componentTypes from '../component-types'
 
-const iniData = {
-    id: null,
-    action_description: 'Enviar Email',
-    action_sequence: 0,
-    action_data: {
+const iniData = () => {
+    return {
         data: '',
         options: {
             period: [0,23]
         }
-    },
-    action_type_id: null
+    }
 }
 
 export default {
     data() {
         return {
-            ...iniData,
+            ...iniData()
         }
     },
     components: {
         quillEditor
     },
     computed: {
-        ...mapState('steps', [
-            'isEditing', 'editingIndex', 'listActions'
+        ...mapState('action', [
+            'id',
+            'action_type_id',
+            'action_sequence',
+            'action_description',
+            'action_data',
+            'editingIndex'
+        ]),
+        ...mapState('step', [
+            'actions', 'actionEditingIndex'
+        ]),
+        ...mapGetters('funnel', [
+            'GetActionTypeByName'
         ]),
         ...mapGetters('variables', [
             'GetVariablesAsObject'
         ]),
-        ...mapGetters('steps', [
-            'GetActionByIndex'
-        ]),
-        ...mapGetters('funnel', [
-            'GetActionTypeByName'
-        ])
+        actionDescription: {
+            get() {
+                return this.action_description
+            },
+            set(value) {
+                this.ActionSetActionDescription(value)
+            }
+        },
+        isEditing() {
+            return this.actionEditingIndex !== null
+        }
     },
     methods: {
-        ...mapActions('steps', [
-            'ActionSetActiveComponent', 'ActionSetNewAction', 'ActionSetUpdateAction'
+        ...mapActions('action', [
+            'ActionSetActionTypeId',
+            'ActionSetActionSequence',
+            'ActionSetActionDescription',
+            'ActionSetActionData',
+            'ActionClearState'
+        ]),
+        ...mapActions('step', [
+            'ActionAddNewAction', 'ActionSetActionComponent', 'ActionUpdateAction', 'ActionSetEditActionIndex'
         ]),
         saveEmailAction() {
-            this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
-            if (this.isEditing) {
-                this.ActionSetUpdateAction(this.$data)
+            this.ActionSetActionData({ ...this.$data })
+            if (!this.isEditing) {
+                this.ActionAddNewAction()
+                    .then(() => this.clearForm())
             } else {
-                this.ActionSetNewAction(this.$data)
+                this.ActionUpdateAction()
+                    .then(() => this.clearForm())
             }
         },
         cancelNewEmailAction() {
@@ -106,7 +127,10 @@ export default {
                     cancelButtonText: 'Não, Continuar.'
                 }).then(result => {
                     if (result.value) {
-                        this.ActionSetActiveComponent(componentTypes.COMPONENT_TABLE)
+                        if (this.isEditing) {
+                            this.ActionSetEditActionIndex(null)
+                        }
+                        this.clearForm()
                     }
                 })
         },
@@ -128,15 +152,21 @@ export default {
             }
 
             variablesDW.attach(quill)
+        },
+        clearForm() {
+            Object.assign(this.$data, { ...iniData() })
+            this.ActionClearState()
+            this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         }
     },
     mounted() {
         this.addCustomSelectToEditor()
         if (this.isEditing) {
-            Object.assign(this.$data, { ...this.GetActionByIndex(this.editingIndex) })
+            Object.assign(this.$data, { ...this.action_data })
         } else {
-            this.action_type_id = this.GetActionTypeByName('email').id
-            this.action_sequence = (this.listActions.length ?? 0) + 1
+            this.actionDescription = 'Enviar Email'
+            this.ActionSetActionTypeId(this.GetActionTypeByName('email').id)
+            this.ActionSetActionSequence((this.actions.length ?? 0) + 1)
         }
     }
 }

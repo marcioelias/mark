@@ -2,12 +2,15 @@
 
 namespace App\Models\User;
 
+use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    use MultiTenantable;
+
     protected $fillable = [
-        'user_id', 'product_id', 'customer_id', 'transaction_code', 'billet_url', 'transaction_payload', 'user_custom_mapping'
+        'user_id', 'product_id', 'customer_id', 'transaction_code', 'billet_url', 'billet_barcode', 'transaction_payload', 'user_custom_mapping'
     ];
 
     public function user() {

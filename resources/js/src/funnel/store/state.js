@@ -1,10 +1,13 @@
 export default {
+    actionTypes: [],
     products: [],
-    tags: [],
-    product: {},
-    active: true,
-    tag: null,
     steps: [],
+    tags: [],
+    product: null,
+    tag: null,
+    active: true,
     showCrudStep: false,
-    actionTypes: []
+    currentStep: 0,
+    isEditingStep: false,
+    httpErrors: []
 }

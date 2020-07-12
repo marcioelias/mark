@@ -1,2 +1,0 @@
-export const SET_DESCRIPTION = 'SET_DESCRIPTION'
-export const SET_ACTION_DATA = 'SET_ACTION_DATA'

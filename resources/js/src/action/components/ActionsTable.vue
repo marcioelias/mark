@@ -1,7 +1,7 @@
 <template>
     <table class="table table-sm table-hover bg-white mb-0">
         <tbody>
-            <tr v-for="(item, index) in OrderedListActions" :key="index">
+            <tr v-for="(item, index) in OrderedActions" :key="index">
                 <td class="align-middle" scope="row">
                     <i class="fas" :class="getActionIcon(item)"></i> {{ item.action_description }}
                 </td>
@@ -20,27 +20,34 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import * as componentTypes from '../component-types'
 
 export default {
     computed: {
-        ...mapState('steps', [
-            'listActions'
-        ]),
-        ...mapGetters('steps', [
-            'OrderedListActions'
+        ...mapGetters('step', [
+            'OrderedActions', 'GetActionByIndex'
         ]),
         ...mapState('funnel', [
             'actionTypes'
-        ])
+        ]),
+        ...mapGetters('funnel', [
+            'GetActionTypeById'
+        ]),
+        ...mapState('action', {
+            actionTypeId: 'action_type_id'
+        })
     },
     methods: {
-        ...mapActions('steps', [
-            'ActionDelAction', 'ActionEditAction'
+        ...mapActions('step', [
+            'ActionDelAction', 'ActionSetActionComponent', 'ActionSetEditActionIndex'
+        ]),
+        ...mapActions('action', [
+            'ActionEditAction'
         ]),
         removeAction(index) {
             this.$swal.fire({
                     title: 'Remover a ação?',
-                    text: `Será removida a ação ${this.listActions[index].description}.`,
+                    text: `Será removida a ação ${this.OrderedActions[index].action_description}.`,
                     icon: 'warning',
                     heightAuto: false,
                     showCancelButton: true,
@@ -53,7 +60,23 @@ export default {
                 })
         },
         editAction(index) {
-            this.ActionEditAction(index)
+            this.ActionEditAction(this.GetActionByIndex(index))
+                .then(() => {
+                    this.ActionSetEditActionIndex(index)
+                    this.ActionSetActionComponent(this.getComponentByAction())
+                })
+        },
+        getComponentByAction() {
+            let actionType = this.actionTypes.find(act => act.id === this.actionTypeId)
+            switch (actionType.action_type_name) {
+                case 'email':
+                    return componentTypes.NEW_EMAIL_ACTION
+                    break;
+
+                case 'sms':
+                    return componentTypes.NEW_SMS_ACTION
+                    break;
+            }
         },
         getActionIcon(item) {
             let act = this.actionTypes.find(a => a.id === item.action_type_id)

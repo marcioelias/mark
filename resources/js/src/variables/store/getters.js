@@ -1,5 +1,4 @@
 export const GetVariables = state => {
-    console.log(state.variables)
     return state.variables
 }
 
