@@ -215,7 +215,6 @@ class FunnelController extends Controller
     }
 
     public function getFunnelJson(Funnel $funnel) {
-        $funnel = Funnel::with('steps.actions')->first();
-        return response()->json($funnel);
+        return response()->json($funnel->load('steps.actions'));
     }
 }
