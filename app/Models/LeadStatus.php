@@ -4,7 +4,7 @@ namespace App\Models;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
-class Shedule extends Model
+class LeadStatus extends Model
 {
     //
 }

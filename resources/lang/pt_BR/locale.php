@@ -10,8 +10,11 @@ return [
     "Buy" => "Comprar",
     "Packages" => "Pacotes",
     "Tags" => "Tags",
-    "Produts" => "Produtos",
+    "Products" => "Produtos",
     "Configurations" => "Configurações",
     "Plataforms" => "Plataformas",
-    'Funnels' => "Funis"
+    "Funnels" => "Funis",
+    "Integrations" => "Integrações",
+    "Postbacks" => "Postbacks",
+    "Rules" => "Regras"
 ];

@@ -26,8 +26,8 @@
                     'type' => 'dollar-sign',
                     'divider' => true
                 ]
-                ],
-                [
+            ],
+            [
                 'type' => 'checkbox',
                 'field' => 'active',
                 'label' => 'Ativo',

@@ -15,7 +15,7 @@
             'displayField' => 'plataform_name',
             'keyField' => 'id',
             'inputSize' => 3,
-            'disabled' => true,
+            'readOnly' => true,
             'indexSelected' => $plataformConfig->plataform_id
         ],
         [

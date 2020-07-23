@@ -13,7 +13,7 @@
             //$permission = 'alterar-'.str_replace('_', '-', $model);
             break;
         case 'destroy':
-            $btn_style = 'btn-danger icon-btn-sm-padding';
+            $btn_style = 'btn-danger icon-btn-sm-padding deleteBtn';
             $btn_icon = 'minus-cirle';
             $tooltip = 'Remover';
             //$permission = 'excluir-'.str_replace('_', '-', $model);

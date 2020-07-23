@@ -17,8 +17,8 @@ class ProductController extends Controller
 
     public function fields() {
         return array(
-            'plataform_name' => 'Plataforma',
             'product_name' => 'Produto',
+            'plataform_name' => 'Plataforma',
             'product_price' => 'Preço',
             'active' => ['label' => 'Ativo', 'type' => 'bool']
         );
@@ -117,13 +117,6 @@ class ProductController extends Controller
 
         $product->save();
 
-        /* Create default tags for the new product */
-        $product->tags()->createMany([
-            ['tag_name' => 'Boleto Impresso'],
-            ['tag_name' => 'Compra Finalizada'],
-            ['tag_name' => 'Remarketing']
-        ]);
-
         return response()->json($product);
     }
 
@@ -192,7 +185,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        return response()->json($product->delete());
     }
 
     /**

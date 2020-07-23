@@ -15,17 +15,30 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'id' => '5b6247a4-d350-4fdc-bacd-2cd56c5db564',
-            'name' => 'User',
-            'email' => 'user@app.com',
-            'password' => bcrypt('user'),
-            'customer_code' => 'A12BC34',
-            'plan_id' => Arr::random(Plan::pluck('id')->toArray()),
-            'email_verified_at' => now(),
-            'first_login_at' => now(),
-            'created_at' => now()
-        ]);
+        $users = [
+            [
+                'name' => 'John Doe',
+                'email' => 'user@app.com',
+                'password' => bcrypt('user'),
+                'customer_code' => 'A12BC34',
+                'plan_id' => Arr::random(Plan::pluck('id')->toArray()),
+                'email_verified_at' => now(),
+                'first_login_at' => now(),
+            ],
+            [
+                'name' => 'Jane Doe',
+                'email' => 'jane@app.com',
+                'password' => bcrypt('jane'),
+                'customer_code' => 'A12BC35',
+                'plan_id' => Arr::random(Plan::pluck('id')->toArray()),
+                'email_verified_at' => now(),
+                'first_login_at' => now(),
+            ]
+        ];
+
+        foreach ($users as $user) {
+            User::create($user);
+        }
 
         factory(User::class, 100)->create();
     }

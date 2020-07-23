@@ -3,7 +3,6 @@ import { reject } from 'lodash'
 
 export const ActionSetProduct = ({ commit }, payload) => {
     commit(types.SET_PRODUCT, payload)
-
 }
 export const ActionSetSteps = ({ commit }, payload) => {
     commit(types.SET_STEPS, payload)
@@ -31,13 +30,13 @@ export const ActionGetProducts = async ({ commit }, { vm }) => {
             .catch(err => console.log(err))
 }
 
-export const ActionGetTags = async ({ commit }, { vm }) => {
-    await vm.$http.get('tags/json')
+export const ActionGetTags = async ({ commit }, { vm, product }) => {
+    await vm.$http.get(`tags/${product}/json`)
                   .then(res => commit(types.SET_TAGS, res.data))
                   .catch(err => console.log(err))
 }
 
-export const ActionSetTag = ({commit}, payload) => {
+export const ActionSetTag = ({ commit }, payload) => {
     commit(types.SET_TAG, payload)
 }
 

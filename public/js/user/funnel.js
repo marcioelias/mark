@@ -2461,6 +2461,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       set: function set(value) {
         this.ActionSetProduct(value);
+        this.ActionGetTags({
+          vm: this,
+          product: value
+        });
       }
     },
     funnelActive: {
@@ -2470,6 +2474,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       set: function set(value) {
         this.ActionSetActive(value);
       }
+    },
+    disableTags: function disableTags() {
+      return this.product == null;
     },
     productName: function productName() {
       return this.product && this.GetProductById(this.product).product_name;
@@ -2567,10 +2574,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return new Promise(function (resolve, reject) {
         _this4.ActionGetProducts({
-          vm: _this4
-        });
-
-        _this4.ActionGetTags({
           vm: _this4
         });
 
@@ -59425,7 +59428,7 @@ var render = function() {
                   attrs: {
                     name: "tag",
                     id: "tag",
-                    setting: { dropdownCssClass: "form-control" },
+                    settings: { disabled: _vm.disableTags },
                     options: _vm.GetTagsForSelect
                   },
                   model: {
@@ -91088,15 +91091,15 @@ var ActionGetProducts = /*#__PURE__*/function () {
 }();
 var ActionGetTags = /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref8, _ref9) {
-    var commit, vm;
+    var commit, vm, product;
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             commit = _ref8.commit;
-            vm = _ref9.vm;
+            vm = _ref9.vm, product = _ref9.product;
             _context2.next = 4;
-            return vm.$http.get('tags/json').then(function (res) {
+            return vm.$http.get("tags/".concat(product, "/json")).then(function (res) {
               return commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_TAGS"], res.data);
             })["catch"](function (err) {
               return console.log(err);

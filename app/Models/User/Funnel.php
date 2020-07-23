@@ -25,8 +25,8 @@ class Funnel extends Model
         return $this->belongsTo(Tag::class);
     }
 
-    public function transactions() {
-        return $this->hasMany(Transaction::class);
+    public function Postbacks() {
+        return $this->hasMany(Postback::class);
     }
 
     public function steps() {

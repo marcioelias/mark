@@ -16,7 +16,6 @@ class TagController extends Controller
 
     public function fields() {
         return array(
-            'product_name' => 'Produto',
             'tag_name' => 'Tag'
         );
     }
@@ -38,22 +37,16 @@ class TagController extends Controller
         ];
 
         $this->setOrder($request, [
-            'order_by' => 'product_name',
+            'order_by' => 'tag_name',
             'order_type' => 'ASC'
         ]);
 
         if ($request->searchField) {
-            $tags = Tag::select('tags.*', 'products.product_name')
-                        ->join('products', 'products.id', 'tags.product_id')
-                        ->whereRaw("((tags.product_id = ?) || (? is null))", [$request->product_id, $request->product_id])
-                        ->where('tag_name', 'like', "%$request->searchField%")
+            $tags = Tag::where('tag_name', 'like', "%$request->searchField%")
                         ->OrderBy($this->orderField, $this->orderType)
                         ->paginate($this->paginate);
         } else {
-            $tags = Tag::select('tags.*', 'products.product_name')
-                        ->join('products', 'products.id', 'tags.product_id')
-                        ->whereRaw("((tags.product_id = ?) || (? is null))", [$request->product_id, $request->product_id])
-                        ->OrderBy($this->orderField, $this->orderType)
+            $tags = Tag::OrderBy($this->orderField, $this->orderType)
                         ->paginate($this->paginate);
         }
 
@@ -80,11 +73,8 @@ class TagController extends Controller
                 'name' => "Nova"
             ]
         ];
-        $products = Product::Active()
-                        ->orderBy('product_name')
-                        ->get();
 
-        return $this->getView('user.tags.create')->withProducts($products);
+        return $this->getView('user.tags.create');
     }
 
     /**
@@ -99,7 +89,6 @@ class TagController extends Controller
         $userId = Auth::user()->id;
         $this->validate($request, [
             'tag_name' => "required|unique:tags,tag_name,NULL,NULL,user_id,$userId",
-            'product_id' => 'required'
         ]);
 
         $tag = new Tag($request->all());
@@ -127,12 +116,7 @@ class TagController extends Controller
             ]
         ];
 
-        $products = Product::Active()
-                        ->Where('id', $tag->product_id)
-                        ->orderBy('product_name', 'asc')
-                        ->get();
-
-        return $this->getView('user.tags.edit')->withTag($tag)->withProducts($products);
+        return $this->getView('user.tags.edit')->withTag($tag);
     }
 
     /**
@@ -162,15 +146,5 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         return response()->json($tag->delete());
-    }
-
-    /**
-     * Get all tags in json Format
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getTagsJson() {
-        $tags = Tag::orderBy('tag_name', 'asc')->get();
-        return response()->json($tags);
     }
 }

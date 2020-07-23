@@ -67,12 +67,14 @@ Route::prefix('')->group(function() {
 		Route::resource('product', 'ProductController')->except('show');
 		Route::resource('plataform_config', 'PlataformConfigController')->except('show');
 		Route::resource('funnel', 'FunnelController')->except('show');
+		Route::resource('postbacks', 'PostbackController')->except('show');
+		Route::resource('tag_rule', 'TagRuleController')->except('show');
 
 		Route::get('plataform_config/get_url/{plataformConfig}', 'PlataformConfigController@getWebhookUrl');
 
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');
-		Route::get('tags/json', 'TagController@getTagsJson');
+		Route::get('tags/{product}/json', 'TagController@getTagsJson');
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
 		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');

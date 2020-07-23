@@ -15,7 +15,7 @@
             "submenu": [
                 {
                     "url": "product.index",
-                    "name": "Produts",
+                    "name": "Products",
                     "activeUrls": ["product", "product/create", "product/{product}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 },
@@ -35,6 +35,19 @@
         },
         {
             "url": "",
+            "name": "Integrations",
+            "icon": "feather icon-cpu",
+            "submenu": [
+                {
+                    "url": "postbacks.index",
+                    "name": "Postbacks",
+                    "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                }
+            ]
+        },
+        {
+            "url": "",
             "name": "Configurations",
             "icon": "feather icon-settings",
             "submenu": [
@@ -42,6 +55,12 @@
                     "url": "plataform_config.index",
                     "name": "Plataforms",
                     "activeUrls": ["plataform_config", "plataform_config/create", "plataform_config/{plataformConfig}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "tag_rule.index",
+                    "name": "Rules",
+                    "activeUrls": ["tag_rule", "tag_rule/create", "tag_rule/{tagRule}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]

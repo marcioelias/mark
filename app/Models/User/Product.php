@@ -31,7 +31,7 @@ class Product extends Model
         return $this->hasOneThrough(Plataform::class, PlataformConfig::class);
     }
 
-    public function tags() {
-        return $this->hasMany(Tag::class);
+    public function tag() {
+        return $this->belongsTo(Tag::class);
     }
 }

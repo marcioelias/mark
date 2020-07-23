@@ -20,7 +20,7 @@
                     <div class="form-control">{{ tagName }}</div>
                 </template>
                 <template v-else>
-                    <Select2 v-model="funnelTag" name="tag" id="tag" :setting="{dropdownCssClass: 'form-control'}" :options="GetTagsForSelect" />
+                    <Select2 v-model="funnelTag" name="tag" id="tag" :settings="{disabled: disableTags}" :options="GetTagsForSelect" />
                     <span v-show="httpErrors.hasOwnProperty('tag_id')" class="invalid-feedback" style="display: block">
                         <span v-for="(error, index) in httpErrors.tag_id" :key="index">{{ error }}</span>
                     </span>
@@ -116,6 +116,7 @@ export default {
             },
             set(value) {
                 this.ActionSetProduct(value)
+                this.ActionGetTags({ vm: this, product: value })
             }
         },
         funnelActive: {
@@ -125,6 +126,9 @@ export default {
             set(value) {
                 this.ActionSetActive(value)
             }
+        },
+        disableTags() {
+            return this.product == null
         },
         productName() {
             return this.product && this.GetProductById(this.product).product_name
@@ -212,7 +216,6 @@ export default {
         loadData() {
             return new Promise((resolve, reject) => {
                 this.ActionGetProducts({ vm: this })
-                this.ActionGetTags({ vm: this })
                 this.ActionGetVariablesFromApi({ vm: this })
                 this.ActionGetActionTypes({ vm: this })
                 resolve()

@@ -11,14 +11,14 @@ class Tag extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'product_id', 'tag_name'
+        'user_id', 'tag_name'
     ];
 
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function product() {
-        return $this->belongsTo(Product::class);
+    public function products() {
+        return $this->hasMany(Product::class);
     }
 }
