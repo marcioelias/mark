@@ -51,8 +51,8 @@
     box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Froala */
-#email-message-editor {
-    height: 25rem;
-    margin-bottom: 4rem;
+.btn-secondary ~ .dropdown-menu .dropdown-item:not(.active):not(:active):hover,
+.btn-outline-secondary ~ .dropdown-menu .dropdown-item:not(.active):not(:active):hover,
+.btn-flat-secondary ~ .dropdown-menu .dropdown-item:not(.active):not(:active):hover {
+  color: black !important;
 }

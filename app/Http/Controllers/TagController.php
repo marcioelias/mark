@@ -147,4 +147,8 @@ class TagController extends Controller
     {
         return response()->json($tag->delete());
     }
+
+    public function getTagsJson() {
+        return response()->json(Tag::orderBy('tag_name', 'ASC')->get());
+    }
 }

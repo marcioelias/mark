@@ -17,6 +17,6 @@ export default {
         state.action_data = payload
     },
     [types.LOAD_STATE] (state, payload) {
-        Object.assign(state, { ...payload })
+        Object.assign(state, payload)
     }
 }

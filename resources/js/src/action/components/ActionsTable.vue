@@ -25,7 +25,7 @@ import * as componentTypes from '../component-types'
 export default {
     computed: {
         ...mapGetters('step', [
-            'OrderedActions', 'GetActionByIndex'
+            'OrderedActions',
         ]),
         ...mapState('funnel', [
             'actionTypes'
@@ -60,7 +60,7 @@ export default {
                 })
         },
         editAction(index) {
-            this.ActionEditAction(this.GetActionByIndex(index))
+            this.ActionEditAction(this.OrderedActions[index])
                 .then(() => {
                     this.ActionSetEditActionIndex(index)
                     this.ActionSetActionComponent(this.getComponentByAction())

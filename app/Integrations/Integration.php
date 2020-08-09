@@ -77,7 +77,9 @@ class Integration {
     }
 
     protected function getProduct() {
-        $product = Product::where('plataform_code', $this->productCode)->first();
+        $product = Product::where('plataform_code', $this->productCode)
+                        ->where('plataform_config_id', $this->plataformConfig->id)
+                        ->first();
         if ($product) {
             return $product;
         } else {
@@ -140,17 +142,53 @@ class Integration {
     }
 
     public function getPostback() {
-        return new Postback([
-            'user_id' => $this->getPlataformConfig()->user_id,
-            'product_id' => $this->product->id,
-            'customer_id' => $this->customer->id,
-            'event_type' => $this->getMappedEventType(),
-            'payload' => $this->getPayload()
-        ]);
+        return Postback::firstOrNew(
+            [
+                'user_id' => $this->getPlataformConfig()->user_id,
+                'product_id' => $this->product->id,
+                'customer_id' => $this->customer->id,
+                'postback_event_type_id' => $this->getMappedEventType(),
+                'transaction_code' => $this->transactionCode
+            ],
+            [
+                'payload' => $this->getPayload()
+            ]
+        );
     }
 
     public function getLead() {
-        return Lead::updateOrCreate(
+        $lead = Lead::where('user_id', $this->getPlataformConfig()->user_id)
+                    ->where('product_id', $this->product->id)
+                    ->where('customer_id', $this->customer->id)
+                    ->where('transaction_code', $this->transactionCode)
+                    ->first();
+
+        if ($lead) {
+            $lead->fill([
+                    'billet_url' => $this->billetUrl,
+                    'billet_barcode' => $this->billetBarcode,
+                    'value' => $this->value,
+                    'paid_at' => $this->getPaidAt(),
+                    'lead_status_id' => $this->getLeadStatus()
+                ]);
+        } else {
+            $lead = new Lead([
+                'user_id' => $this->getPlataformConfig()->user_id,
+                'product_id' => $this->product->id,
+                'customer_id' => $this->customer->id,
+                'transaction_code' => $this->transactionCode,
+                'billet_url' => $this->billetUrl,
+                'billet_barcode' => $this->billetBarcode,
+                'value' => $this->value,
+                'paid_at' => $this->getPaidAt(),
+                'lead_status_id' => $this->getLeadStatus(),
+                'last_step_finished_at' => Carbon::now()
+            ]);
+        }
+        $lead->save();
+
+        return $lead;
+        /* return Lead::updateOrCreate(
             [
                 'user_id' => $this->getPlataformConfig()->user_id,
                 'product_id' => $this->product->id,
@@ -162,8 +200,8 @@ class Integration {
                 'billet_barcode' => $this->billetBarcode,
                 'value' => $this->value,
                 'paid_at' => $this->getPaidAt(),
-                'status' => $this->getLeadStatus()
+                'lead_status_id' => $this->getLeadStatus()
             ]
-        );
+        ); */
     }
 }

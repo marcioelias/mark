@@ -1,4 +1,6 @@
 export default {
+    isEditing: false,
+    funnelId: null,
     actionTypes: [],
     products: [],
     steps: [],
@@ -9,5 +11,6 @@ export default {
     showCrudStep: false,
     currentStep: 0,
     isEditingStep: false,
-    httpErrors: []
+    httpErrors: [],
+    isLoading: false
 }

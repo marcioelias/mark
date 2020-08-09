@@ -28,7 +28,7 @@
                 {
                     "url": "funnel.index",
                     "name": "Funnels",
-                    "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit"],
+                    "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]
@@ -39,7 +39,7 @@
             "icon": "feather icon-cpu",
             "submenu": [
                 {
-                    "url": "postbacks.index",
+                    "url": "postback.index",
                     "name": "Postbacks",
                     "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
                     "i18n": "nav.sk_layout_2_columns"

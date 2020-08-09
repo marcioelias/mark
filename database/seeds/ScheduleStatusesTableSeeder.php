@@ -24,6 +24,10 @@ class ScheduleStatusesTableSeeder extends Seeder
             [
                 'id' => 'abda429b-11c6-4de8-9f35-171f85b31bcf',
                 'schedule_status' => 'Erro',
+            ],
+            [
+                'id' => '90b0030a-2206-4add-9307-6fed6eee743f',
+                'schedule_status' => 'Cancelado',
             ]
         ];
 

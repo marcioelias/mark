@@ -1,9 +1,9 @@
 @extends('layouts.crud.index', ['tableConf' => [
     'captions' => $fields,
-    'rows' => $tags,
-    'model' => 'tag',
-    'tableTitle' => 'Tags',
-    'displayField' => 'tag_name',
-    'actions' => ['edit', 'destroy'],
+    'rows' => $postbacks,
+    'model' => 'postback',
+    'tableTitle' => 'Postbacks',
+    'displayField' => 'product_name',
+    'actions' => ['show'],
     'orderData' => $orderData ?? false
 ]])

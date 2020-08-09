@@ -25,7 +25,7 @@ class CreateFunnelStepActionsTable extends Migration
             $table->string('action_description');
             $table->json('action_data')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps');
+            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps')->onDelete('cascade');
             $table->foreign('action_type_id')->references('id')->on('action_types');
             $table->timestamps();
         });

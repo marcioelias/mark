@@ -51,8 +51,6 @@ class CustomVerifyEmailNotification extends Notification
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }
 
-        Log::debug($this->user->temp_password->temp_password);
-
         return (new MailMessage)
             ->subject(Lang::get('Verify Email Address'))
             ->line('Parabéns pela escolha, **'.$this->user->name.'**.')

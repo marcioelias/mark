@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('hotzz:queue-notifications')->everyMinute()->withoutOverlapping(10);
     }
 
     /**

@@ -1,5 +1,4 @@
 import * as types from './mutation-types'
-import { reject } from 'lodash'
 
 export const ActionSetProduct = ({ commit }, payload) => {
     commit(types.SET_PRODUCT, payload)
@@ -30,8 +29,8 @@ export const ActionGetProducts = async ({ commit }, { vm }) => {
             .catch(err => console.log(err))
 }
 
-export const ActionGetTags = async ({ commit }, { vm, product }) => {
-    await vm.$http.get(`tags/${product}/json`)
+export const ActionGetTags = async ({ commit }, { vm }) => {
+    await vm.$http.get(`tags/json`)
                   .then(res => commit(types.SET_TAGS, res.data))
                   .catch(err => console.log(err))
 }
@@ -49,8 +48,9 @@ export const ActionSetShowCrudStep = ({ commit }, payload) => {
 }
 
 export const ActionClearState = ({ commit }) => {
-    commit(types.SET_PRODUCT, {})
     commit(types.SET_STEPS, [])
+    commit(types.SET_TAG, null)
+    commit(types.SET_PRODUCT, null)
 }
 
 export const ActionGetActionTypes = async ({ commit }, { vm }) => {
@@ -60,14 +60,27 @@ export const ActionGetActionTypes = async ({ commit }, { vm }) => {
 }
 
 export const ActionSaveFunnel = ({ state }, { vm }) => {
-    return vm.$http.post('funnel', {
-        product_id: state.product,
-        tag_id: state.tag,
-        active: state.active,
-        steps: {
-            ...state.steps
-        }
-    })
+    if (state.isEditing) {
+        return vm.$http.put(`funnel/${state.funnelId}`, {
+            id: state.funnelId,
+            product_id: state.product,
+            tag_id: state.tag,
+            active: state.active,
+            steps: {
+                ...state.steps
+            }
+        })
+    } else {
+        return vm.$http.post('funnel', {
+            product_id: state.product,
+            tag_id: state.tag,
+            active: state.active,
+            steps: {
+                ...state.steps
+            }
+        })
+    }
+
 }
 
 export const ActionSetCurrentStep = ({ commit }, payload) => {
@@ -79,10 +92,13 @@ export const ActionLoadFunnel = ({ commit, dispatch }, { vm, id }) => {
         vm.$http.get(`funnel/${id}/json`)
             .then(res => {
                 dispatch('ActionClearState')
+                commit(types.SET_FUNNEL_IS_EDITING, true)
+                commit(types.SET_FUNNEL_ID, res.data.id)
                 commit(types.SET_PRODUCT, res.data.product_id)
                 commit(types.SET_TAG, res.data.tag_id)
                 commit(types.SET_ACTIVE, res.data.active)
                 commit(types.SET_STEPS, res.data.steps)
+                commit(types.SET_IS_LOADING, false)
             })
         resolve()
     })
@@ -94,4 +110,8 @@ export const ActionIsEditingStep = ({ commit }, payload) => {
 
 export const ActionSetHttpErrors = ({ commit }, payload) => {
     commit(types.SET_HTTP_ERRORS, payload)
+}
+
+export const ActionSetIsLoading = ({ commit }, payload) => {
+    commit(types.SET_IS_LOADING, payload)
 }

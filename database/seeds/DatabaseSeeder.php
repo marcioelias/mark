@@ -13,9 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Schema::disableForeignKeyConstraints();
         $this->truncateTables();
-        Schema::enableForeignKeyConstraints();
+
         $this->call(PlansTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(AdminsTableSeeder::class);
@@ -23,9 +22,15 @@ class DatabaseSeeder extends Seeder
         $this->call(VariablesTableSeeder::class);
         $this->call(ActionTypesTableSeeder::class);
         $this->call(LeadStatusesTableSeeder::class);
+        $this->call(PostbackEventTypesTableSeeder::class);
+
+        if (env('APP_DEBUG', false)) {
+            $this->call(SeedDummyData::class);
+        }
     }
 
     public function truncateTables() {
+        Schema::disableForeignKeyConstraints();
         DB::table('admins')->truncate();
         DB::table('users')->truncate();
         DB::table('plans')->truncate();
@@ -33,5 +38,7 @@ class DatabaseSeeder extends Seeder
         DB::table('variables')->truncate();
         DB::table('action_types')->truncate();
         DB::table('lead_statuses')->truncate();
+        DB::table('postback_event_types')->truncate();
+        Schema::enableForeignKeyConstraints();
     }
 }

@@ -2,19 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User\FunnelStep;
 use App\Models\User\Lead;
+use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
 {
+    use LayoutConfigTrait;
+
+    public $breadcrumbs;
+
+    public function fields() {
+        return array(
+            'tag_name' => 'Tag'
+        );
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $this->breadcrumbs = [
+            [
+                'name' => 'Leads'
+            ],
+            [
+                'name' => "Leads"
+            ],
+        ];
+
+        $this->setOrder($request, [
+            'order_by' => 'tag_name',
+            'order_type' => 'ASC'
+        ]);
+
+        if ($request->searchField) {
+            $tags = Lead::where('tag_name', 'like', "%$request->searchField%")
+                        ->OrderBy($this->orderField, $this->orderType)
+                        ->paginate($this->paginate);
+        } else {
+            $tags = Lead::OrderBy($this->orderField, $this->orderType)
+                        ->paginate($this->paginate);
+        }
+
+        return $this->getIndex('user.tags.index')
+                    ->withTags($tags);
     }
 
     /**
@@ -81,5 +117,18 @@ class LeadController extends Controller
     public function destroy(Lead $lead)
     {
         //
+    }
+
+    public function getLeadsFromStep(FunnelStep $funnelStep) {
+        return response()->json(
+            $funnelStep->leads()
+                    ->with([
+                        'customer',
+                        'leadStatus',
+                        'schedules' => function($query) use ($funnelStep) {
+                            $query->where('funnel_step_id', $funnelStep->id)
+                            ->with('action');
+                        }
+                    ])->paginate(3));
     }
 }

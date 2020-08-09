@@ -10,11 +10,64 @@
                     <input type="text" name="action_description" id="action_description" class="form-control" v-model="actionDescription" placeholder="Exemplo: Enviar SMS">
                 </div>
             </div>
+            <div class="row mb-1">
+                <div class="col d-flex flex-row justify-content-between">
+                    <div class="flex-grow-1">
+                        <label for="mail_subject">Assunto</label>
+                        <div class="input-group">
+                            <input ref="emailSubject" type="text" name="mail_subject" id="mail_subject" class="form-control" v-model="options.subject" placeholder="Assunto do E-mail">
+                            <div class="input-group-append">
+                                <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Variáveis</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" v-for="variable in GetVariables" :key="variable.id" @click="insertVariable(variable.variable)">{{ variable.description }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-end ml-2">
+                        <mail-template :message="data" @templateLoaded="setDataFromTemplate" />
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col">
                     <label for="email-message-editor">Texto do E-mail</label>
                     <quill-editor ref="emailMessageEditor" id="email-message-editor" v-model="data"
-                        :options="{placeholder: 'Digite a mensagem a ser enviada...', theme: 'snow' }"></quill-editor>
+                        :options="{
+                            placeholder: 'Digite a mensagem a ser enviada...',
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    ['bold', 'italic'],
+                                    ['blockquote'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                                    [{ 'direction': 'rtl' }],
+                                    [{ 'size': [false, '10px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '32px', '36px'] }],
+                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    [{ 'font': [] }],
+                                    [{ 'align': [] }],
+                                    ['clean'],
+                                    ['link', 'image', 'video'],
+                                ],
+                                imageResize: {
+                                    displayStyles: {
+                                        backgroundColor: 'black',
+                                        border: 'none',
+                                        color: 'white'
+                                    },
+                                    modules: [ 'Resize', 'DisplaySize' ]
+                                },
+                                history: {
+                                    delay: 2000,
+                                    maxStack: 500,
+                                    userOnly: true
+                                },
+                                imageDrop: true,
+                            }
+                        }">
+                    </quill-editor>
                 </div>
             </div>
             <div class="row">
@@ -42,15 +95,55 @@
     </div>
 </template>
 
+<style>
+    .ql-picker-item[data-value='10px']::before, .ql-picker-label[data-value='10px']::before { content: '10px' !important; }
+    .ql-picker-item[data-value='12px']::before, .ql-picker-label[data-value='12px']::before { content: '12px' !important; }
+    .ql-picker-item[data-value='14px']::before, .ql-picker-label[data-value='14px']::before { content: '14px' !important; }
+    .ql-picker-item[data-value='16px']::before, .ql-picker-label[data-value='16px']::before { content: '16px' !important; }
+    .ql-picker-item[data-value='18px']::before, .ql-picker-label[data-value='18px']::before { content: '18px' !important; }
+    .ql-picker-item[data-value='20px']::before, .ql-picker-label[data-value='20px']::before { content: '20px' !important; }
+    .ql-picker-item[data-value='24px']::before, .ql-picker-label[data-value='24px']::before { content: '24px' !important; }
+    .ql-picker-item[data-value='30px']::before, .ql-picker-label[data-value='30px']::before { content: '30px' !important; }
+    .ql-picker-item[data-value='32px']::before, .ql-picker-label[data-value='32px']::before { content: '32px' !important; }
+    .ql-picker-item[data-value='36px']::before, .ql-picker-label[data-value='36px']::before { content: '36px' !important; }
+</style>
+
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import * as componentTypes from '../component-types'
+import insertTextAtCursor from 'insert-text-at-cursor'
+import Quill from 'quill'
+import ImageResize from 'quill-image-resize'
+import { ImageDrop } from 'quill-image-drop-module'
+import MailTemplate from './MailTemplate'
+
+let DirectionAttribute = Quill.import('attributors/attribute/direction')
+let AlignStyle = Quill.import('attributors/style/align');
+let SizeStyle = Quill.import('attributors/style/size');
+let BackgroundStyle = Quill.import('attributors/style/background');
+let ColorStyle = Quill.import('attributors/style/color');
+let DirectionStyle = Quill.import('attributors/style/direction');
+let FontStyle = Quill.import('attributors/style/font');
+
+SizeStyle.whitelist = ['6px', '8px', '10px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '32px', '36px']
+
+Quill.register(DirectionAttribute,true)
+Quill.register(AlignStyle,true);
+Quill.register(SizeStyle,true);
+Quill.register(BackgroundStyle,true);
+Quill.register(ColorStyle,true);
+Quill.register(DirectionStyle,true);
+Quill.register(FontStyle,true);
+
+Quill.register('modules/imageResize', ImageResize)
+Quill.register('modules/imageDrop', ImageDrop)
 
 const iniData = () => {
     return {
         data: '',
         options: {
+            subject: '',
             period: [0,23]
         }
     }
@@ -63,7 +156,7 @@ export default {
         }
     },
     components: {
-        quillEditor
+        quillEditor, MailTemplate
     },
     computed: {
         ...mapState('action', [
@@ -81,7 +174,7 @@ export default {
             'GetActionTypeByName'
         ]),
         ...mapGetters('variables', [
-            'GetVariablesAsObject'
+            'GetVariablesAsObject', 'GetVariables'
         ]),
         actionDescription: {
             get() {
@@ -157,12 +250,18 @@ export default {
             Object.assign(this.$data, { ...iniData() })
             this.ActionClearState()
             this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
+        },
+        insertVariable(value) {
+            insertTextAtCursor(this.$refs['emailSubject'], value)
+        },
+        setDataFromTemplate(event) {
+            this.data = event
         }
     },
     mounted() {
         this.addCustomSelectToEditor()
         if (this.isEditing) {
-            Object.assign(this.$data, { ...this.action_data })
+            Object.assign(this.$data, JSON.parse(this.action_data))
         } else {
             this.actionDescription = 'Enviar Email'
             this.ActionSetActionTypeId(this.GetActionTypeByName('email').id)

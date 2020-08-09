@@ -66,48 +66,33 @@ Route::prefix('')->group(function() {
 		Route::resource('tag', 'TagController')->except('show');
 		Route::resource('product', 'ProductController')->except('show');
 		Route::resource('plataform_config', 'PlataformConfigController')->except('show');
-		Route::resource('funnel', 'FunnelController')->except('show');
-		Route::resource('postbacks', 'PostbackController')->except('show');
+		Route::resource('funnel', 'FunnelController');
+		Route::resource('lead', 'LeadController');
 		Route::resource('tag_rule', 'TagRuleController')->except('show');
+
+		Route::get('postback', 'PostbackController@index')->name('postback.index');
+		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');
 
 		Route::get('plataform_config/get_url/{plataformConfig}', 'PlataformConfigController@getWebhookUrl');
 
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');
-		Route::get('tags/{product}/json', 'TagController@getTagsJson');
+		Route::get('tags/json', 'TagController@getTagsJson');
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
 		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');
+		Route::get('leads/{funnelStep}', 'LeadController@getLeadsFromStep')->name('step.leads');
+		Route::get('message/{funnelStepAction}/{lead}', 'FunnelStepActionController@getActionMessage')->name('action.message');
+
+
+		/* mail template routes */
+		Route::post('mailtemplate', 'MailTemplateController@store');
+		Route::post('mailtemplate/exists', 'MailTemplateController@templateExists');
+		Route::get('mailtemplate/list', 'MailTemplateController@listTemplates');
+		Route::get('mailtemplate/{mailTemplate}', 'MailTemplateController@loadTemplate');
 	});
 
 	Route::middleware(['auth:web', 'signed'])->group(function() {
 		Route::get('email/verify/{id}/{hash}', 'Auth\User\VerificationController@verify')->name('verification.verify');
 	});
 });
-
-/* // Route url
-Route::get('/', 'DashboardController@dashboardAnalytics');
-
-// Route Dashboards
-Route::get('/dashboard-analytics', 'DashboardController@dashboardAnalytics');
-
-// Route Components
-Route::get('/sk-layout-2-columns', 'StaterkitController@columns_2');
-Route::get('/sk-layout-fixed-navbar', 'StaterkitController@fixed_navbar');
-Route::get('/sk-layout-floating-navbar', 'StaterkitController@floating_navbar');
-Route::get('/sk-layout-fixed', 'StaterkitController@fixed_layout');
-
-// acess controller
-Route::get('/access-control', 'AccessController@index');
-Route::get('/access-control/{roles}', 'AccessController@roles');
-Route::get('/modern-admin', 'AccessController@home')->middleware('permissions:approve-post');
-
-// Auth::routes();
-
-// locale Route
-Route::get('lang/{locale}',[LanguageController::class,'swap']);
- */
-
-/* Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home'); */

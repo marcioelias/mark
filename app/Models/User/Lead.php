@@ -2,7 +2,8 @@
 
 namespace App\Models\User;
 
-use App\Enums\LeadStatus;
+use App\Constants\LeadStatus as ConstantsLeadStatus;
+use App\Models\LeadStatus;
 use App\Models\User;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
@@ -20,7 +21,10 @@ class Lead extends Model
         'billet_barcode',
         'value',
         'paid_at',
-        'status'
+        'lead_status_id',
+        'tag_id',
+        'last_step_finished_at',
+        'funnel_step_id'
     ];
 
     public function user() {
@@ -39,19 +43,39 @@ class Lead extends Model
         return $this->hasMany(Postback::class);
     }
 
-    public function scopeFinalizadas($query) {
-        return $query->where('status', LeadStatus::compraFinalizada()->getStatus());
+    public function leadStatus() {
+        return $this->belongsTo(LeadStatus::class);
     }
 
-    public function scopeCanceladas($query) {
-        return $query->where('status', LeadStatus::compraCancelada()->getStatus());
+    public function tag() {
+        return $this->belongsTo(Tag::class);
+    }
+
+    public function funnelStep() {
+        return $this->belongsTo(FunnelStep::class);
+    }
+
+    public function schedules() {
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function stepFinishedAt() {
+        return $this->last_step_finished_at ?? $this->created_at;
+    }
+
+    public function scopeFinalizados($query) {
+        return $query->where('lead_status_id', ConstantsLeadStatus::FINALIZADO);
+    }
+
+    public function scopeCancelados($query) {
+        return $query->where('lead_status_id', ConstantsLeadStatus::CANCELADO);
     }
 
     public function scopeBoletosVencendo($query) {
-        return $query->where('status', LeadStatus::boletoVencendo()->getStatus());
+        return $query->where('lead_status_id', ConstantsLeadStatus::VENCENDO);
     }
 
     public function scopeBoletosVencidos($query) {
-        return $query->where('status', LeadStatus::boletoVencido()->getStatus());
+        return $query->where('lead_status_id', ConstantsLeadStatus::VENCIDO);
     }
 }

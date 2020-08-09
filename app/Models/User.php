@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\User\MailTemplate;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Product;
 use App\Models\User\Tag;
 use App\Notifications\CustomVerifyEmailNotification;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use GoldSpecDigital\LaravelEloquentUUID\Foundation\Auth\User as Authenticatable;
@@ -44,6 +46,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'active' => 'boolean'
     ];
 
+    protected static function boot():void {
+        parent::boot();
+
+        static::creating(function (self $user) {
+            $user->plan_cycle_ends = Carbon::now()->addDays(30);
+        });
+    }
+
     /**
      * Send the email verification notification.
      *
@@ -80,5 +90,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function plataform() {
         return $this->hasOneThrough(Plataform::class, PlataformConfig::class);
+    }
+
+    public function mailTemplates() {
+        return $this->hasMany(MailTemplate::class);
     }
 }

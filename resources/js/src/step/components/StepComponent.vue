@@ -60,7 +60,8 @@ export default {
             return  tag ? tag.tag_name : 'Nenhuma Tag informada'
         },
         orderedActions() {
-            return this.actions.sort((a, b) => a.action_sequence - b.action_sequence)
+            let acts = this.actions.filter(a => !a.deleted)
+            return acts.sort((a, b) => a.action_sequence - b.action_sequence)
         }
     },
     props: {

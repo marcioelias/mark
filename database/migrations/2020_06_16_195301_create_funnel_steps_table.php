@@ -26,7 +26,7 @@ class CreateFunnelStepsTable extends Migration
             $table->unsignedInteger('delay_days')->default(0);
             $table->unsignedInteger('delay_hours')->default(0);
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('funnel_id')->references('id')->on('funnels');
+            $table->foreign('funnel_id')->references('id')->on('funnels')->onDelete('cascade');
             $table->foreign('new_tag_id')->references('id')->on('tags');
             $table->timestamps();
         });

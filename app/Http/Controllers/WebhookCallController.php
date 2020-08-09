@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewLeadCreated;
 use App\Integrations\IntegrationFactory;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Postback;
@@ -33,6 +34,9 @@ class WebhookCallController extends Controller
 
             DB::commit();
 
+            /* dispatch event for process tag rules */
+            event(new NewLeadCreated($lead));
+
             return $this->handleTransactionOk($postback);
 
         } catch (\Exception $e) {
@@ -43,7 +47,7 @@ class WebhookCallController extends Controller
 
     private function handleException(Exception $exception) {
         if (env('APP_DEBUG', false)) {
-            Log::debug($exception);
+            Log::emergency($exception);
         } else {
             Log::emergency($exception->getMessage());
         }

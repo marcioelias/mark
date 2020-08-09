@@ -34,14 +34,14 @@ export const ActionSetActionComponent = ({ commit }, payload) => {
 }
 
 export const ActionAddNewAction = ({ commit, rootState }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
         commit(types.ADD_NEW_ACTION, { ...rootState.action })
         resolve()
     })
 }
 
 export const ActionUpdateAction = ({ commit, rootState }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
         commit(types.UPDATE_ACTION, { ...rootState.action })
         resolve()
     })

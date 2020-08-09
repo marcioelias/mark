@@ -127,11 +127,12 @@ class FunnelController extends Controller
             if ($funnel->save()) {
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
                 foreach ($request->steps as $step) {
-                    Log::debug($step);
                     $newStep = new FunnelStep([
                         'funnel_step_sequence' => $step['funnel_step_sequence'],
                         'funnel_step_description' => $step['funnel_step_description'],
-                        'new_tag_id' => $step['new_tag_id'] ?? null
+                        'new_tag_id' => $step['new_tag_id'] ?? null,
+                        'delay_days' => $step['delay_days'] ?? 0,
+                        'delay_hours' => $step['delay_hours'] ?? 0
                     ]);
                     $funnel->steps()->save($newStep);
 
@@ -148,7 +149,7 @@ class FunnelController extends Controller
 
                 DB::commit();
 
-                return response()->json(['redirect' => route('user.funnels.index')]);
+                return response()->json(['redirect' => route('funnel.index')]);
 
             } else {
                 throw new \Exception('Ocorreu um erro ao salvar o Funil.');
@@ -169,7 +170,22 @@ class FunnelController extends Controller
      */
     public function show(Funnel $funnel)
     {
-        //
+        Log::info('chegou no método!');
+        $this->breadcrumbs = [
+            [
+                'name' => 'Cadastros'
+            ],
+            [
+                'link' => "/funnel",
+                'name' => "Funis"
+            ],
+            [
+                'name' => "Visualizar Funil"
+            ]
+        ];
+
+        return $this->getView('user.funnels.show')
+                    ->withFunnel($funnel->load(['product', 'tag', 'steps.actions']));
     }
 
     /**
@@ -206,7 +222,75 @@ class FunnelController extends Controller
      */
     public function update(Request $request, Funnel $funnel)
     {
-        //
+        //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
+        $this->validate($request, [
+            'product_id' => "required",
+            'tag_id' => "required|unique:funnels,tag_id,$funnel->id,id,product_id,$request->product_id",
+        ], [],
+        [
+            'product_id' => 'Produto',
+            'tag_id' => 'Tag'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            Log::debug($request->all());
+            $funnel->fill([
+                'product_id' => $request->product_id,
+                'tag_id' => $request->tag_id,
+                'active' => $request->active
+            ]);
+
+            if ($funnel->save()) {
+                /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
+                foreach ($request->steps as $step) {
+                    $newStep = FunnelStep::updateOrCreate(
+                        [
+                            'id' => $step['id']
+                        ],
+                        [
+                            'funnel_id' => $funnel->id,
+                            'funnel_step_sequence' => $step['funnel_step_sequence'],
+                            'funnel_step_description' => $step['funnel_step_description'],
+                            'new_tag_id' => $step['new_tag_id'] ?? null,
+                            'delay_days' => $step['delay_days'] ?? 0,
+                            'delay_hours' => $step['delay_hours'] ?? 0
+                        ]
+                    );
+
+                    foreach ($step['actions'] as $action) {
+                        if ($action['deleted']) {
+                            FunnelStepAction::find($action['id'])->delete();
+                        } else {
+                            FunnelStepAction::updateOrCreate(
+                                ['id' => $action['id']],
+                                [
+                                    'funnel_step_id' => $newStep->id,
+                                    'action_type_id' => $action['action_type_id'],
+                                    'action_sequence' => $action['action_sequence'],
+                                    'action_description' => $action['action_description'],
+                                    'action_data' => json_encode($action['action_data']),
+                                    'deleted' => $action['deleted']
+                                ]
+                            );
+                        }
+                    }
+                }
+
+                DB::commit();
+
+                return response()->json(['redirect' => route('funnel.index')]);
+
+            } else {
+                throw new \Exception('Ocorreu um erro ao salvar o Funil.');
+            }
+
+        } catch (\Exception $e) {
+            Log::emergency($e);
+            DB::rollBack();
+            return response()->json($e->getMessage());
+        }
     }
 
     /**
@@ -217,7 +301,7 @@ class FunnelController extends Controller
      */
     public function destroy(Funnel $funnel)
     {
-        //
+        return response()->json($funnel->delete());
     }
 
     public function getFunnelJson(Funnel $funnel) {

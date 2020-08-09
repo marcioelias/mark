@@ -23,7 +23,7 @@ class CreatePostbacksTable extends Migration
             $table->json('payload');
             $table->json('user_custom_mapping')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('lead_id')->references('id')->on('leads');
+            $table->foreign('lead_id')->references('id')->on('leads')->onDelete('CASCADE');
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });

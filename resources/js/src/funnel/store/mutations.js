@@ -39,5 +39,14 @@ export default {
     },
     [types.SET_HTTP_ERRORS] (state, payload) {
         state.httpErrors = payload
+    },
+    [types.SET_IS_LOADING] (state, payload) {
+        state.isLoading = payload
+    },
+    [types.SET_FUNNEL_IS_EDITING] (state, payload) {
+        state.isEditing = payload
+    },
+    [types.SET_FUNNEL_ID] (state, payload) {
+        state.funnelId = payload
     }
 }

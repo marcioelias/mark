@@ -25,11 +25,29 @@ class Funnel extends Model
         return $this->belongsTo(Tag::class);
     }
 
-    public function Postbacks() {
+    public function postbacks() {
         return $this->hasMany(Postback::class);
     }
 
     public function steps() {
         return $this->hasMany(FunnelStep::class);
+    }
+
+    public function firstStep() {
+        return $this->hasOne(FunnelStep::class)
+                    ->orderBy('funnel_step_sequence', 'ASC')
+                    ->first();
+    }
+
+    public function nextStep(int $currentStepId) {
+        return $this->hasOne(FunnelStep::class)
+                    ->where('funnel_step_sequence', '>', $currentStepId)
+                    ->orderBy('funnel_step_sequence', 'ASC')
+                    ->first();
+    }
+
+    public function scopeByProductAndTag($query, $product_id, $tag_id) {
+        return $query->where('product_id', $product_id)
+                    ->where('tag_id', $tag_id);
     }
 }

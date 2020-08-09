@@ -4,6 +4,6 @@
     'model' => 'funnel',
     'tableTitle' => 'Funis',
     'displayField' => 'id',
-    'actions' => ['edit', 'destroy'],
+    'actions' => ['show', 'edit', 'destroy'],
     'orderData' => $orderData ?? false
 ]])
