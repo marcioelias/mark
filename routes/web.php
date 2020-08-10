@@ -83,6 +83,7 @@ Route::prefix('')->group(function() {
 		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');
 		Route::get('leads/{funnelStep}', 'LeadController@getLeadsFromStep')->name('step.leads');
 		Route::get('message/{funnelStepAction}/{lead}', 'FunnelStepActionController@getActionMessage')->name('action.message');
+		Route::get('schedules/{funnelStep}/{lead', 'ScheduleController@getSchedulesByStepLead')->name('step.lead.schedules');
 
 
 		/* mail template routes */

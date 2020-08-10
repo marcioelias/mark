@@ -2010,7 +2010,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     currentSchedule: function currentSchedule(value) {
-      console.log(this);
       value ? $(this.$children[2].$refs['notificationSentModal']).modal('show') : '';
     }
   },
@@ -2501,6 +2500,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2509,7 +2538,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       leads: {
         data: []
       },
-      isLoading: true
+      isLoading: true,
+      searchString: '',
+      orderBy: {
+        column: 'leads.created_at',
+        asc: true
+      }
     };
   },
   props: {
@@ -2526,22 +2560,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getResults();
   },
   methods: {
-    getResults: function getResults() {
-      var _arguments = arguments,
-          _this = this;
+    setOrderBy: function setOrderBy(column) {
+      var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var page;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                page = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : 1;
+                if (_this.orderBy.column === column) {
+                  _this.orderBy.asc = !_this.orderBy.asc;
+                } else {
+                  _this.orderBy.column = column;
+                  _this.orderBy.asc = true;
+                }
+
                 _context.next = 3;
-                return _this.$http.get("leads/".concat(_this.stepId, "?page=").concat(page)).then(function (res) {
-                  _this.leads = res.data;
-                  _this.isLoading = false;
-                });
+                return _this.getResults();
 
               case 3:
               case "end":
@@ -2549,6 +2584,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    getOrderBy: function getOrderBy() {
+      var type = this.orderBy.asc ? 'ASC' : 'DESC';
+      return "&orderBy=".concat(this.orderBy.column, "&orderType=").concat(type);
+    },
+    getColumnStyle: function getColumnStyle(column) {
+      if (column === this.orderBy.column) {
+        return {
+          'background-color': 'whitesmoke'
+        };
+      } else {
+        return {};
+      }
+    },
+    getOrderIcon: function getOrderIcon(column) {
+      return {
+        'icon-code': this.orderBy.column != column,
+        'icon-chevrons-down': this.orderBy.asc,
+        'icon-chevrons-up': !this.orderBy.asc
+      };
+    },
+    getResults: function getResults() {
+      var _arguments = arguments,
+          _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var page, url, orderBy;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                page = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : 1;
+                url = '';
+                orderBy = _this2.getOrderBy();
+
+                if (_this2.searchString) {
+                  url = "leads/".concat(_this2.stepId, "?page=").concat(page).concat(orderBy, "&searchValue=").concat(_this2.searchString);
+                } else {
+                  url = "leads/".concat(_this2.stepId, "?page=").concat(page).concat(orderBy);
+                }
+
+                _context2.next = 6;
+                return _this2.$http.get(url).then(function (res) {
+                  _this2.leads = res.data;
+                  _this2.isLoading = false;
+                });
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
       }))();
     },
     getSchedules: function getSchedules(lead) {
@@ -45877,13 +45966,29 @@ var render = function() {
                     [
                       _c("div", { staticClass: "input-group" }, [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.searchString,
+                              expression: "searchString"
+                            }
+                          ],
                           staticClass: "form-control",
                           attrs: {
                             type: "text",
                             name: "search_by",
                             id: "search_by",
-                            value: "",
                             placeholder: "Buscar por..."
+                          },
+                          domProps: { value: _vm.searchString },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.searchString = $event.target.value
+                            }
                           }
                         }),
                         _vm._v(" "),
@@ -45891,7 +45996,13 @@ var render = function() {
                           _c(
                             "button",
                             {
-                              staticClass: "btn btn-primary icon-btn-sm-padding"
+                              staticClass:
+                                "btn btn-primary icon-btn-sm-padding",
+                              on: {
+                                click: function($event) {
+                                  return _vm.getResults()
+                                }
+                              }
                             },
                             [_c("i", { staticClass: "fa fa-search" })]
                           )
@@ -45915,23 +46026,179 @@ var render = function() {
                   class: { "table-hover": _vm.leads.data.length }
                 },
                 [
-                  _c("thead", { staticClass: "bg-light text-dark" }, [
+                  _c("thead", { staticClass: "bg-primary text-white" }, [
                     _c("tr", [
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _vm._v("Transação")
-                      ]),
+                      _c(
+                        "th",
+                        {
+                          class: {
+                            "bg-warning":
+                              _vm.orderBy.column == "leads.created_at"
+                          },
+                          attrs: { scope: "col" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "d-flex align-items-center justify-content-between",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOrderBy("leads.created_at")
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [_vm._v("Data da Compra")]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "feather",
+                                class: _vm.getOrderIcon("leads.created_at")
+                              })
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _vm._v("Data da Compra")
-                      ]),
+                      _c(
+                        "th",
+                        {
+                          class: {
+                            "bg-warning":
+                              _vm.orderBy.column == "leads.transaction_code"
+                          },
+                          attrs: { scope: "col" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "d-flex align-items-center justify-content-between",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOrderBy(
+                                    "leads.transaction_code"
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [_vm._v("Transação")]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "feather",
+                                class: _vm.getOrderIcon(
+                                  "leads.transaction_code"
+                                )
+                              })
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [
-                        _vm._v("Cliente")
-                      ]),
+                      _c(
+                        "th",
+                        {
+                          class: {
+                            "bg-warning":
+                              _vm.orderBy.column == "customers.customer_name"
+                          },
+                          attrs: { scope: "col" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "d-flex align-items-center justify-content-between",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOrderBy(
+                                    "customers.customer_name"
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [_vm._v("Cliente")]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "feather",
+                                class: _vm.getOrderIcon(
+                                  "customers.customer_name"
+                                )
+                              })
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [_vm._v("Valor")]),
+                      _c(
+                        "th",
+                        {
+                          class: {
+                            "bg-warning": _vm.orderBy.column == "leads.value"
+                          },
+                          attrs: { scope: "col" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "d-flex align-items-center justify-content-between",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOrderBy("leads.value")
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [_vm._v("Valor")]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "feather",
+                                class: _vm.getOrderIcon("leads.value")
+                              })
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("th", { attrs: { scope: "col" } }, [_vm._v("Status")]),
+                      _c(
+                        "th",
+                        {
+                          class: {
+                            "bg-warning":
+                              _vm.orderBy.column == "lead_statuses.status"
+                          },
+                          attrs: { scope: "col" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "d-flex align-items-center justify-content-between",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setOrderBy("lead_statuses.status")
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [_vm._v("Status")]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "feather",
+                                class: _vm.getOrderIcon("lead_statuses.status")
+                              })
+                            ]
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
                       _c("th", {
                         staticClass: "text-center",
@@ -45960,29 +46227,42 @@ var render = function() {
                           ])
                         : _vm._l(_vm.leads.data, function(lead) {
                             return _c("tr", { key: lead.id }, [
-                              _c("td", { attrs: { scope: "row" } }, [
-                                _vm._v(_vm._s(lead.transaction_code))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm._f("formatDateTime")(lead.created_at)
+                              _c(
+                                "td",
+                                { style: _vm.getColumnStyle("created_at") },
+                                [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatDateTime")(lead.created_at)
+                                    )
                                   )
-                                )
-                              ]),
+                                ]
+                              ),
                               _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(lead.customer.customer_name))
-                              ]),
+                              _c(
+                                "td",
+                                {
+                                  style: _vm.getColumnStyle("transaction_code"),
+                                  attrs: { scope: "row" }
+                                },
+                                [_vm._v(_vm._s(lead.transaction_code))]
+                              ),
                               _vm._v(" "),
-                              _c("td", [
+                              _c(
+                                "td",
+                                { style: _vm.getColumnStyle("customer_name") },
+                                [_vm._v(_vm._s(lead.customer.customer_name))]
+                              ),
+                              _vm._v(" "),
+                              _c("td", { style: _vm.getColumnStyle("value") }, [
                                 _vm._v(_vm._s(_vm._f("currency")(lead.value)))
                               ]),
                               _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(lead.lead_status.status))
-                              ]),
+                              _c(
+                                "td",
+                                { style: _vm.getColumnStyle("status") },
+                                [_vm._v(_vm._s(lead.lead_status.status))]
+                              ),
                               _vm._v(" "),
                               _c(
                                 "td",

@@ -25,4 +25,8 @@ class FunnelStepAction extends Model
     public function actionType() {
         return $this->belongsTo(ActionType::class);
     }
+
+    public function schedule() {
+        return $this->hasOne(Schedule::class);
+    }
 }

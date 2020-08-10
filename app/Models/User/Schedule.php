@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Constants\ScheduleStatus;
 use App\Models\User;
+use App\Traits\ModelUtilsTrait;
 use App\Traits\MultiTenantable;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
@@ -11,7 +12,7 @@ use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
-    use MultiTenantable;
+    use MultiTenantable, ModelUtilsTrait;
 
     protected $fillable = [
         'user_id',

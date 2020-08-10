@@ -19,11 +19,11 @@
                                 name="search_by"
                                 class="form-control"
                                 id="search_by"
-                                value=""
+                                v-model="searchString"
                                 placeholder="Buscar por..."
                             />
                             <div class="input-group-append">
-                                <button class="btn btn-primary icon-btn-sm-padding">
+                                <button class="btn btn-primary icon-btn-sm-padding" @click="getResults()">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -36,13 +36,43 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-sm" :class="{'table-hover': leads.data.length}">
-                    <thead class="bg-light text-dark">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <th scope="col">Transação</th>
-                            <th scope="col">Data da Compra</th>
-                            <th scope="col">Cliente</th>
-                            <th scope="col">Valor</th>
-                            <th scope="col">Status</th>
+                            <th scope="col" :class="{'bg-warning': orderBy.column == 'leads.created_at'}">
+                                <a class="d-flex align-items-center justify-content-between"
+                                    @click="setOrderBy('leads.created_at')">
+                                    <span>Data da Compra</span>
+                                    <i class="feather" :class="getOrderIcon('leads.created_at')"></i>
+                                </a>
+                            </th>
+                            <th scope="col" :class="{'bg-warning': orderBy.column == 'leads.transaction_code'}">
+                                <a class="d-flex align-items-center justify-content-between"
+                                    @click="setOrderBy('leads.transaction_code')">
+                                    <span>Transação</span>
+                                    <i class="feather" :class="getOrderIcon('leads.transaction_code')"></i>
+                                </a>
+                            </th>
+                            <th scope="col" :class="{'bg-warning': orderBy.column == 'customers.customer_name'}">
+                                <a class="d-flex align-items-center justify-content-between"
+                                    @click="setOrderBy('customers.customer_name')">
+                                    <span>Cliente</span>
+                                    <i class="feather" :class="getOrderIcon('customers.customer_name')"></i>
+                                </a>
+                            </th>
+                            <th scope="col" :class="{'bg-warning': orderBy.column == 'leads.value'}">
+                                <a class="d-flex align-items-center justify-content-between"
+                                    @click="setOrderBy('leads.value')">
+                                    <span>Valor</span>
+                                    <i class="feather" :class="getOrderIcon('leads.value')"></i>
+                                </a>
+                            </th>
+                            <th scope="col" :class="{'bg-warning': orderBy.column == 'lead_statuses.status'}">
+                                <a class="d-flex align-items-center justify-content-between"
+                                    @click="setOrderBy('lead_statuses.status')">
+                                    <span>Status</span>
+                                    <i class="feather" :class="getOrderIcon('lead_statuses.status')"></i>
+                                </a>
+                            </th>
                             <th scope="col" class="text-center"></th>
                         </tr>
                     </thead>
@@ -53,11 +83,11 @@
                             </td>
                         </tr>
                         <tr v-else v-for="lead in leads.data" :key="lead.id">
-                            <td scope="row">{{ lead.transaction_code }}</td>
-                            <td>{{ lead.created_at | formatDateTime }}</td>
-                            <td>{{ lead.customer.customer_name }}</td>
-                            <td>{{ lead.value | currency }}</td>
-                            <td>{{ lead.lead_status.status }}</td>
+                            <td :style="getColumnStyle('created_at')">{{ lead.created_at | formatDateTime }}</td>
+                            <td scope="row" :style="getColumnStyle('transaction_code')">{{ lead.transaction_code }}</td>
+                            <td :style="getColumnStyle('customer_name')">{{ lead.customer.customer_name }}</td>
+                            <td :style="getColumnStyle('value')">{{ lead.value | currency }}</td>
+                            <td :style="getColumnStyle('status')">{{ lead.lead_status.status }}</td>
                             <td class="text-center">
                                 <lead-actions
                                     :lead="lead"
@@ -86,7 +116,12 @@ export default {
             leads: {
                 data: []
             },
-            isLoading: true
+            isLoading: true,
+            searchString: '',
+            orderBy: {
+                column: 'leads.created_at',
+                asc: true
+            }
         }
     },
     props: {
@@ -103,8 +138,44 @@ export default {
         this.getResults()
     },
     methods: {
+        async setOrderBy(column) {
+            if (this.orderBy.column === column) {
+                this.orderBy.asc = !this.orderBy.asc
+            } else {
+                this.orderBy.column = column
+                this.orderBy.asc = true
+            }
+            await this.getResults()
+        },
+        getOrderBy() {
+            let type = this.orderBy.asc ? 'ASC' : 'DESC'
+            return `&orderBy=${this.orderBy.column}&orderType=${type}`
+        },
+        getColumnStyle(column) {
+            if (column === this.orderBy.column) {
+                return {
+                    'background-color': 'whitesmoke'
+                }
+            } else {
+                return {}
+            }
+        },
+        getOrderIcon(column) {
+            return {
+                'icon-code': this.orderBy.column != column,
+                'icon-chevrons-down': this.orderBy.asc,
+                'icon-chevrons-up': !this.orderBy.asc
+            }
+        },
         async getResults(page = 1) {
-			await this.$http.get(`leads/${this.stepId}?page=${page}`)
+            let url = ''
+            let orderBy = this.getOrderBy()
+            if (this.searchString) {
+                url = `leads/${this.stepId}?page=${page}${orderBy}&searchValue=${this.searchString}`
+            } else {
+                url = `leads/${this.stepId}?page=${page}${orderBy}`
+            }
+			await this.$http.get(url)
 				            .then(res => {
                                 this.leads = res.data
                                 this.isLoading = false

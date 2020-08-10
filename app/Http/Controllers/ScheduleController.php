@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\App\Model\User\Schedule;
+use App\Models\User\FunnelStep;
+use App\Models\User\Lead;
+use App\Models\User\Schedule;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -81,5 +83,15 @@ class ScheduleController extends Controller
     public function destroy(Schedule $schedule)
     {
         //
+    }
+
+    public function getSchedulesByStepLead(FunnelStep $funnelStep, Lead $lead) {
+        $schedule = Schedule::with('action')
+                            ->where('funnel_step_id', $funnelStep->id)
+                            ->where('lead_id', $lead->id)
+                            ->orderBy('funnel_step_actions.action_sequense', 'asc')
+                            ->get();
+
+        return response()->json($schedule);
     }
 }

@@ -30,7 +30,6 @@ export default {
     },
     watch: {
         currentSchedule(value) {
-            console.log(this)
             value ? $(this.$children[2].$refs['notificationSentModal']).modal('show') : ''
         }
     },

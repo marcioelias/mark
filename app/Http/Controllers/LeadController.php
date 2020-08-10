@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User\FunnelStep;
+use App\Models\User\FunnelStepAction;
 use App\Models\User\Lead;
+use App\Models\User\Schedule;
 use App\Traits\LayoutConfigTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LeadController extends Controller
 {
@@ -119,16 +123,28 @@ class LeadController extends Controller
         //
     }
 
-    public function getLeadsFromStep(FunnelStep $funnelStep) {
-        return response()->json(
-            $funnelStep->leads()
-                    ->with([
-                        'customer',
-                        'leadStatus',
-                        'schedules' => function($query) use ($funnelStep) {
-                            $query->where('funnel_step_id', $funnelStep->id)
-                            ->with('action');
-                        }
-                    ])->paginate(3));
+    public function getLeadsFromStep(Request $request, FunnelStep $funnelStep) {
+        $leads = Lead::select('leads.*')
+                    ->join('customers', 'customers.id', 'leads.customer_id')
+                    ->where('leads.funnel_step_id', $funnelStep->id)
+                    ->where(function ($query) use ($request) {
+                        $query->where('customers.customer_name', 'like', "%$request->searchValue%")
+                             ->orWhere('leads.transaction_code', $request->searchValue);
+                    })
+                    ->orderBy($request->orderBy, $request->orderType)
+                    ->get();
+
+        foreach ($leads as $lead) {
+            $rows[] =  Lead::with(['customer', 'leadStatus'])
+                            ->withHas('schedules', function($query) use ($lead) {
+                                $query->where('funnel_step_id', $lead->funnel_step_id)
+                                    ->with('action');
+                            })
+                            ->find($lead->id);
+        }
+
+        $result = (new Collection($rows ?? []))->paginate(3);
+
+        return response()->json($result);
     }
 }

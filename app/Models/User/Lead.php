@@ -5,12 +5,13 @@ namespace App\Models\User;
 use App\Constants\LeadStatus as ConstantsLeadStatus;
 use App\Models\LeadStatus;
 use App\Models\User;
+use App\Traits\ModelUtilsTrait;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Lead extends Model
 {
-    use MultiTenantable;
+    use MultiTenantable, ModelUtilsTrait;
 
     protected $fillable = [
         'user_id',
