@@ -54,8 +54,8 @@
 </div>
 <div class="row">
     <div class="col">
-        <button class="btn btn-secondary btn-sm btn-block pb-0" id="show-filters" data-toggle="tooltip" title="Mostrar opções de filtro"><i class="fa fa-arrow-down"></i></button>
-        <button class="btn btn-secondary btn-sm btn-block pt-0 d-none" id="hide-filters" data-toggle="tooltip" title="Esconder opções de filtro"><i class="fa fa-arrow-up"></i></button>
+        <button class="btn btn-primary btn-sm btn-block pb-0" id="show-filters" data-toggle="tooltip" title="Mostrar opções de filtro"><i class="fa fa-arrow-down fa-2x"></i></button>
+        <button class="btn btn-primary btn-sm btn-block pt-0 d-none" id="hide-filters" data-toggle="tooltip" title="Esconder opções de filtro"><i class="fa fa-arrow-up fa-2x"></i></button>
     </div>
 </div>
 

@@ -14,6 +14,7 @@ use App\Traits\LayoutConfigTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LeadController extends Controller
@@ -54,40 +55,45 @@ class LeadController extends Controller
         ]);
 
         /* filters */
+        $rawQuery = false;
+        $rawQueryParam = [];
         if (isset($request->lead_dt_begin_submit) && isset($request->lead_dt_end_submit)) {
-            $whereData = '`leads`.`created_at` between \''.Carbon::parse($request->lead_dt_begin_submit)->startOfDay()->format('Y/m/d H:n:s').'\' and \''.Carbon::parse($request->lead_dt_end_submit)->endOfDay()->format('Y/m/d H:n:s').'\'';
+            $rawQuery .= ($rawQuery) ? ' and leads.created_at between ? and ?' : 'leads.created_at between ? and ?';
+            $rawQueryParam[] =  Carbon::parse($request->lead_dt_begin_submit)->startOfDay()->format('Y/m/d H:n:s');
+            $rawQueryParam[] = Carbon::parse($request->lead_dt_end_submit)->endOfDay()->format('Y/m/d H:n:s');
         } else if (isset($request->lead_dt_begin_submit) && !isset($request->lead_dt_end_submit)) {
-            $whereData = '`leads`.`created_at` >= \''.Carbon::parse($request->lead_dt_begin_submit)->startOfDay()->format('Y/m/d H:n:s').'\'';
+            $rawQuery .= ($rawQuery) ? ' and leads.created_at >= ?' : 'leads.created_at >= ?';
+            $rawQueryParam[] =  Carbon::parse($request->lead_dt_begin_submit)->startOfDay()->format('Y/m/d H:n:s');
         } else if (!isset($request->lead_dt_begin_submit) && isset($request->lead_dt_end_submit)) {
-            $whereData = '`leads`.`created_at` <= \''.Carbon::parse($request->lead_dt_end_submit)->endOfDay()->format('Y/m/d H:n:s').'\'';
-        } else {
-            $whereData = '1 = 1';
+            $rawQuery .= ($rawQuery) ? ' and leads.created_at <= ?' : 'leads.created_at <= ?';
+            $rawQueryParam[] = Carbon::parse($request->lead_dt_end_submit)->endOfDay()->format('Y/m/d H:n:s');
         }
 
         if (isset($request->tag_id) && $request->tag_id === 'none') {
-            $whereTag = '`leads`.`tag_id` is null';
+            $rawQuery .= ($rawQuery) ? ' and leads.tag_id is null' : 'leads.tag_id is null';
         } else if (isset($request->tag_id) && $request->tag_id != 'none') {
-            $whereTag = '`leads`.`tag_id` = \''.$request->tag_id.'\'';
-        } else {
-            $whereTag = '1 = 1';
+            $rawQuery .= ($rawQuery) ? ' and leads.tag_id = ?' : 'leads.tag_id = ?';
+            $rawQueryParam[] = $request->tag_id;
         }
 
         if (isset($request->product_id)) {
-            $whereProduct = '`leads`.`product_id` = \''.$request->product_id.'\'';
-        } else {
-            $whereProduct = '1 = 1';
+            $rawQuery .= ($rawQuery) ? ' and leads.product_id = ?' : 'leads.product_id = ?';
+            $rawQueryParam[] = $request->product_id;
         }
 
         if (isset($request->payment_type_id)) {
-            $wherePaymentType = '`leads`.`payment_type_id` = \''.$request->payment_type_id.'\'';
-        } else {
-            $wherePaymentType = '1 = 1';
+            $rawQuery .= ($rawQuery) ? ' and leads.payment_type_id = ?' : 'leads.payment_type_id = ?';
+            $rawQueryParam[] = $request->payment_type_id;
         }
 
         if (isset($request->lead_status_id)) {
-            $whereLeadStatus = '`leads`.`lead_status_id` = \''.$request->lead_status_id.'\'';
-        } else {
-            $whereLeadStatus = '1 = 1';
+            $rawQuery .= ($rawQuery) ? ' and leads.lead_status_id = ?' : 'leads.lead_status_id = ?';
+            $rawQueryParam[] = $request->lead_status_id;
+        }
+
+        if (!$rawQuery) {
+            $rawQuery = '? = ?';
+            $rawQueryParam = [1, 1];
         }
 
         if ($request->searchField) {
@@ -101,15 +107,26 @@ class LeadController extends Controller
                             ->join('payment_types', 'payment_types.id', 'leads.payment_type_id')
                             ->join('lead_statuses', 'lead_statuses.id', 'leads.lead_status_id')
                             ->where('customers.customer_name', 'like', "%$request->searchField%")
-                            ->whereRaw($whereProduct)
-                            ->whereRaw($wherePaymentType)
-                            ->whereRaw($whereLeadStatus)
-                            ->whereRaw($whereData)
-                            ->whereRaw($whereTag)
                             ->orWhere('leads.transaction_code', "$request->searchField")
+                            // ->whereRaw($whereProduct)
+                            // ->whereRaw($wherePaymentType)
+                            // ->whereRaw($whereLeadStatus)
+                            // ->whereRaw($whereData)
+                            // ->whereRaw($whereTag)
+                            ->whereRaw($rawQuery, $rawQueryParam)
                             ->OrderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         } else {
+        //    return Lead::select('leads.*',
+        //                           'customers.customer_name',
+        //                           'customers.customer_phone_number',
+        //                           'customers.customer_email',
+        //                           'payment_types.payment_type',
+        //                           'lead_statuses.status')
+        //                     ->join('customers', 'customers.id', 'leads.customer_id')
+        //                     ->join('payment_types', 'payment_types.id', 'leads.payment_type_id')
+        //                     ->join('lead_statuses', 'lead_statuses.id', 'leads.lead_status_id')
+        //                     ->whereRaw($rawQuery, $rawQueryParam)->toSql();
             $leads = Lead::select('leads.*',
                                   'customers.customer_name',
                                   'customers.customer_phone_number',
@@ -119,11 +136,13 @@ class LeadController extends Controller
                             ->join('customers', 'customers.id', 'leads.customer_id')
                             ->join('payment_types', 'payment_types.id', 'leads.payment_type_id')
                             ->join('lead_statuses', 'lead_statuses.id', 'leads.lead_status_id')
-                            ->whereRaw($whereProduct)
-                            ->whereRaw($wherePaymentType)
-                            ->whereRaw($whereLeadStatus)
-                            ->whereRaw($whereData)
-                            ->whereRaw($whereTag)
+                            // ->whereRaw($whereProduct)
+                            // ->whereRaw($wherePaymentType)
+                            // ->whereRaw($whereLeadStatus)
+                            // ->whereRaw($whereData)
+                            // ->whereRaw($whereTag)
+                            ->whereRaw($rawQuery, $rawQueryParam)
+                            //->whereRaw(DB::raw($rawQuery, $rawQueryParam))
                             ->OrderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         }

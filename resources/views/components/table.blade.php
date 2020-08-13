@@ -12,9 +12,9 @@
 @endphp
 <div class="card d-block card-primary">
     <div class="card-header">
-        <form id="searchForm" class="form w-100" method="GET" action="{{ route($model.'.index') }}">
+        <form id="searchForm" class="form w-100 mb-1" method="GET" action="{{ route($model.'.index') }}">
             @csrf
-            <div class="d-flex justify-content-between align-items-center mb-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <div class="input-group">
                     <input type="text" class="form-control" id="searchField" name="searchField" placeholder="Digite aqui para buscar" value="{{isset($_GET['searchField']) ? $_GET['searchField'] : ''}}">
                     @if(request('searchField', false))
