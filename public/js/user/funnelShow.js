@@ -77578,7 +77578,10 @@ var ActionSetActionDescription = function ActionSetActionDescription(_ref4, payl
 };
 var ActionSetActionData = function ActionSetActionData(_ref5, payload) {
   var commit = _ref5.commit;
-  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["ACTION_DATA"], payload);
+  return new Promise(function (resolve, _) {
+    commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["ACTION_DATA"], payload);
+    resolve();
+  });
 };
 var ActionClearState = function ActionClearState(_ref6) {
   var commit = _ref6.commit;
@@ -79102,6 +79105,8 @@ var LOAD_STATE = 'LOAD_STATE';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/src/step/store/mutation-types.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 var _types$SET_ID$types$S;
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -79109,6 +79114,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = (_types$SET_ID$types$S = {}, _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ID"], function (state, payload) {
@@ -79128,13 +79134,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ACTION_COMPONENT"], function (state, payload) {
   state.actionComponent = payload;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["ADD_NEW_ACTION"], function (state, payload) {
-  state.actions.push(payload);
+  /*
+   * save the current state on a local variable an re-inicialize the state altered in order to get
+   * propper reactivity
+   */
+  var tmp = state.actions;
+  tmp.push(payload);
+  state.actions = null;
+  state.actions = tmp;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_ACTION"], function (state, payload) {
   state.actions.splice(payload, 1);
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ACTION_EDITING_INDEX"], function (state, payload) {
   state.actionEditingIndex = payload;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["UPDATE_ACTION"], function (state, payload) {
-  state.actions[state.actionEditingIndex] = payload;
+  /*
+   * save the current state on a local variable an re-inicialize the state altered in order to get
+   * propper reactivity
+   */
+  var tmp = state.actions;
+  state.actions = null;
+  tmp[state.actionEditingIndex] = payload;
+  state.actions = tmp;
   state.actionEditingIndex = null;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["LOAD_STATE"], function (state, payload) {
   Object.assign(state, _objectSpread({}, payload));

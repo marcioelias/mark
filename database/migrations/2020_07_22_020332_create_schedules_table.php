@@ -30,8 +30,8 @@ class CreateSchedulesTable extends Migration
             $table->string('result_message')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('lead_id')->references('id')->on('leads');
-            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps');
-            $table->foreign('funnel_step_action_id')->references('id')->on('funnel_step_actions');
+            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps')->onDelete('cascade');
+            $table->foreign('funnel_step_action_id')->references('id')->on('funnel_step_actions')->onDelete('cascade');
             $table->foreign('schedule_status_id')->references('id')->on('schedule_statuses');
         });
     }

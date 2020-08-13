@@ -204,7 +204,7 @@ export default {
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
                                 padding: '2em'
-                            }).then(() => window.location =  res.data.redirect)
+                            }) //.then(() => window.location =  res.data.redirect)
                         }
                     })
                     .catch(err => {

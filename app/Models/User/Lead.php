@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use App\Constants\LeadStatus as ConstantsLeadStatus;
 use App\Models\LeadStatus;
+use App\Models\PaymentType;
 use App\Models\User;
 use App\Traits\ModelUtilsTrait;
 use App\Traits\MultiTenantable;
@@ -18,6 +19,7 @@ class Lead extends Model
         'product_id',
         'customer_id',
         'transaction_code',
+        'payment_type_id',
         'billet_url',
         'billet_barcode',
         'value',
@@ -58,6 +60,10 @@ class Lead extends Model
 
     public function schedules() {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function paymentType() {
+        return $this->belongsTo(PaymentType::class);
     }
 
     public function stepFinishedAt() {

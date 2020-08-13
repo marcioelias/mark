@@ -67,8 +67,9 @@ Route::prefix('')->group(function() {
 		Route::resource('product', 'ProductController')->except('show');
 		Route::resource('plataform_config', 'PlataformConfigController')->except('show');
 		Route::resource('funnel', 'FunnelController');
-		Route::resource('lead', 'LeadController');
+		Route::resource('lead', 'LeadController')->except('create');
 		Route::resource('tag_rule', 'TagRuleController')->except('show');
+		Route::resource('whatsapp_template', 'WhatsappTemplateController')->except('show');
 
 		Route::get('postback', 'PostbackController@index')->name('postback.index');
 		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');

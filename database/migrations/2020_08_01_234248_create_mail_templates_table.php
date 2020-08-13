@@ -17,7 +17,7 @@ class CreateMailTemplatesTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->string('template_name');
-            $table->text('template');
+            $table->longtext('template');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

@@ -16,5 +16,9 @@ return [
     "Funnels" => "Funis",
     "Integrations" => "Integrações",
     "Postbacks" => "Postbacks",
-    "Rules" => "Regras"
+    "Rules" => "Regras",
+    "Leads" => "Leads",
+    "Whatsapp 2.0" => "Whatsapp 2.0",
+    "Message Models" => "Modelos de Msg",
+    "Send Whatsapp" => "Enviar Whatsapp",
 ];

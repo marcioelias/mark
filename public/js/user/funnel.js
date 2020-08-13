@@ -2063,6 +2063,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       type: String,
       required: true,
       "default": ''
+    },
+    images: {
+      type: Array
     }
   },
   methods: {
@@ -2197,7 +2200,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context4.next = 2;
                 return _this4.$http.post('/mailtemplate', {
                   template_name: templateName,
-                  template: _this4.message
+                  template: _this4.message,
+                  images: _this4.images
                 }).then(function (res) {
                   if (res.status === 200) {
                     _this4.$swal.fire({
@@ -2280,6 +2284,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var quill_image_resize__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(quill_image_resize__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var quill_image_drop_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! quill-image-drop-module */ "./node_modules/quill-image-drop-module/index.js");
 /* harmony import */ var _MailTemplate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./MailTemplate */ "./resources/js/src/action/components/MailTemplate.vue");
+var _this = undefined;
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2396,6 +2406,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2404,14 +2461,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var DirectionAttribute = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/attribute/direction');
-var AlignStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/align');
-var SizeStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/size');
-var BackgroundStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/background');
-var ColorStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/color');
-var DirectionStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/direction');
-var FontStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]('attributors/style/font');
-SizeStyle.whitelist = ['6px', '8px', '10px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '32px', '36px'];
+var DirectionAttribute = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/attribute/direction");
+var AlignStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/align");
+var SizeStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/size");
+var BackgroundStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/background");
+var ColorStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/color");
+var DirectionStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/direction");
+var FontStyle = quill__WEBPACK_IMPORTED_MODULE_4___default.a["import"]("attributors/style/font");
+SizeStyle.whitelist = ["6px", "8px", "10px", "12px", "14px", "16px", "18px", "20px", "24px", "30px", "32px", "36px"];
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(DirectionAttribute, true);
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(AlignStyle, true);
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(SizeStyle, true);
@@ -2419,28 +2476,90 @@ quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(BackgroundStyle, true);
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(ColorStyle, true);
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(DirectionStyle, true);
 quill__WEBPACK_IMPORTED_MODULE_4___default.a.register(FontStyle, true);
-quill__WEBPACK_IMPORTED_MODULE_4___default.a.register('modules/imageResize', quill_image_resize__WEBPACK_IMPORTED_MODULE_5___default.a);
-quill__WEBPACK_IMPORTED_MODULE_4___default.a.register('modules/imageDrop', quill_image_drop_module__WEBPACK_IMPORTED_MODULE_6__["ImageDrop"]);
+quill__WEBPACK_IMPORTED_MODULE_4___default.a.register("modules/imageResize", quill_image_resize__WEBPACK_IMPORTED_MODULE_5___default.a);
+quill__WEBPACK_IMPORTED_MODULE_4___default.a.register("modules/imageDrop", quill_image_drop_module__WEBPACK_IMPORTED_MODULE_6__["ImageDrop"]);
 
 var iniData = function iniData() {
   return {
-    data: '',
+    data: "",
     options: {
-      subject: '',
-      period: [0, 23]
+      subject: "",
+      period: [0, 23],
+      images: []
+    }
+  };
+};
+
+var toolbarOptions = [["bold", "italic"], ["blockquote"], [{
+  list: "ordered"
+}, {
+  list: "bullet"
+}], [{
+  script: "sub"
+}, {
+  script: "super"
+}], [{
+  direction: "rtl"
+}], [{
+  size: [false, "10px", "12px", "14px", "16px", "18px", "20px", "24px", "30px", "32px", "36px"]
+}], [{
+  header: [1, 2, 3, 4, 5, 6, false]
+}], [{
+  color: []
+}, {
+  background: []
+}], [{
+  font: []
+}], [{
+  align: []
+}], ["clean"], ["link", "image", "video"]];
+
+var quillOptions = function quillOptions() {
+  return {
+    editorOptions: {
+      placeholder: "Digite a mensagem a ser enviada...",
+      theme: "snow",
+      modules: {
+        toolbar: {
+          container: toolbarOptions,
+          handlers: {
+            image: function image(value) {
+              if (value) {
+                document.getElementById("imageUpload").click();
+              } else {
+                _this.quill.format("image", false);
+              }
+            }
+          }
+        },
+        imageResize: {
+          displayStyles: {
+            backgroundColor: "black",
+            border: "none",
+            color: "white"
+          },
+          modules: ["Resize", "DisplaySize"]
+        },
+        history: {
+          delay: 2000,
+          maxStack: 500,
+          userOnly: true
+        },
+        imageDrop: true
+      }
     }
   };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return _objectSpread({}, iniData());
+    return _objectSpread(_objectSpread({}, iniData()), quillOptions());
   },
   components: {
     quillEditor: vue_quill_editor__WEBPACK_IMPORTED_MODULE_0__["quillEditor"],
     MailTemplate: _MailTemplate__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
-  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('action', ['id', 'action_type_id', 'action_sequence', 'action_description', 'action_data', 'editingIndex'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('step', ['actions', 'actionEditingIndex'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('funnel', ['GetActionTypeByName'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])('variables', ['GetVariablesAsObject', 'GetVariables'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])("action", ["id", "action_type_id", "action_sequence", "action_description", "action_data", "editingIndex"])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])("step", ["actions", "actionEditingIndex"])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])("funnel", ["GetActionTypeByName"])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])("variables", ["GetVariablesAsObject", "GetVariables"])), {}, {
     actionDescription: {
       get: function get() {
         return this.action_description;
@@ -2451,42 +2570,49 @@ var iniData = function iniData() {
     },
     isEditing: function isEditing() {
       return this.actionEditingIndex !== null;
+    },
+    editor: function editor() {
+      return this.$refs.emailMessageEditor.quill;
     }
   }),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('action', ['ActionSetActionTypeId', 'ActionSetActionSequence', 'ActionSetActionDescription', 'ActionSetActionData', 'ActionClearState'])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('step', ['ActionAddNewAction', 'ActionSetActionComponent', 'ActionUpdateAction', 'ActionSetEditActionIndex'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])("action", ["ActionSetActionTypeId", "ActionSetActionSequence", "ActionSetActionDescription", "ActionSetActionData", "ActionClearState"])), Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])("step", ["ActionAddNewAction", "ActionSetActionComponent", "ActionUpdateAction", "ActionSetEditActionIndex"])), {}, {
     saveEmailAction: function saveEmailAction() {
-      var _this = this;
-
-      this.ActionSetActionData(_objectSpread({}, this.$data));
-
-      if (!this.isEditing) {
-        this.ActionAddNewAction().then(function () {
-          return _this.clearForm();
-        });
-      } else {
-        this.ActionUpdateAction().then(function () {
-          return _this.clearForm();
-        });
-      }
-    },
-    cancelNewEmailAction: function cancelNewEmailAction() {
       var _this2 = this;
 
+      var _this$$data = this.$data,
+          editorOptions = _this$$data.editorOptions,
+          payload = _objectWithoutProperties(_this$$data, ["editorOptions"]);
+
+      this.ActionSetActionData(_objectSpread({}, payload)).then(function () {
+        if (!_this2.isEditing) {
+          _this2.ActionAddNewAction().then(function () {
+            return _this2.clearForm();
+          });
+        } else {
+          _this2.ActionUpdateAction().then(function () {
+            return _this2.clearForm();
+          });
+        }
+      });
+    },
+    cancelNewEmailAction: function cancelNewEmailAction() {
+      var _this3 = this;
+
       this.$swal.fire({
-        title: 'Cancelar cadastro da ação?',
+        title: "Cancelar cadastro da ação?",
         text: "Os dados informados ser\xE3o perdidos...",
-        icon: 'warning',
+        icon: "warning",
         heightAuto: false,
         showCancelButton: true,
-        confirmButtonText: 'Sim, Cancelar!',
-        cancelButtonText: 'Não, Continuar.'
+        confirmButtonText: "Sim, Cancelar!",
+        cancelButtonText: "Não, Continuar."
       }).then(function (result) {
         if (result.value) {
-          if (_this2.isEditing) {
-            _this2.ActionSetEditActionIndex(null);
+          if (_this3.isEditing) {
+            _this3.ActionSetEditActionIndex(null);
           }
 
-          _this2.clearForm();
+          _this3.clearForm();
         }
       });
     },
@@ -2510,27 +2636,53 @@ var iniData = function iniData() {
       variablesDW.attach(quill);
     },
     clearForm: function clearForm() {
-      Object.assign(this.$data, _objectSpread({}, iniData()));
+      Object.assign(this.$data, _objectSpread(_objectSpread({}, iniData()), quillOptions()));
       this.ActionClearState();
       this.ActionSetActionComponent(_component_types__WEBPACK_IMPORTED_MODULE_2__["ACTIONS_TABLE"]);
     },
     insertVariable: function insertVariable(value) {
-      Object(insert_text_at_cursor__WEBPACK_IMPORTED_MODULE_3__["default"])(this.$refs['emailSubject'], value);
+      Object(insert_text_at_cursor__WEBPACK_IMPORTED_MODULE_3__["default"])(this.$refs["emailSubject"], value);
     },
     setDataFromTemplate: function setDataFromTemplate(event) {
       this.data = event;
+    },
+    imageUpload: function imageUpload(e) {
+      if (e.target.files.length !== 0) {
+        var quill = this.editor;
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        var self = this;
+
+        reader.onloadend = function () {
+          var base64data = reader.result;
+          self.options.images.push(base64data); // Get cursor location
+
+          var length = quill.getSelection().index; // Insert image at cursor location
+
+          quill.insertEmbed(length, "image", base64data); // Set cursor to the end
+
+          quill.setSelection(length + 1);
+        };
+      }
+    },
+    onEditorBlur: function onEditorBlur(editor) {// console.log('editor blur!', editor)
+    },
+    onEditorFocus: function onEditorFocus(editor) {// console.log('editor focus!', editor)
+    },
+    onEditorReady: function onEditorReady(editor) {// console.log('editor ready!', editor)
     }
   }),
   mounted: function mounted() {
     this.addCustomSelectToEditor();
 
     if (this.isEditing) {
-      Object.assign(this.$data, JSON.parse(this.action_data));
+      //let data = JSON.parse(this.action_data)
+      Object.assign(this.$data, this.action_data);
     } else {
       var _this$actions$length;
 
-      this.actionDescription = 'Enviar Email';
-      this.ActionSetActionTypeId(this.GetActionTypeByName('email').id);
+      this.actionDescription = "Enviar Email";
+      this.ActionSetActionTypeId(this.GetActionTypeByName("email").id);
       this.ActionSetActionSequence(((_this$actions$length = this.actions.length) !== null && _this$actions$length !== void 0 ? _this$actions$length : 0) + 1);
     }
   }
@@ -2668,7 +2820,7 @@ var iniData = function iniData() {
   }),
   mounted: function mounted() {
     if (this.isEditing) {
-      Object.assign(this.$data, JSON.parse(this.action_data));
+      Object.assign(this.$data, this.action_data);
     } else {
       var _this$actions$length;
 
@@ -2933,9 +3085,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               icon: 'success',
               confirmButtonText: 'Ok',
               padding: '2em'
-            }).then(function () {
-              return window.location = res.data.redirect;
-            });
+            }); //.then(() => window.location =  res.data.redirect)
+
           }
         })["catch"](function (err) {
           switch (err.response.status) {
@@ -5449,7 +5600,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.ql-picker-item[data-value='10px']::before, .ql-picker-label[data-value='10px']::before { content: '10px' !important;\n}\n.ql-picker-item[data-value='12px']::before, .ql-picker-label[data-value='12px']::before { content: '12px' !important;\n}\n.ql-picker-item[data-value='14px']::before, .ql-picker-label[data-value='14px']::before { content: '14px' !important;\n}\n.ql-picker-item[data-value='16px']::before, .ql-picker-label[data-value='16px']::before { content: '16px' !important;\n}\n.ql-picker-item[data-value='18px']::before, .ql-picker-label[data-value='18px']::before { content: '18px' !important;\n}\n.ql-picker-item[data-value='20px']::before, .ql-picker-label[data-value='20px']::before { content: '20px' !important;\n}\n.ql-picker-item[data-value='24px']::before, .ql-picker-label[data-value='24px']::before { content: '24px' !important;\n}\n.ql-picker-item[data-value='30px']::before, .ql-picker-label[data-value='30px']::before { content: '30px' !important;\n}\n.ql-picker-item[data-value='32px']::before, .ql-picker-label[data-value='32px']::before { content: '32px' !important;\n}\n.ql-picker-item[data-value='36px']::before, .ql-picker-label[data-value='36px']::before { content: '36px' !important;\n}\n", ""]);
+exports.push([module.i, "\n.ql-picker-item[data-value=\"10px\"]::before,\n.ql-picker-label[data-value=\"10px\"]::before {\n\tcontent: \"10px\" !important;\n}\n.ql-picker-item[data-value=\"12px\"]::before,\n.ql-picker-label[data-value=\"12px\"]::before {\n\tcontent: \"12px\" !important;\n}\n.ql-picker-item[data-value=\"14px\"]::before,\n.ql-picker-label[data-value=\"14px\"]::before {\n\tcontent: \"14px\" !important;\n}\n.ql-picker-item[data-value=\"16px\"]::before,\n.ql-picker-label[data-value=\"16px\"]::before {\n\tcontent: \"16px\" !important;\n}\n.ql-picker-item[data-value=\"18px\"]::before,\n.ql-picker-label[data-value=\"18px\"]::before {\n\tcontent: \"18px\" !important;\n}\n.ql-picker-item[data-value=\"20px\"]::before,\n.ql-picker-label[data-value=\"20px\"]::before {\n\tcontent: \"20px\" !important;\n}\n.ql-picker-item[data-value=\"24px\"]::before,\n.ql-picker-label[data-value=\"24px\"]::before {\n\tcontent: \"24px\" !important;\n}\n.ql-picker-item[data-value=\"30px\"]::before,\n.ql-picker-label[data-value=\"30px\"]::before {\n\tcontent: \"30px\" !important;\n}\n.ql-picker-item[data-value=\"32px\"]::before,\n.ql-picker-label[data-value=\"32px\"]::before {\n\tcontent: \"32px\" !important;\n}\n.ql-picker-item[data-value=\"36px\"]::before,\n.ql-picker-label[data-value=\"36px\"]::before {\n\tcontent: \"36px\" !important;\n}\n", ""]);
 
 // exports
 
@@ -42603,7 +42754,7 @@ var render = function() {
               type: "text",
               name: "action_description",
               id: "action_description",
-              placeholder: "Exemplo: Enviar SMS"
+              placeholder: "Exemplo: Enviar E-mail"
             },
             domProps: { value: _vm.actionDescription },
             on: {
@@ -42701,7 +42852,7 @@ var render = function() {
               { staticClass: "d-flex align-items-end ml-2" },
               [
                 _c("mail-template", {
-                  attrs: { message: _vm.data },
+                  attrs: { message: _vm.data, images: _vm.options.images },
                   on: { templateLoaded: _vm.setDataFromTemplate }
                 })
               ],
@@ -42716,6 +42867,32 @@ var render = function() {
           "div",
           { staticClass: "col" },
           [
+            _c("div", { staticClass: "custom-file d-none" }, [
+              _c("input", {
+                ref: "imageUpload",
+                staticClass: "custom-file-input",
+                attrs: {
+                  type: "file",
+                  id: "imageUpload",
+                  "aria-describedby": "imageUploadAddon"
+                },
+                on: {
+                  change: function($event) {
+                    return _vm.imageUpload($event)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "custom-file-label",
+                  attrs: { for: "imageUpload" }
+                },
+                [_vm._v("Choose file")]
+              )
+            ]),
+            _vm._v(" "),
             _c("label", { attrs: { for: "email-message-editor" } }, [
               _vm._v("Texto do E-mail")
             ]),
@@ -42724,55 +42901,18 @@ var render = function() {
               ref: "emailMessageEditor",
               attrs: {
                 id: "email-message-editor",
-                options: {
-                  placeholder: "Digite a mensagem a ser enviada...",
-                  theme: "snow",
-                  modules: {
-                    toolbar: [
-                      ["bold", "italic"],
-                      ["blockquote"],
-                      [{ list: "ordered" }, { list: "bullet" }],
-                      [{ script: "sub" }, { script: "super" }],
-                      [{ direction: "rtl" }],
-                      [
-                        {
-                          size: [
-                            false,
-                            "10px",
-                            "12px",
-                            "14px",
-                            "16px",
-                            "18px",
-                            "20px",
-                            "24px",
-                            "30px",
-                            "32px",
-                            "36px"
-                          ]
-                        }
-                      ],
-                      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                      [{ color: [] }, { background: [] }],
-                      [{ font: [] }],
-                      [{ align: [] }],
-                      ["clean"],
-                      ["link", "image", "video"]
-                    ],
-                    imageResize: {
-                      displayStyles: {
-                        backgroundColor: "black",
-                        border: "none",
-                        color: "white"
-                      },
-                      modules: ["Resize", "DisplaySize"]
-                    },
-                    history: {
-                      delay: 2000,
-                      maxStack: 500,
-                      userOnly: true
-                    },
-                    imageDrop: true
-                  }
+                rows: "10",
+                options: _vm.editorOptions
+              },
+              on: {
+                blur: function($event) {
+                  return _vm.onEditorBlur($event)
+                },
+                focus: function($event) {
+                  return _vm.onEditorFocus($event)
+                },
+                ready: function($event) {
+                  return _vm.onEditorReady($event)
                 }
               },
               model: {
@@ -42851,7 +42991,10 @@ var render = function() {
               staticClass: "btn btn-secondary float-right",
               on: { click: _vm.cancelNewEmailAction }
             },
-            [_c("i", { staticClass: "fas fa-times" }), _vm._v(" Cancelar")]
+            [
+              _c("i", { staticClass: "fas fa-times" }),
+              _vm._v(" Cancelar\n\t\t\t\t")
+            ]
           ),
           _vm._v(" "),
           _c(
@@ -42862,7 +43005,7 @@ var render = function() {
             },
             [
               _c("i", { staticClass: "fas fa-save" }),
-              _vm._v(" Salvar mensagem")
+              _vm._v(" Salvar mensagem\n\t\t\t\t")
             ]
           )
         ])
@@ -42877,7 +43020,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header bg-primary text-white p-1" }, [
       _c("i", { staticClass: "fas fa-envelope fa-2x" }),
-      _vm._v(" Nova mensagem de E-mail\n    ")
+      _vm._v(" Nova mensagem de E-mail\n\t")
     ])
   }
 ]
@@ -74628,7 +74771,10 @@ var ActionSetActionDescription = function ActionSetActionDescription(_ref4, payl
 };
 var ActionSetActionData = function ActionSetActionData(_ref5, payload) {
   var commit = _ref5.commit;
-  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["ACTION_DATA"], payload);
+  return new Promise(function (resolve, _) {
+    commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__["ACTION_DATA"], payload);
+    resolve();
+  });
 };
 var ActionClearState = function ActionClearState(_ref6) {
   var commit = _ref6.commit;
@@ -75858,6 +76004,8 @@ var LOAD_STATE = 'LOAD_STATE';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/src/step/store/mutation-types.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 var _types$SET_ID$types$S;
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -75865,6 +76013,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = (_types$SET_ID$types$S = {}, _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ID"], function (state, payload) {
@@ -75884,13 +76033,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ACTION_COMPONENT"], function (state, payload) {
   state.actionComponent = payload;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["ADD_NEW_ACTION"], function (state, payload) {
-  state.actions.push(payload);
+  /*
+   * save the current state on a local variable an re-inicialize the state altered in order to get
+   * propper reactivity
+   */
+  var tmp = state.actions;
+  tmp.push(payload);
+  state.actions = null;
+  state.actions = tmp;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_ACTION"], function (state, payload) {
   state.actions.splice(payload, 1);
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ACTION_EDITING_INDEX"], function (state, payload) {
   state.actionEditingIndex = payload;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["UPDATE_ACTION"], function (state, payload) {
-  state.actions[state.actionEditingIndex] = payload;
+  /*
+   * save the current state on a local variable an re-inicialize the state altered in order to get
+   * propper reactivity
+   */
+  var tmp = state.actions;
+  state.actions = null;
+  tmp[state.actionEditingIndex] = payload;
+  state.actions = tmp;
   state.actionEditingIndex = null;
 }), _defineProperty(_types$SET_ID$types$S, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["LOAD_STATE"], function (state, payload) {
   Object.assign(state, _objectSpread({}, payload));

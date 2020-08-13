@@ -2,6 +2,7 @@
 
 namespace App\Integrations;
 
+use App\Constants\PaymentTypes;
 use App\Constants\PostbackEventType;
 use App\Enums\PostbackField;
 
@@ -19,6 +20,7 @@ class MonetizzeIntegration extends Integration {
             PostbackField::eventType()->getField()       => 'tipoEvento.codigo',
             PostbackField::paidAt()->getField()          => 'venda.dataFinalizada',
             PostbackField::value()->getField()           => 'venda.valor',
+            PostbackField::paymentType()->getField()     => 'venda.formaPagamento',
         ];
     }
 
@@ -48,5 +50,25 @@ class MonetizzeIntegration extends Integration {
 
     public function getPayload() {
         return $this->request->json;
+    }
+
+    public function getMappedPaymentType() {
+        switch ($this->paymentType) {
+            case 'Cartão de crédito':
+                return PaymentTypes::CARTAO_CREDITO;
+                break;
+
+            case 'Débito online':
+                return PaymentTypes::CARTAO_DEBIDO;
+                break;
+
+            case 'Cartão de crédito':
+                return PaymentTypes::BOLETO_BANCARIO;
+                break;
+
+            default:
+                return PaymentTypes::OUTROS;
+                break;
+        }
     }
 }

@@ -32,6 +32,7 @@ class Integration {
     public $billetUrl;
     public $billetBarcode;
     public $value;
+    public $paymentType;
     public $paidAt;
     public $eventType;
     public $product;
@@ -106,6 +107,10 @@ class Integration {
         //
     }
 
+    public function getMappedPaymentType() {
+        //
+    }
+
     public function getPlataformConfig() {
         return $this->plataformConfig;
     }
@@ -177,6 +182,7 @@ class Integration {
                 'product_id' => $this->product->id,
                 'customer_id' => $this->customer->id,
                 'transaction_code' => $this->transactionCode,
+                'payment_type_id' => $this->getMappedPaymentType(),
                 'billet_url' => $this->billetUrl,
                 'billet_barcode' => $this->billetBarcode,
                 'value' => $this->value,

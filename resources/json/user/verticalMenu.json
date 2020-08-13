@@ -34,6 +34,34 @@
             ]
         },
         {
+            "url": "lead.index",
+            "name": "Leads",
+            "slug": "leads",
+            "badge": "",
+            "badgeClass": "badge badge-warning badge-pill float-right",
+            "icon": "feather icon-dollar-sign",
+            "activeUrls": ["lead", "lead/{lead}/show"]
+        },
+        {
+            "url": "",
+            "name": "Whatsapp 2.0",
+            "icon": "fab fa-whatsapp",
+            "submenu": [
+                {
+                    "url": "whatsapp_template.index",
+                    "name": "Message Models",
+                    "activeUrls": ["whatsapp_template", "whatsapp_template/create", "whatsapp_template/{whatsappTemplate}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "postback.index",
+                    "name": "Send Whatsapp",
+                    "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                }
+            ]
+        },
+        {
             "url": "",
             "name": "Integrations",
             "icon": "feather icon-cpu",

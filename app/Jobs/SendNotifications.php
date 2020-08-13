@@ -89,11 +89,11 @@ class SendNotifications implements ShouldQueue
     }
 
     private function getNotificationData() {
-        return $this->replaceVariables(json_decode($this->schedule->action->action_data, true)['data']);
+        return $this->replaceVariables($this->schedule->action->action_data['data']);
     }
 
     private function getMailSubject() {
-        return $this->replaceVariables(Arr::get(json_decode($this->schedule->action->action_data, true), 'options.subject')) ?? '';
+        return $this->replaceVariables(Arr::get($this->schedule->action->action_data, 'options.subject')) ?? '';
     }
 
     private function getVariables() {

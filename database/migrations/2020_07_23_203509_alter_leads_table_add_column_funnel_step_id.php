@@ -15,7 +15,7 @@ class AlterLeadsTableAddColumnFunnelStepId extends Migration
     {
         Schema::table('leads', function (Blueprint $table) {
             $table->uuid('funnel_step_id')->nullable()->after('tag_id');
-            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps');
+            $table->foreign('funnel_step_id')->references('id')->on('funnel_steps')->onDelete('set null');
         });
     }
 

@@ -4,12 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\User\MailTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MailTemplateController extends Controller
 {
     public function store(Request $request) {
-        $mailTemplate = new MailTemplate($request->all());
+        Log::debug(($request->all()));
+        if ($request->images) {
+            $mailTemplate = MailTemplate::create([
+                'template_name' => $request->template_name,
+                'template' => ' '
+            ]);
+
+            $template = $request->template;
+            foreach ($request->images as $image) {
+                $mailTemplate->addMediaFromBase64($image)->toMediaCollection('mail-images');
+                $mediaItems = $mailTemplate->load('media')->getMedia('mail-images');
+                $template = str_replace($image, $mediaItems[count($mediaItems) - 1]->getFullUrl(), $template);
+            }
+
+            $mailTemplate->template = $template;
+        } else {
+            $mailTemplate = new MailTemplate($request->all());
+        }
+
         $mailTemplate->save();
+
         return response()->json($mailTemplate);
     }
 

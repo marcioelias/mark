@@ -15,7 +15,7 @@
         <form id="searchForm" class="form w-100" method="GET" action="{{ route($model.'.index') }}">
             @csrf
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <div class="input-group mr-1">
+                <div class="input-group">
                     <input type="text" class="form-control" id="searchField" name="searchField" placeholder="Digite aqui para buscar" value="{{isset($_GET['searchField']) ? $_GET['searchField'] : ''}}">
                     @if(request('searchField', false))
                     <span class="input-group-append" data-toggle="tooltip" data-placement="top" title="{{__('strings.Clear')}}" data-original-title="{{__('Clear')}}">
@@ -30,7 +30,7 @@
                 </div>
                 <div>
                     @if(Route::has($model.'.create'))
-                    <a href="{{ route($model.'.create', Request()->request->all() ?? []) }}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="{{__('strings.New')}}" data-original-title="{{__('New')}}">
+                    <a href="{{ route($model.'.create', Request()->request->all() ?? []) }}" class="btn btn-success ml-1" data-toggle="tooltip" data-placement="top" title="{{__('strings.New')}}" data-original-title="{{__('New')}}">
                         <i class="fa fa-plus"></i>
                     </a>
                     @endif
@@ -42,15 +42,13 @@
                     @endcomponent
                 @endforeach
             </div>
-            <div class="row">
             @if(isset($searchParms))
-                @component($searchParms, $searchParmsData ?? [])
-                @endcomponent
+            @component($searchParms, $searchParmsData ?? [])
+            @endcomponent
             @endif
-            </div>
         </form>
     </div>
-    <div class="table-responsive-md">
+    <div class="table-responsive">
         <table class="table table-sm table-hover bg-white table-bordered" style="margin: 0px">
             <thead>
                 <tr class="bg-primary text-white">

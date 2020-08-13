@@ -18,7 +18,10 @@ export const ActionSetActionDescription = ({ commit }, payload) => {
 }
 
 export const ActionSetActionData = ({ commit }, payload) => {
-    commit(types.ACTION_DATA, payload)
+    return new Promise((resolve, _) => {
+        commit(types.ACTION_DATA, payload)
+        resolve()
+    })
 }
 
 export const ActionClearState = ({ commit }) => {

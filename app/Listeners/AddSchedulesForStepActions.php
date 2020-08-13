@@ -36,7 +36,7 @@ class AddSchedulesForStepActions
         try {
             $step = $event->lead->funnelStep;
             foreach($step->actions as $action) {
-                $actionData = json_decode($action->action_data, true);
+                $actionData = $action->action_data;
                 $lastStepFinishedAt = CarbonImmutable::parse($event->lead->stepFinishedAt());
                 $startAt =  (Arr::get($actionData, 'options.period', [])[0] ?? 0).':00:00';
                 $endAt = (Arr::get($actionData, 'options.period', [])[1] ?? 23).':59:59';

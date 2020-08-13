@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ActionTypesTableSeeder::class);
         $this->call(LeadStatusesTableSeeder::class);
         $this->call(PostbackEventTypesTableSeeder::class);
+        $this->call(PaymentTypesTableSeeder::class);
 
         if (env('APP_DEBUG', false)) {
             $this->call(SeedDummyData::class);

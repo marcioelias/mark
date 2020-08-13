@@ -16,6 +16,7 @@ class PostbackField {
     private const EVENT_TYPE        = 'eventType';
     private const PAID_AT           = 'paidAt';
     private const VALUE             = 'value';
+    private const PAYMENT_TYPE      = 'paymentType';
 
     private static $values = null;
 
@@ -59,7 +60,8 @@ class PostbackField {
                 self::BILLET_BARCODE    => new PostbackField(self::BILLET_BARCODE, 'BILLET_BARCODE'),
                 self::EVENT_TYPE        => new PostbackField(self::EVENT_TYPE, 'EVENT_TYPE'),
                 self::PAID_AT           => new PostbackField(self::PAID_AT, 'PAID_AT'),
-                self::VALUE             => new PostbackField(self::VALUE, 'VALUE')
+                self::VALUE             => new PostbackField(self::VALUE, 'VALUE'),
+                self::PAYMENT_TYPE      => new PostbackField(self::PAYMENT_TYPE, 'PAYMENT_TYPE')
             ];
         }
         return self::$values;
@@ -118,6 +120,11 @@ class PostbackField {
     public static function value(): PostbackField
     {
         return self::values()[self::VALUE];
+    }
+
+    public static function paymentType(): PostbackField
+    {
+        return self::values()[self::PAYMENT_TYPE];
     }
 
     public function getField(): string

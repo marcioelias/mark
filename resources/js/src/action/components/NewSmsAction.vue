@@ -129,7 +129,7 @@ export default {
     },
     mounted() {
         if (this.isEditing) {
-            Object.assign(this.$data, JSON.parse(this.action_data))
+            Object.assign(this.$data, this.action_data)
         } else {
             this.actionDescription = 'Enviar SMS'
             this.ActionSetActionTypeId(this.GetActionTypeByName('sms').id)

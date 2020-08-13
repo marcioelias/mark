@@ -32,6 +32,7 @@
 @section('page-script')
     <script src="{{ asset('js/scripts/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/scripts/jquery.mask.min.js') }}"></script>
+    @stack('custom-script')
 @endsection
 
 @push('document-ready')

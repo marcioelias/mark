@@ -2,6 +2,7 @@
 
 namespace App\Integrations;
 
+use App\Constants\PaymentTypes;
 use App\Constants\PostbackEventType;
 use App\Enums\PostbackField;
 
@@ -19,6 +20,7 @@ class EduzzIntegration extends Integration {
             PostbackField::eventType()->getField()       => 'trans_status',
             PostbackField::paidAt()->getField()          => ['trans_paiddate', 'trans_paidtime'],
             PostbackField::value()->getField()           => 'trans_value',
+            PostbackField::paymentType()->getField()     => 'trans_paymentmethod'
         ];
     }
 
@@ -34,6 +36,41 @@ class EduzzIntegration extends Integration {
 
             case '4':
                 return PostbackEventType::COMPRA_CANCELADA;
+                break;
+        }
+    }
+
+    public function getMappedPaymentType() {
+        switch ($this->paymentType) {
+            case 1:
+                return PaymentTypes::BOLETO_BANCARIO;
+                break;
+
+            case 9:
+            case 25:
+                return PaymentTypes::PAYPAL;
+                break;
+
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 21:
+            case 23:
+            case 24:
+            case 27:
+                return PaymentTypes::CARTAO_CREDITO;
+                break;
+
+            case 17:
+            case 18:
+            case 19:
+            case 22:
+                return PaymentTypes::CARTAO_DEBIDO;
+                break;
+
+            default:
+                return PaymentTypes::OUTROS;
                 break;
         }
     }

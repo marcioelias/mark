@@ -9,4 +9,15 @@
 
 @section('page-script')
     <script src="{{ asset('js/scripts/sweetalert2.min.js') }}"></script>
+    @stack('custom-scripts')
 @endsection
+
+@push('document-ready')
+$('select').select2({
+    placeholder: {
+        id: '',
+        text: ''
+      },
+      allowClear: true
+    });
+@endpush

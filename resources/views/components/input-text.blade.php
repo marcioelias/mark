@@ -8,6 +8,8 @@
     $div_css = isset($div_css) ? $div_css : '';
     $vModel = isset($vModel) ? $vModel : false;
     $readOnly = isset($readOnly) ? $readOnly : false;
+    $icon = $icon ?? false;
+    $id = $id ?? $field
 @endphp
 
 <div class="col col-sm col-md{{$inputSize}} col-lg{{$inputSize}} {{$div_css}}">

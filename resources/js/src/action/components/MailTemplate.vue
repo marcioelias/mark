@@ -27,6 +27,9 @@ export default {
             type: String,
             required: true,
             default: ''
+        },
+        images: {
+            type: Array,
         }
     },
     methods: {
@@ -99,7 +102,8 @@ export default {
         async storeTemplate(templateName) {
             await this.$http.post('/mailtemplate', {
                 template_name: templateName,
-                template: this.message
+                template: this.message,
+                images: this.images
             })
             .then(res => {
                 if (res.status === 200) {

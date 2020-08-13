@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta http-equiv="Content-Security-Policy" content="style-src-elem '*.quilljs.com'">
     {{-- <link href="{{ asset(mix('css/quill.snow.css')) }}" rel="stylesheet">
     <link href="{{ asset(mix('css/quill.bubble.css')) }}" rel="stylesheet"> --}}
     {{-- <link href="//cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
