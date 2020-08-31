@@ -5,28 +5,12 @@ export const ActionSetId = ({ commit }, payload) => {
     commit(types.SET_ID, payload)
 }
 
-export const ActionSetFunnelStepSequence = ({ commit }, payload) => {
-    commit(types.SET_FUNNEL_STEP_SEQUENCE, payload)
-}
-
-export const ActionSetFunnelStepDescription = ({ commit }, payload) => {
-    commit(types.SET_FUNNEL_STEP_DESCRIPTION, payload)
-}
-
-export const ActionSetNewTagId = ({ commit }, payload) => {
-    commit(types.SET_NEW_TAG_ID, payload)
-}
-
-export const ActionSetDelayDays = ({ commit }, payload) => {
-    commit(types.SET_DELAY_DAYS, payload)
-}
-
-export const ActionSetDelayHours = ({ commit }, payload) => {
-    commit(types.SET_DELAY_HOURS, payload)
-}
-
 export const ActionSetActions = ({ commit }, payload) => {
     commit(types.SET_ACTIONS, payload)
+}
+
+export const ActionSetFunnelStepSequence = ({ commit }, payload) => {
+    commit(types.SET_FUNNEL_STEP_SEQUENCE, payload)
 }
 
 export const ActionSetActionComponent = ({ commit }, payload) => {
@@ -62,6 +46,8 @@ export const ActionDelAction = ({ commit, state }, payload) => {
 
 export const ActionLoadStep = ({ commit, rootState}) => {
     return new Promise((resolve, _) => {
+        console.log('passou aqui')
+        console.log(rootState.funnel.steps[rootState.funnel.currentStep])
         commit(types.LOAD_STATE, rootState.funnel.steps[rootState.funnel.currentStep])
         resolve()
     })

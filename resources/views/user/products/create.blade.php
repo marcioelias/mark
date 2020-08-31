@@ -42,6 +42,20 @@
         'inputs' => [
             [
                 'type' => 'select',
+                'field' => 'funnel_id',
+                'label' => 'Funil de Vendas',
+                'items' => $funnels,
+                'displayField' => 'funnel_description',
+                'keyField' => 'id',
+                'inputSize' => 12
+            ],
+        ]
+    ])
+    @endcomponent
+    @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'select',
                 'field' => 'plataform_config_id',
                 'label' => 'Plataforma',
                 'items' => $plataforms,

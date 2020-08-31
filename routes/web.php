@@ -1,7 +1,12 @@
 <?php
   use App\Http\Controllers\LanguageController;
+use Illuminate\Support\Facades\Http;
 
 //Auth::routes(['verify' => true]);
+
+Route::get('teste', function() {
+	return Http::post('http://marcos.startzap.online/sendText?token=MARCOS954E9137CD3C9EBA4FD2A5C87390B', ['to' => '554884691819@c.us', 'msg' => 'Teste de envio de whatsapp']);
+});
 
 /* Webhook routes */
 Route::post('webhook/system/monetizze', 'WebhookMonetizzeController@receive');
@@ -63,13 +68,12 @@ Route::prefix('')->group(function() {
 		Route::get('password/change', 'Auth\User\LoginController@showChangePasswordForm')->name('password.change');
 		Route::post('password/change', 'Auth\User\LoginController@changePassword');
 
-		Route::resource('tag', 'TagController')->except('show');
 		Route::resource('product', 'ProductController')->except('show');
 		Route::resource('plataform_config', 'PlataformConfigController')->except('show');
 		Route::resource('funnel', 'FunnelController');
 		Route::resource('lead', 'LeadController')->except('create');
-		Route::resource('tag_rule', 'TagRuleController')->except('show');
 		Route::resource('whatsapp_template', 'WhatsappTemplateController')->except('show');
+		Route::resource('lead_status', 'LeadStatusController')->except('show');
 
 		Route::get('postback', 'PostbackController@index')->name('postback.index');
 		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');
@@ -78,7 +82,8 @@ Route::prefix('')->group(function() {
 
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');
-		Route::get('tags/json', 'TagController@getTagsJson');
+		Route::get('lead_statuses/json', 'LeadStatusController@getLeadStatusesJson');
+		Route::get('postback_event_types/json', 'PostbackEventTypeController@getPostbackEventTypeJson');
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
 		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');

@@ -69,25 +69,6 @@ class SeedDummyData extends Seeder
             $plataformConfig->save();
         }
 
-        /* TAGS */
-        $tags = [
-            [
-                'id' => self::TAG_ABERTO_ID,
-                'user_id' => $user->id,
-                'tag_name' => 'Aguardando Pagamento'
-            ],
-            [
-                'id' => self::TAG_PAGO_ID,
-                'user_id' => $user->id,
-                'tag_name' => 'Pago'
-            ]
-        ];
-
-        foreach ($tags as $tag) {
-            $t = new Tag($tag);
-            $t->save();
-        }
-
         /* PRODUCTS */
         $products = [
             [
@@ -118,13 +99,10 @@ class SeedDummyData extends Seeder
                 'active' => true
             ],
         ];
-        foreach($products as $product) {
+        /* foreach($products as $product) {
             $prod = new Product($product);
             $prod->save();
-
-            /* TAG RULES */
-            $this->createTagRules($user, $prod);
-        }
+        } */
 
         /* FUNNELS */
         // $funnels = [
@@ -143,28 +121,6 @@ class SeedDummyData extends Seeder
         //     /* FUNNEL STEPS */
         //     $this->createFunnelSteps($f, $user);
         // }
-    }
-
-    public function createTagRules(User $user, Product $product) {
-        $tagRules = [
-            [
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'lead_status_id' => LeadStatus::EM_ABERTO,
-                'tag_id' => self::TAG_ABERTO_ID
-            ],
-            [
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'lead_status_id' => LeadStatus::FINALIZADO,
-                'tag_id' => self::TAG_PAGO_ID
-            ]
-        ];
-
-        foreach ($tagRules as $tagRule) {
-            $tr = new TagRule($tagRule);
-            $tr->save();
-        }
     }
 
     public function createFunnelSteps(Funnel $funnel, User $user) {

@@ -1,1 +1,77 @@
-@-webkit-keyframes line-scale-party{0%{transform:scale(1)}50%{transform:scale(.5)}to{transform:scale(1)}}@keyframes line-scale-party{0%{transform:scale(1)}50%{transform:scale(.5)}to{transform:scale(1)}}.line-scale-party>div:first-child{-webkit-animation-delay:-.11s;animation-delay:-.11s;-webkit-animation-duration:.64s;animation-duration:.64s}.line-scale-party>div:nth-child(2){-webkit-animation-delay:.43s;animation-delay:.43s;-webkit-animation-duration:.93s;animation-duration:.93s}.line-scale-party>div:nth-child(3){-webkit-animation-delay:.41s;animation-delay:.41s;-webkit-animation-duration:1.19s;animation-duration:1.19s}.line-scale-party>div:nth-child(4){-webkit-animation-delay:.51s;animation-delay:.51s;-webkit-animation-duration:.39s;animation-duration:.39s}.line-scale-party>div{background-color:#b8c2cc;width:4px;height:3.45rem;border-radius:2px;margin:2px;-webkit-animation-fill-mode:both;animation-fill-mode:both;display:inline-block;-webkit-animation-name:line-scale-party;animation-name:line-scale-party;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-delay:0;animation-delay:0}
+/*========================================================
+        DARK LAYOUT
+=========================================================*/
+
+@-webkit-keyframes line-scale-party {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes line-scale-party {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.line-scale-party > div:nth-child(1) {
+  -webkit-animation-delay: 0.37s;
+          animation-delay: 0.37s;
+  -webkit-animation-duration: 0.9s;
+          animation-duration: 0.9s;
+}
+
+.line-scale-party > div:nth-child(2) {
+  -webkit-animation-delay: 0.66s;
+          animation-delay: 0.66s;
+  -webkit-animation-duration: 0.74s;
+          animation-duration: 0.74s;
+}
+
+.line-scale-party > div:nth-child(3) {
+  -webkit-animation-delay: 0.14s;
+          animation-delay: 0.14s;
+  -webkit-animation-duration: 1.27s;
+          animation-duration: 1.27s;
+}
+
+.line-scale-party > div:nth-child(4) {
+  -webkit-animation-delay: 0.62s;
+          animation-delay: 0.62s;
+  -webkit-animation-duration: 1.04s;
+          animation-duration: 1.04s;
+}
+
+.line-scale-party > div {
+  background-color: #b8c2cc;
+  width: 4px;
+  height: 3.45rem;
+  border-radius: 2px;
+  margin: 2px;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  display: inline-block;
+  -webkit-animation-name: line-scale-party;
+          animation-name: line-scale-party;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-delay: 0;
+          animation-delay: 0;
+}
+

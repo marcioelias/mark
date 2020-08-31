@@ -2,6 +2,7 @@
 
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\User\LeadStatus;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -36,8 +37,18 @@ class UsersTableSeeder extends Seeder
             ]
         ];
 
+        $leadStatuses = [
+            ['status' => 'Ativo'],
+            ['status' => 'Remarketing'],
+            ['status' => 'Inativo'],
+        ];
+
         foreach ($users as $user) {
-            User::create($user);
+            $newUser = User::create($user);
+            foreach($leadStatuses as $leadStatus) {
+                $newLeadStatus = new LeadStatus($leadStatus);
+                $newUser->leadStatuses()->save($newLeadStatus);
+            }
         }
 
         factory(User::class, 100)->create();

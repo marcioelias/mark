@@ -1,9 +1,23 @@
 <template>
     <table class="table table-sm table-hover bg-white mb-0">
+        <thead class="bg-primary text-white">
+            <tr>
+                <td>Descrição</td>
+                <td>Enviar após</td>
+                <td>Somente entre</td>
+                <td></td>
+            </tr>
+        </thead>
         <tbody>
             <tr v-for="(item, index) in OrderedActions" :key="index">
                 <td class="align-middle" scope="row">
                     <i class="fas" :class="getActionIcon(item)"></i> {{ item.action_description }}
+                </td>
+                <td class="align-middle">
+                    {{ item.action_data.options.days_after }} dias
+                </td>
+                <td class="align-middle">
+                    {{ item.action_data.options.start_time }} / {{ item.action_data.options.end_time }} horas
                 </td>
                 <td class="align-middle text-right" scope="row">
                     <span data-toggle="tooltip" data-placement="top" title="Editar">
@@ -28,7 +42,7 @@ export default {
             'OrderedActions',
         ]),
         ...mapState('funnel', [
-            'actionTypes'
+            'actionTypes', 'isSalesFunnel'
         ]),
         ...mapGetters('funnel', [
             'GetActionTypeById'
@@ -56,6 +70,9 @@ export default {
                 }).then(result => {
                     if (result.value) {
                         this.ActionDelAction(index)
+                        if (!this.isSalesFunnel) {
+                            this.$emit('deleted-action', index)
+                        }
                     }
                 })
         },

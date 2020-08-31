@@ -1,31 +1,28 @@
-export const GetProductsForSelect = state => {
+export const GetLeadStatusesForSelect = state => {
     let res = []
-    state.products.forEach(product => {
+    state.leadStatuses.forEach(leadStatus => {
         res.push({
-            id: product.id,
-            text: product.product_name
+            id: leadStatus.id,
+            text: lead_status.status
         })
     })
     return res
 }
 
-export const GetTagsForSelect = state => {
+export const GetPostbackEventTypesForSelect = state => {
     let res = []
-    state.tags.forEach(tag => {
+    let aux = state.postbackEventTypes.filter(pt => !state.steps.find(st => st.postback_event_type_id == pt.id))
+    aux.forEach(postbackEventType => {
         res.push({
-            id: tag.id,
-            text: tag.tag_name
+            id: postbackEventType.id,
+            text: postbackEventType.postback_event_type
         })
     })
     return res
 }
 
-export const GetTagById = state => id => {
-    return state.tags.find(tag => tag.id === id)
-}
-
-export const GetNewTagsForSelect = (state, getters) => {
-    return getters.GetTagsForSelect.filter(tag => tag.id != state.originalTag)
+export const GetPostbackEventTypeById = state => id => {
+    return state.postbackEventTypes.find(a => a.id === id)
 }
 
 export const GetStepByIndex = state => index => {
@@ -42,8 +39,4 @@ export const GetActionTypeById = state => id => {
 
 export const OrderedSteps = state => {
     return state.steps.sort((a, b) => a.funnel_step_sequence - b.funnel_step_sequence)
-}
-
-export const GetProductById = state => id => {
-    return state.products.find(p => p.id === id)
 }

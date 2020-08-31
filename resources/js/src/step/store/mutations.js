@@ -5,23 +5,11 @@ export default {
     [types.SET_ID] (state, payload) {
         state.id = payload
     },
-    [types.SET_FUNNEL_STEP_SEQUENCE] (state, payload) {
-        state.funnel_step_sequence = payload
-    },
-    [types.SET_FUNNEL_STEP_DESCRIPTION] (state, payload) {
-        state.funnel_step_description = payload
-    },
-    [types.SET_NEW_TAG_ID] (state, payload) {
-        state.new_tag_id = payload
-    },
-    [types.SET_DELAY_DAYS] (state, payload) {
-        state.delay_days = payload
-    },
-    [types.SET_DELAY_HOURS] (state, payload) {
-        state.delay_hours = payload
-    },
     [types.SET_ACTIONS] (state, payload) {
         state.actions = payload
+    },
+    [types.SET_FUNNEL_STEP_SEQUENCE] (state, payload) {
+        state.funnel_step_sequence = payload
     },
     [types.SET_ACTION_COMPONENT] (state, payload) {
         state.actionComponent = payload

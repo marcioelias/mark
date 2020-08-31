@@ -1,8 +1,8 @@
 import * as types from './mutation-types'
 
 export default {
-    [types.SET_PRODUCT] (state, payload) {
-        state.product = payload
+    [types.SET_DESCRIPTION] (state, payload) {
+        state.description = payload
     },
     [types.SET_STEPS] (state, payload) {
         state.steps = payload
@@ -13,20 +13,17 @@ export default {
     [types.UPDATE_STEP] (state, payload) {
         state.steps[payload.index] = payload.data
     },
-    [types.SET_PRODUCTS] (state, payload) {
-        state.products = payload
-    },
-    [types.SET_TAGS] (state, payload) {
-        state.tags = payload
-    },
-    [types.SET_TAG] (state, payload) {
-        state.tag = payload
+    [types.SET_IS_SALES_FUNNEL] (state, payload) {
+        state.isSalesFunnel = payload
     },
     [types.SET_ACTIVE] (state, payload) {
         state.active = payload
     },
     [types.SET_SHOW_CRUD_STEPS] (state, payload) {
         state.showCrudStep = payload
+    },
+    [types.SET_SHOW_CRUD_ACTION] (state, payload) {
+        state.showCrudAction = payload
     },
     [types.SET_ACTION_TYPES] (state, payload) {
         state.actionTypes = payload
@@ -48,5 +45,8 @@ export default {
     },
     [types.SET_FUNNEL_ID] (state, payload) {
         state.funnelId = payload
+    },
+    [types.SET_POSTBACK_EVENT_TYPES] (state, payload) {
+        state.postbackEventTypes = payload
     }
 }

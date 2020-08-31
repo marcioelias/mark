@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\PostbackEventType;
+use App\Models\PostbackEventType;
 use Illuminate\Http\Request;
 
 class PostbackEventTypeController extends Controller
@@ -81,5 +81,9 @@ class PostbackEventTypeController extends Controller
     public function destroy(PostbackEventType $postbackEventType)
     {
         //
+    }
+
+    public function getPostbackEventTypeJson() {
+        return response()->json(PostbackEventType::all());
     }
 }

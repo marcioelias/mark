@@ -25,7 +25,6 @@ class Lead extends Model
         'value',
         'paid_at',
         'lead_status_id',
-        'tag_id',
         'last_step_finished_at',
         'funnel_step_id'
     ];
@@ -50,10 +49,6 @@ class Lead extends Model
         return $this->belongsTo(LeadStatus::class);
     }
 
-    public function tag() {
-        return $this->belongsTo(Tag::class);
-    }
-
     public function funnelStep() {
         return $this->belongsTo(FunnelStep::class);
     }
@@ -68,21 +63,5 @@ class Lead extends Model
 
     public function stepFinishedAt() {
         return $this->last_step_finished_at ?? $this->created_at;
-    }
-
-    public function scopeFinalizados($query) {
-        return $query->where('lead_status_id', ConstantsLeadStatus::FINALIZADO);
-    }
-
-    public function scopeCancelados($query) {
-        return $query->where('lead_status_id', ConstantsLeadStatus::CANCELADO);
-    }
-
-    public function scopeBoletosVencendo($query) {
-        return $query->where('lead_status_id', ConstantsLeadStatus::VENCENDO);
-    }
-
-    public function scopeBoletosVencidos($query) {
-        return $query->where('lead_status_id', ConstantsLeadStatus::VENCIDO);
     }
 }

@@ -24,8 +24,7 @@ class FunnelController extends Controller
 
     public function fields() {
         return array(
-            'product_name' => 'Produto',
-            'tag_name' => 'Tag',
+            'funnel_description' => 'Descrição',
             'active' => ['label' => 'Ativo', 'type' => 'bool']
         );
     }
@@ -47,22 +46,16 @@ class FunnelController extends Controller
         ];
 
         $this->setOrder($request, [
-            'order_by' => 'product_name',
+            'order_by' => 'funnel_description',
             'order_type' => 'ASC'
         ]);
 
         if ($request->searchField) {
-            $funnels = Funnel::select(['funnels.*', 'products.product_name', 'tags.tag_name'])
-                            ->join('products', 'products.id', 'funnels.product_id')
-                            ->join('tags', 'tags.id', 'funnels.tag_id')
-                            ->where('products.produtct_name', 'like', "%$request->searchField%")
+            $funnels = Funnel::where('funnels.description', 'like', "%$request->searchField%")
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         } else {
-            $funnels = Funnel::select(['funnels.*', 'products.product_name', 'tags.tag_name'])
-                            ->join('products', 'products.id', 'funnels.product_id')
-                            ->join('tags', 'tags.id', 'funnels.tag_id')
-                            ->orderBy($this->orderField, $this->orderType)
+            $funnels = Funnel::orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         }
 
@@ -110,20 +103,18 @@ class FunnelController extends Controller
     {
         //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
         $this->validate($request, [
-            'product_id' => "required",
-            'tag_id' => "required|unique:funnels,tag_id,NULL,NULL,product_id,$request->product_id",
+            'description' => "required",
         ], [],
         [
-            'product_id' => 'Produto',
-            'tag_id' => 'Tag'
+            'description' => 'Descrição',
         ]);
 
         DB::beginTransaction();
 
         try {
             $funnel = new Funnel([
-                'product_id' => $request->product_id,
-                'tag_id' => $request->tag_id,
+                'funnel_description' => $request->description,
+                'is_sales_funnel' => $request->is_sales_funnel,
                 'active' => $request->active
             ]);
 
@@ -131,11 +122,8 @@ class FunnelController extends Controller
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
                 foreach ($request->steps as $step) {
                     $newStep = new FunnelStep([
-                        'funnel_step_sequence' => $step['funnel_step_sequence'],
-                        'funnel_step_description' => $step['funnel_step_description'],
-                        'new_tag_id' => $step['new_tag_id'] ?? null,
-                        'delay_days' => $step['delay_days'] ?? 0,
-                        'delay_hours' => $step['delay_hours'] ?? 0
+                        //'funnel_step_sequence' => $step['funnel_step_sequence'],
+                        'postback_event_type_id' => $step['postback_event_type_id'],
                     ]);
                     try {
                         $funnel->steps()->save($newStep);
@@ -218,7 +206,7 @@ class FunnelController extends Controller
         ];
 
         return $this->getView('user.funnels.show')
-                    ->withFunnel($funnel->load(['product', 'tag', 'steps.actions']));
+                    ->withFunnel($funnel->load(['lead_statuses', 'steps.actions']));
     }
 
     /**
@@ -257,12 +245,10 @@ class FunnelController extends Controller
     {
         //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
         $this->validate($request, [
-            'product_id' => "required",
-            'tag_id' => "required|unique:funnels,tag_id,$funnel->id,id,product_id,$request->product_id",
+            'description' => "required",
         ], [],
         [
-            'product_id' => 'Produto',
-            'tag_id' => 'Tag'
+            'description' => 'Descrição',
         ]);
 
         DB::beginTransaction();
@@ -270,8 +256,8 @@ class FunnelController extends Controller
         try {
             Log::debug($request->all());
             $funnel->fill([
-                'product_id' => $request->product_id,
-                'tag_id' => $request->tag_id,
+                'funnel_description' => $request->description,
+                'is_sales_funnel' => $request->is_sales_funnel,
                 'active' => $request->active
             ]);
 
@@ -284,11 +270,8 @@ class FunnelController extends Controller
                         ],
                         [
                             'funnel_id' => $funnel->id,
-                            'funnel_step_sequence' => $step['funnel_step_sequence'],
-                            'funnel_step_description' => $step['funnel_step_description'],
-                            'new_tag_id' => $step['new_tag_id'] ?? null,
-                            'delay_days' => $step['delay_days'] ?? 0,
-                            'delay_hours' => $step['delay_hours'] ?? 0
+                            //'funnel_step_sequence' => $step['funnel_step_sequence'],
+                            'postback_event_type_id' => $step['postback_event_type_id'],
                         ]
                     );
 

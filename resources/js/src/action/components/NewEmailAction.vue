@@ -5,7 +5,7 @@
 		</div>
 		<div class="card-body pl-0 pr-0">
 			<div class="row mb-1">
-				<div class="col">
+				<div class="col col-lg-6">
 					<label for="action_description">Descrição</label>
 					<input
 						type="text"
@@ -16,6 +16,37 @@
 						placeholder="Exemplo: Enviar E-mail"
 					/>
 				</div>
+				<div class="col col-lg-2">
+                    <NumberEdit name="delay_days" id="delay_days" :min="0" :max="30" @on-change="doOnChangeDelayDays">Enviar após dias</NumberEdit>
+                </div>
+                <div class="col col-lg-4">
+                    <label>Somente no período entre:</label>
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <flat-pickr
+                            v-model="options.start_time"
+                            class="form-control"
+                            :config="{
+                                enableTime: true,
+                                noCalendar: true,
+                                dateFormat: 'H:i',
+                                time_24hr: true
+                            }"
+                        ></flat-pickr>
+                        <span class="pl-1 pr-1"> e </span>
+                        <flat-pickr
+                            v-model="options.end_time"
+                            class="form-control"
+                            :config="{
+                                enableTime: true,
+                                noCalendar: true,
+                                dateFormat: 'H:i',
+                                minTime: options.start_time,
+                                time_24hr: true
+                            }"
+                        ></flat-pickr>
+                    </div>
+                    <!-- <NumberEdit name="delay_hours" id="delay_hours" :min="0" :max="23" @on-change="doOnChangeDelayHours">horas</NumberEdit> -->
+                </div>
 			</div>
 			<div class="row mb-1">
 				<div class="col d-flex flex-row justify-content-between">
@@ -81,21 +112,6 @@
 					></quill-editor>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col">
-					<hr />
-					<fieldset>
-						<label>Enviar somente no horário entre:</label>
-						<div class="d-flex justify-content-between">
-							<div class="form-control mr-1" style="width: 7rem">{{ options.period[0] }} Horas</div>
-							<div class="flex-grow-1">
-								<vs-slider step="1" :min="0" :max="23" text-fixed="horas" v-model="options.period" />
-							</div>
-							<div class="form-control ml-1" style="width: 7rem">{{ options.period[1] }} Horas</div>
-						</div>
-					</fieldset>
-				</div>
-			</div>
 		</div>
 		<div class="card-footer">
 			<div class="row">
@@ -158,12 +174,17 @@
 <script>
 import { quillEditor } from "vue-quill-editor";
 import { mapState, mapActions, mapGetters } from "vuex";
-import * as componentTypes from "../component-types";
+import NumberEdit from '../../components/NumberEdit'
+import flatPickr from 'vue-flatpickr-component'
+import * as componentTypes from '../component-types'
+
 import insertTextAtCursor from "insert-text-at-cursor";
 import Quill from "quill";
 import ImageResize from "quill-image-resize";
 import { ImageDrop } from "quill-image-drop-module";
 import MailTemplate from "./MailTemplate";
+
+import 'flatpickr/dist/flatpickr.css'
 
 let DirectionAttribute = Quill.import("attributors/attribute/direction");
 let AlignStyle = Quill.import("attributors/style/align");
@@ -204,7 +225,8 @@ const iniData = () => {
 		data: "",
 		options: {
 			subject: "",
-			period: [0, 23],
+			start_time: '00:00',
+            end_time: '23:59',
 			images: [],
 		},
 	}
@@ -288,6 +310,8 @@ export default {
 	components: {
 		quillEditor,
 		MailTemplate,
+		flatPickr,
+		NumberEdit
 	},
 	computed: {
 		...mapState("action", [

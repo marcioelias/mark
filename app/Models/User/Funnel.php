@@ -10,7 +10,7 @@ class Funnel extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'product_id', 'tag_id', 'active'
+        'user_id', 'funnel_description', 'is_sales_funnel', 'active'
     ];
 
     public function user() {
@@ -18,11 +18,7 @@ class Funnel extends Model
     }
 
     public function product() {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function tag() {
-        return $this->belongsTo(Tag::class);
+        return $this->hasMany(Product::class);
     }
 
     public function postbacks() {

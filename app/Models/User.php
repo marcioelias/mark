@@ -6,6 +6,7 @@ use App\Models\User\MailTemplate;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Product;
 use App\Models\User\Tag;
+use App\Models\User\LeadStatus;
 use App\Notifications\CustomVerifyEmailNotification;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
@@ -94,5 +95,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function mailTemplates() {
         return $this->hasMany(MailTemplate::class);
+    }
+
+    public function leadStatuses() {
+        return $this->hasMany(LeadStatus::class);
     }
 }

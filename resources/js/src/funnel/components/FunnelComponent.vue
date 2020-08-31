@@ -8,28 +8,22 @@
         </div>
         <div v-else key="loadedContent">
             <div class="row">
-                <div class="col-md-5">
-                    <label for="product_id">Produto</label>
+                <div class="col-md-10">
                     <template v-if="isEditing">
-                        <div class="form-control">{{ productName }}</div>
+                        <template v-if="isSalesFunnel">
+                        <label for="product_id">Descrição (Venda)</label>
+                        </template>
+                        <template v-else>
+                        <label for="product_id">Descrição (Remarketing)</label>
+                        </template>
+                        <div class="form-control">{{ description }}</div>
                     </template>
                     <template v-else>
-                        <Select2 v-model="funnelProduct" name="product_id" id="product_id" :options="GetProductsForSelect" :settings="{  }" />
-                        <div class="invalid-feedback"  id="error-product_id"></div>
-                        <span v-show="httpErrors.hasOwnProperty('product_id')" class="invalid-feedback" style="display: block">
-                            <span v-for="(error, index) in httpErrors.product_id" :key="index">{{ error }}</span>
-                        </span>
-                    </template>
-                </div>
-                <div class="col-md-5">
-                    <label for="tag">Tag</label>
-                    <template v-if="isEditing">
-                        <div class="form-control">{{ tagName }}</div>
-                    </template>
-                    <template v-else>
-                        <Select2 v-model="funnelTag" name="tag" id="tag" :options="GetTagsForSelect" />
-                        <span v-show="httpErrors.hasOwnProperty('tag_id')" class="invalid-feedback" style="display: block">
-                            <span v-for="(error, index) in httpErrors.tag_id" :key="index">{{ error }}</span>
+                        <label for="product_id">Descrição</label>
+                        <input type="text" class="form-control" v-model="funnelDescription" name="description" id="description" />
+                        <div class="invalid-feedback"  id="error-description"></div>
+                        <span v-show="httpErrors.hasOwnProperty('description')" class="invalid-feedback" style="display: block">
+                            <span v-for="(error, index) in httpErrors.description" :key="index">{{ error }}</span>
                         </span>
                     </template>
                 </div>
@@ -45,23 +39,55 @@
                 </div>
             </div>
             <div class="card mb-0">
-                <div class="card-header p-0 mt-1" v-if="steps.length == 0 && !showCrudStep">
-                    <button class="btn btn-success float-right" @click="ActionSetShowCrudStep(true)"><i class="fas fa-plus"></i> Adicionar Primeiro Passo</button>
+                <transition enter-active-class="animate__animated animate__fadeIn animate__faster" leave-active-class="animate__animated animate__fadeOut animate__faster" mode="out-in" apper>
+                <div class="card-header p-0 mt-3 d-flex justify-content-around" v-if="steps.length == 0 && !showCrudStep" key="havent_steps">
+                    <div class="card border-success text-center bg-transparent">
+                        <div class="card-content d-flex">
+                            <div class="card-body">
+                                <p>
+                                    <i class="fas fa-funnel-dollar fa-3x text-success"></i>
+                                </p>
+                                <h4>Funil de Venda</h4>
+                                <button class="btn btn-success float-right" @click="addFirstStep"><i class="fas fa-plus"></i> Adicionar Primeiro Passo</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-success text-center bg-transparent">
+                        <div class="card-content d-flex">
+                            <div class="card-body">
+                                <p>
+                                    <i class="fas fa-filter fa-3x text-success"></i>
+                                </p>
+                                <h4>Funil de Remarketing</h4>
+                                <action-button @on-add-action="addFirstAction">Adicionar primeira Ação</action-button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-0" v-if="showCrudStep || steps.length > 0">
-                    <transition enter-active-class="animate__animated animate__fadeIn animate__faster" leave-active-class="animate__animated animate__fadeOut animate__faster" mode="out-in" apper>
-                        <vs-tabs v-if="!showCrudStep" key="tabs" v-model="currentStepIndex">
-                            <vs-tab v-for="step in OrderedSteps" :key="step.funnel_step_sequence" :label="step.funnel_step_description" icon-pack="fas" icon="fa-angle-right" class="p-0">
-                                <step-component :step="step" />
-                            </vs-tab>
-                            <vs-tab label="Novo Passo" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
-                            </vs-tab>
-                        </vs-tabs>
-                        <new-step-component v-else key="crud" class="mt-1"/>
-                    </transition>
+                <div class="card-body p-0" v-else key="has_steps">
+                    <template v-if="isSalesFunnel">
+                        <transition enter-active-class="animate__animated animate__fadeIn animate__faster" leave-active-class="animate__animated animate__fadeOut animate__faster" mode="out-in" apper>
+                            <vs-tabs v-if="!showCrudStep" key="tabs" v-model="currentStepIndex">
+                                <vs-tab v-for="step in OrderedSteps" :key="step.funnel_step_sequence" :label="GetPostbackEventTypeById(step.postback_event_type_id).postback_event_type" icon-pack="fas" icon="fa-angle-right" class="p-0">
+                                    <step-component :step="step" />
+                                </vs-tab>
+                                <vs-tab label="Novo Passo" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
+                                </vs-tab>
+                            </vs-tabs>
+                            <new-step-component v-else key="crud" class="mt-1"/>
+                        </transition>
+                    </template>
+                    <template v-else>
+                        <transition enter-active-class="animate__animated animate__fadeIn animate__faster" leave-active-class="animate__animated animate__fadeOut animate__faster" mode="out-in" apper>
+                            <new-step-component :initial-action="firstAction" key="crud" class="mt-1" />
+                        </transition>
+                    </template>
+
                 </div>
+                </transition>
             </div>
-            <nav class="navbar navbar-expand-lg fixed-bottom p-0 mt-1" v-if="!showCrudStep">
+            <transition enter-active-class="animate__animated animate__fadeIn animate__faster" leave-active-class="animate__animated animate__fadeOut animate__faster">
+            <nav class="navbar navbar-expand-lg fixed-bottom p-0 mt-1" v-if="!showCrudStep || (!isSalesFunnel &&  !showCrudAction)">
                 <div class="ml-auto">
                     <button type="button" @click="saveFunnel" class="btn btn-primary waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="Salvar">
                         <i class="fa fa-check"></i>
@@ -71,6 +97,7 @@
                     </button>
                 </div>
             </nav>
+            </transition>
         </div>
     </transition>
 </template>
@@ -80,13 +107,15 @@ import Select2 from 'v-select2-component';
 import NewStepComponent from '../../step/components/NewStepComponent'
 import StepComponent from '../../step/components/StepComponent'
 import { mapGetters, mapState, mapActions } from 'vuex'
+import ActionButton from '../../actionButton/components/ActionButton'
 
 export default {
     data() {
         return {
-           currentStepIndex: 0,
-           isEditing: false,
-           response: {},
+            firstAction: null,
+            //currentStepIndex: 0,
+            isEditing: false,
+            response: {},
         }
     },
     props: {
@@ -96,34 +125,34 @@ export default {
         }
     },
     components: {
-        Select2, NewStepComponent, StepComponent
+        Select2, NewStepComponent, StepComponent, ActionButton
     },
-    watch: {
+    /* watch: {
         currentStepIndex: function(value) {
             this.ActionSetCurrentStep(value)
         }
-    },
+    }, */
     computed: {
         ...mapGetters('funnel', [
-            'GetProductsForSelect', 'GetTagsForSelect', 'GetNewTagsForSelect', 'OrderedSteps', 'GetProductById', 'GetTagById',
+            'GetLeadStatusesForSelect', 'OrderedSteps', 'GetPostbackEventTypeById'
         ]),
         ...mapState('funnel', [
-            'showCrudStep', 'steps', 'products', 'tag', 'product', 'active', 'httpErrors', 'isLoading'
+            'showCrudStep', 'currentStep', 'showCrudAction', 'steps', 'description', 'isSalesFunnel', 'active', 'httpErrors', 'isLoading'
         ]),
-        funnelTag: {
+        currentStepIndex: {
             get() {
-                return this.tag
+                return this.currentStep ?? 0
             },
             set(value) {
-                this.ActionSetTag(value)
+                this.ActionSetCurrentStep(value)
             }
         },
-        funnelProduct: {
+        funnelDescription: {
             get() {
-                return this.product
+                return this.description
             },
             set(value) {
-                this.ActionSetProduct(value)
+                this.ActionSetDescription(value)
             }
         },
         funnelActive: {
@@ -142,14 +171,8 @@ export default {
                 this.ActionSetIsLoading(value)
             }
         },
-        disableTags() {
-            return this.product == null
-        },
-        productName() {
-            return this.product && this.GetProductById(this.product).product_name
-        },
-        tagName() {
-            return this.tag && this.GetTagById(this.tag).tag_name
+        LeadStatusName() {
+            return this.leadStatusId && this.GetLeadStatusById(this.leadStatusId).status
         }
     },
     async mounted() {
@@ -157,24 +180,50 @@ export default {
         if (this.funnelId) {
             this.isEditing = true
             await this.ActionLoadFunnel({ vm: this, id: this.funnelId })
+            if (!this.isSalesFunnel) {
+                this.currentStepIndex = 0
+                this.ActionLoadStep()
+                    .then(() => {
+                        this.ActionIsEditingStep(true)
+                        this.ActionSetShowCrudStep(true)
+                    })
+            }
+        } else {
+            this.loading = false
         }
-        this.loading = false
     },
     created() {
         this.loading = true
     },
     methods: {
         ...mapActions('funnel', [
-            'ActionSetShowCrudStep', 'ActionGetProducts', 'ActionGetTags', 'ActionClearState',
-            'ActionSetTag', 'ActionSetProduct', 'ActionSaveFunnel', 'ActionGetActionTypes',
+            'ActionSetShowCrudStep', 'ActionClearState', 'ActionSetDescription',
+            'ActionSaveFunnel', 'ActionGetActionTypes', 'ActionSetIsSalesFunnel',
             'ActionLoadFunnel', 'ActionSetActive', 'ActionSetCurrentStep', 'ActionSetHttpErrors',
-            'ActionSetIsLoading'
+            'ActionSetIsLoading', 'ActionGetPostbackEventTypes', 'ActionAddNewStep', 'ActionIsEditingStep'
+        ]),
+        ...mapActions('step', [
+            'ActionLoadStep'
         ]),
         ...mapActions('variables', [
             'ActionGetVariablesFromApi'
         ]),
         addNewStep() {
             this.ActionSetShowCrudStep(true)
+        },
+        addFirstStep() {
+            this.ActionSetIsSalesFunnel(true)
+            this.ActionSetShowCrudStep(true)
+        },
+        addFirstAction(actionId) {
+            this.firstAction = actionId
+            this.ActionSetIsSalesFunnel(false)
+            this.ActionAddNewStep({actions: []})
+            this.ActionLoadStep()
+                .then(() => {
+                    this.ActionIsEditingStep(true)
+                    this.ActionSetShowCrudStep(true)
+                })
         },
         cancelFunnel() {
             this.$swal.fire({
@@ -204,7 +253,7 @@ export default {
                                 icon: 'success',
                                 confirmButtonText: 'Ok',
                                 padding: '2em'
-                            }) //.then(() => window.location =  res.data.redirect)
+                            }).then(() => window.location =  res.data.redirect)
                         }
                     })
                     .catch(err => {
@@ -234,26 +283,48 @@ export default {
         },
         async loadData() {
             try {
-                await this.ActionGetProducts({ vm: this })
-                await this.ActionGetTags({ vm: this })
                 await this.ActionGetVariablesFromApi({ vm: this })
                 await this.ActionGetActionTypes({ vm: this })
+                await this.ActionGetPostbackEventTypes({ vm: this })
             } catch (err) {
                 console.log(err)
             }
         },
         validateSteps() {
             if (this.steps.length < 1) {
-                this.$swal.fire({
-                        title: 'Nenhum passo adicionado!',
-                        text: `Antes de salvar o Funil deve ter ao menos 1 passo.`,
-                        icon: 'info',
-                        heightAuto: false,
-                        showCancelButton: false,
-                        confirmButtonText: 'Ok',
-                    })
-                return false
+                if (this.isSalesFunnel) {
+                    this.$swal.fire({
+                            title: 'Nenhum passo adicionado!',
+                            text: `Antes de salvar o Funil deve ter ao menos 1 passo.`,
+                            icon: 'info',
+                            heightAuto: false,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                        })
+                    return false
+                } else {
+                    this.$swal.fire({
+                            title: 'Nenhuma ação adicionada!',
+                            text: `Antes de salvar o Funil deve ter ao menos 1 ação.`,
+                            icon: 'info',
+                            heightAuto: false,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                        })
+                    return false
+                }
             } else {
+                if (!this.description) {
+                    this.$swal.fire({
+                            title: 'Descrição não informada',
+                            text: `Informe uma descrição antes de salvar o Funil.`,
+                            icon: 'info',
+                            heightAuto: false,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                        })
+                    return false
+                }
                 return true
             }
         }

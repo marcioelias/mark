@@ -1,7 +1,7 @@
 @extends('layouts.crud.vue', [
     'title' => 'Novo Funil',
-    'route' => route('tag.store'),
-    'redirect' => route('tag.index')
+    'route' => route('funnel.store'),
+    'redirect' => route('funnel.index')
 ])
 
 @section('vue-component')

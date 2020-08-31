@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PlataformSeeder::class);
         $this->call(VariablesTableSeeder::class);
         $this->call(ActionTypesTableSeeder::class);
-        $this->call(LeadStatusesTableSeeder::class);
         $this->call(PostbackEventTypesTableSeeder::class);
         $this->call(PaymentTypesTableSeeder::class);
 

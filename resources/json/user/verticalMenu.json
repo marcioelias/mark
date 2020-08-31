@@ -20,44 +20,34 @@
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {
-                    "url": "tag.index",
-                    "name": "Tags",
-                    "activeUrls": ["tag", "tag/create", "tag/{tag}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "funnel.index",
-                    "name": "Funnels",
-                    "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"],
+                    "url": "lead_status.index",
+                    "name": "Status",
+                    "activeUrls": ["lead_status", "lead_status/create", "lead_status/{lead_status}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]
         },
         {
-            "url": "lead.index",
-            "name": "Leads",
-            "slug": "leads",
-            "badge": "",
-            "badgeClass": "badge badge-warning badge-pill float-right",
-            "icon": "feather icon-dollar-sign",
-            "activeUrls": ["lead", "lead/{lead}/show"]
+            "url": "funnel.index",
+            "name": "Funnels",
+            "icon": "feather icon-zap",
+            "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"],
+            "i18n": "nav.sk_layout_2_columns"
         },
         {
             "url": "",
-            "name": "Whatsapp 2.0",
-            "icon": "fab fa-whatsapp",
+            "name": "Leads",
+            "icon": "feather icon-zap",
             "submenu": [
                 {
-                    "url": "whatsapp_template.index",
-                    "name": "Message Models",
-                    "activeUrls": ["whatsapp_template", "whatsapp_template/create", "whatsapp_template/{whatsappTemplate}/edit"],
+                    "url": "lead.index",
+                    "name": "Leads",
+                    "activeUrls": ["lead", "lead/{lead}/show"],
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {
-                    "url": "postback.index",
-                    "name": "Send Whatsapp",
-                    "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
+                    "url": "",
+                    "name": "Marketing Actions"
                 }
             ]
         },
@@ -83,12 +73,6 @@
                     "url": "plataform_config.index",
                     "name": "Plataforms",
                     "activeUrls": ["plataform_config", "plataform_config/create", "plataform_config/{plataformConfig}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "tag_rule.index",
-                    "name": "Rules",
-                    "activeUrls": ["tag_rule", "tag_rule/create", "tag_rule/{tagRule}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]

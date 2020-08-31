@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LeadStatus;
+use App\Models\User\LeadStatus;
 use Illuminate\Http\Request;
 
 class LeadStatusController extends Controller
@@ -81,5 +81,9 @@ class LeadStatusController extends Controller
     public function destroy(LeadStatus $leadStatus)
     {
         //
+    }
+
+    public function getLeadStatusesJson() {
+        return response()->json(LeadStatus::orderBy('status', 'ASC')->get());
     }
 }

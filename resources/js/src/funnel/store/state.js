@@ -1,16 +1,16 @@
 export default {
     isEditing: false,
     funnelId: null,
+    description: '',
+    isSalesFunnel: true,
     actionTypes: [],
-    products: [],
     steps: [],
-    tags: [],
-    product: null,
-    tag: null,
     active: true,
     showCrudStep: false,
+    showCrudAction: false,
     currentStep: 0,
     isEditingStep: false,
     httpErrors: [],
-    isLoading: false
+    isLoading: false,
+    postbackEventTypes: [],
 }

@@ -13,7 +13,7 @@ class Product extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'plataform_config_id', 'plataform_code', 'product_name', 'product_price', 'active'
+        'user_id', 'plataform_config_id', 'plataform_code', 'product_name', 'product_price', 'funnel_id', 'active'
     ];
 
     public function scopeActive($query) {
@@ -28,7 +28,7 @@ class Product extends Model
         return $this->belongsTo(PlataformConfig::class);
     }
 
-    public function tag() {
-        return $this->belongsTo(Tag::class);
+    public function funnel() {
+        return $this->belongsTo(Funnel::class);
     }
 }
