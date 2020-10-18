@@ -2018,11 +2018,6 @@ pre code {
   opacity: 1;
 }
 
-.form-control::-ms-input-placeholder {
-  color: rgba(0, 0, 0, 0.5);
-  opacity: 1;
-}
-
 .form-control::placeholder {
   color: rgba(0, 0, 0, 0.5);
   opacity: 1;

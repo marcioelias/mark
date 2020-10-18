@@ -109,10 +109,6 @@ body.dark-layout .header-navbar .navbar-container .nav .nav-item.nav-search .sea
   color: #c2c6dc;
 }
 
-body.dark-layout .header-navbar .navbar-container .nav .nav-item.nav-search .search-input.open .input::-ms-input-placeholder {
-  color: #c2c6dc;
-}
-
 body.dark-layout .header-navbar .navbar-container .nav .nav-item.nav-search .search-input.open .input,
 body.dark-layout .header-navbar .navbar-container .nav .nav-item.nav-search .search-input.open .input::placeholder,
 body.dark-layout .header-navbar .navbar-container .nav .nav-item.nav-search .search-input.open .search-input-close {
@@ -906,10 +902,6 @@ body.dark-layout input.form-control:-ms-input-placeholder, body.dark-layout .cus
   color: #c2c6dc;
 }
 
-body.dark-layout input.form-control::-ms-input-placeholder, body.dark-layout .custom-file-label::-ms-input-placeholder, body.dark-layout textarea.form-control::-ms-input-placeholder {
-  color: #c2c6dc;
-}
-
 body.dark-layout input.form-control::placeholder,
 body.dark-layout .custom-file-label::placeholder,
 body.dark-layout textarea.form-control::placeholder {
@@ -1404,10 +1396,6 @@ body.dark-layout .aggrid .ag-popup .ag-menu .ag-filter-filter:-ms-input-placehol
   color: #c2c6dc;
 }
 
-body.dark-layout .aggrid .ag-popup .ag-menu .ag-filter-filter::-ms-input-placeholder, body.dark-layout .aggrid .ag-popup .ag-menu .ag-filter-select::-ms-input-placeholder, body.dark-layout .ag-header .ag-popup .ag-menu .ag-filter-filter::-ms-input-placeholder, body.dark-layout .ag-header .ag-popup .ag-menu .ag-filter-select::-ms-input-placeholder {
-  color: #c2c6dc;
-}
-
 body.dark-layout .aggrid .ag-popup .ag-menu .ag-filter-filter::placeholder,
 body.dark-layout .aggrid .ag-popup .ag-menu .ag-filter-select::placeholder,
 body.dark-layout .ag-header .ag-popup .ag-menu .ag-filter-filter::placeholder,
@@ -1624,10 +1612,6 @@ body.dark-layout.email-application .app-content .content-area-wrapper .app-fixed
 }
 
 body.dark-layout.email-application .app-content .content-area-wrapper .app-fixed-search .form-control:-ms-input-placeholder {
-  color: #c2c6dc;
-}
-
-body.dark-layout.email-application .app-content .content-area-wrapper .app-fixed-search .form-control::-ms-input-placeholder {
   color: #c2c6dc;
 }
 

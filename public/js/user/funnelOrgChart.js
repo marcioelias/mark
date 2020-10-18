@@ -34908,7 +34908,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use({
   install: function install(Vue) {
     Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_1___default.a.create({
-      baseURL: "https://mark2.dev.test",
+      baseURL: "https://convertall.com.br",
       //'http://ec2-18-221-128-147.us-east-2.compute.amazonaws.com/',
       headers: {
         common: {

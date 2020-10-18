@@ -61163,7 +61163,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VEmojiPicker", function() { return VEmojiPicker$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VEmojiPicker", function() { return __vue_component__$6; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "categoriesDefault", function() { return categoriesDefault; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emojisDefault", function() { return emojisDefault; });
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-property-decorator */ "./node_modules/vue-property-decorator/lib/vue-property-decorator.js");
@@ -61186,7 +61186,7 @@ PERFORMANCE OF THIS SOFTWARE.
 var extendStatics = function(d, b) {
     extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
     return extendStatics(d, b);
 };
 
@@ -63594,13 +63594,14 @@ var __vue_staticRenderFns__$6 = [];
   );var defaultOptions = {
     i18n: {}
 };
-var VEmojiPicker$1 = {
+var plugin = {
+    VEmojiPicker: __vue_component__$6,
     install: function (Vue, opts) {
         if (opts === void 0) { opts = defaultOptions; }
         locale.i18n(opts.i18n);
         Vue.component(__vue_component__$6.name, __vue_component__$6);
     }
-};/* harmony default export */ __webpack_exports__["default"] = (__vue_component__$6);
+};/* harmony default export */ __webpack_exports__["default"] = (plugin);
 
 /***/ }),
 
@@ -66209,7 +66210,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Mixins", function() { return vue_class_component__WEBPACK_IMPORTED_MODULE_1__["mixins"]; });
 
-/** vue-property-decorator verson 9.0.0 MIT LICENSE copyright 2020 kaorun343 */
+/** vue-property-decorator verson 9.0.2 MIT LICENSE copyright 2020 kaorun343 */
 /// <reference types='reflect-metadata'/>
 
 
@@ -66261,7 +66262,7 @@ function produceProvide(original) {
         var rv = typeof original === 'function' ? original.call(this) : original;
         rv = Object.create(rv || null);
         // set reactive services (propagates previous services if necessary)
-        rv[reactiveInjectKey] = this[reactiveInjectKey] || {};
+        rv[reactiveInjectKey] = Object.create(this[reactiveInjectKey] || {});
         for (var i in provide.managed) {
             rv[provide.managed[i]] = this[i];
         }
@@ -66286,6 +66287,16 @@ function needToProduceProvide(original) {
     return (typeof original !== 'function' ||
         (!original.managed && !original.managedReactive));
 }
+function inheritInjected(componentOptions) {
+    // inject parent reactive services (if any)
+    if (!Array.isArray(componentOptions.inject)) {
+        componentOptions.inject = componentOptions.inject || {};
+        componentOptions.inject[reactiveInjectKey] = {
+            from: reactiveInjectKey,
+            default: {},
+        };
+    }
+}
 /**
  * decorator of a provide
  * @param key key
@@ -66294,6 +66305,7 @@ function needToProduceProvide(original) {
 function Provide(key) {
     return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
         var provide = componentOptions.provide;
+        inheritInjected(componentOptions);
         if (needToProduceProvide(provide)) {
             provide = componentOptions.provide = produceProvide(provide);
         }
@@ -66308,14 +66320,7 @@ function Provide(key) {
 function ProvideReactive(key) {
     return Object(vue_class_component__WEBPACK_IMPORTED_MODULE_1__["createDecorator"])(function (componentOptions, k) {
         var provide = componentOptions.provide;
-        // inject parent reactive services (if any)
-        if (!Array.isArray(componentOptions.inject)) {
-            componentOptions.inject = componentOptions.inject || {};
-            componentOptions.inject[reactiveInjectKey] = {
-                from: reactiveInjectKey,
-                default: {},
-            };
-        }
+        inheritInjected(componentOptions);
         if (needToProduceProvide(provide)) {
             provide = componentOptions.provide = produceProvide(provide);
         }
@@ -66449,15 +66454,8 @@ function Emit(event) {
                     }
                 }
                 else {
-                    if (args.length === 0) {
-                        _this.$emit(emitName, returnValue);
-                    }
-                    else if (args.length === 1) {
-                        _this.$emit(emitName, returnValue, args[0]);
-                    }
-                    else {
-                        _this.$emit.apply(_this, [emitName, returnValue].concat(args));
-                    }
+                    args.unshift(returnValue);
+                    _this.$emit.apply(_this, [emitName].concat(args));
                 }
             };
             var returnValue = original.apply(this, args);
@@ -96917,7 +96915,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use({
   install: function install(Vue) {
     Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_1___default.a.create({
-      baseURL: "https://mark2.dev.test",
+      baseURL: "https://convertall.com.br",
       //'http://ec2-18-221-128-147.us-east-2.compute.amazonaws.com/',
       headers: {
         common: {

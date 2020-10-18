@@ -205,10 +205,6 @@
   font-size: 0.95rem;
 }
 
-.ecommerce-application .search-product::-ms-input-placeholder {
-  font-size: 0.95rem;
-}
-
 .ecommerce-application .search-product::placeholder {
   font-size: 0.95rem;
 }

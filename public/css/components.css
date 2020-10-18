@@ -866,8 +866,7 @@ body.fixed-footer footer.footer-dark {
   width: 100%;
   pointer-events: none;
   margin-top: -1.3rem;
-  -webkit-filter: blur(5px);
-          filter: blur(5px);
+  filter: blur(5px);
   background: linear-gradient(#fff 41%, rgba(255, 255, 255, 0.11) 95%, rgba(255, 255, 255, 0));
 }
 
