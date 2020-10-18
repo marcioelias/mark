@@ -46,8 +46,6 @@ export const ActionDelAction = ({ commit, state }, payload) => {
 
 export const ActionLoadStep = ({ commit, rootState}) => {
     return new Promise((resolve, _) => {
-        console.log('passou aqui')
-        console.log(rootState.funnel.steps[rootState.funnel.currentStep])
         commit(types.LOAD_STATE, rootState.funnel.steps[rootState.funnel.currentStep])
         resolve()
     })

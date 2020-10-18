@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\PostbackEventType;
 use App\Events\NewLeadCreated;
+use App\Events\OnLeadCreated;
 use App\Integrations\IntegrationFactory;
+use App\Models\User\Lead;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Postback;
+use App\Providers\OnLeadUpdated;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,14 +38,28 @@ class WebhookCallController extends Controller
 
             DB::commit();
 
+            $this->dispatchEvents($postback);
+
             /* dispatch event for process tag rules */
-            event(new NewLeadCreated($lead));
+            //event(new NewLeadCreated($lead));
 
             return $this->handleTransactionOk($postback);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->handleException($e);
+        }
+    }
+
+    private function dispatchEvents(Postback $postback) {
+        switch ($postback->postback_event_type_id) {
+            case PostbackEventType::BILLET_PRINTED:
+                event(new OnLeadCreated($postback));
+                break;
+
+            default:
+                event(new OnLeadUpdated($postback));
+                break;
         }
     }
 

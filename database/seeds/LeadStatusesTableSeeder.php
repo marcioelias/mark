@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\LeadStatus;
+use App\Constants\DefaultLeadStatuses;
+use App\Models\User\LeadStatus;
 use Illuminate\Database\Seeder;
 
 class LeadStatusesTableSeeder extends Seeder
@@ -13,9 +14,18 @@ class LeadStatusesTableSeeder extends Seeder
     public function run()
     {
         $leadStatuses = [
-            ['status' => 'Ativo'],
-            ['status' => 'Remarketing'],
-            ['status' => 'Inativo'],
+            [
+                'id' => DefaultLeadStatuses::ACTIVE,
+                'status' => 'Ativo'
+            ],
+            [
+                'id' => DefaultLeadStatuses::REMARKETING,
+                'status' => 'Remarketing'
+            ],
+            [
+                'id' => DefaultLeadStatuses::INACTIVE,
+                'status' => 'Inativo'
+            ]
         ];
 
         foreach($leadStatuses as $leadStatus) {

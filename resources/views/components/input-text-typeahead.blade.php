@@ -12,7 +12,7 @@
     @if(isset($label))
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
-    @endif  
+    @endif
 
     <div class="typeahead__container">
         <div class="typeahead__field">
@@ -30,7 +30,7 @@
                     <span class="typeahead__search-icon"></span>
                 </button>
             </span>
-    
+
         </div>
     </div>
     @if ($errors->has($field))

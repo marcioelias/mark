@@ -13,7 +13,7 @@
     @if(isset($label))
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
-    @endif  
+    @endif
 
     <div class="input-group">
         <div id="{{$field}}" class="btn-group btn-group-toggle" data-toggle="buttons" >

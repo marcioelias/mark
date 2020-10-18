@@ -3,14 +3,15 @@
 namespace App\Models\User;
 
 use App\Traits\MultiTenantable;
+use App\Traits\VisibleRecords;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Postback extends Model
 {
-    use MultiTenantable;
+    use MultiTenantable, VisibleRecords;
 
     protected $fillable = [
-        'user_id', 'product_id', 'customer_id', 'lead_id', 'transaction_code', 'payload', 'user_custom_mapping', 'postback_event_type_id'
+        'user_id', 'product_id', 'customer_id', 'lead_id', 'transaction_code', 'payload', 'user_custom_mapping', 'postback_event_type_id', 'visible'
     ];
 
     public function user() {

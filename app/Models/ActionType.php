@@ -10,4 +10,8 @@ class ActionType extends Model
         'action_type_name',
         'action_type_description'
     ];
+
+    public function feature() {
+        return $this->hasOne(Feature::class);
+    }
 }

@@ -10,7 +10,7 @@
         </div>
         <div class="card mb-0">
             <div class="card-header bg-primary text-white pl-1 d-flex justify-content-between align-items-center" style="padding: .5rem" v-if="actionComponent === actionComponentTypes.ACTIONS_TABLE">
-                <div>Ações</div>
+                Ações
                 <action-button @on-add-action="doOnAddActionClick">Nova Ação</action-button>
             </div>
             <div class="card-body p-0">
@@ -40,6 +40,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import ActionsTable from '../../action/components/ActionsTable'
 import NewSmsAction from '../../action/components/NewSmsAction'
 import NewEmailAction from '../../action/components/NewEmailAction'
+import NewWhatsappAction from '../../action/components/NewWhatsappAction'
 import ActionButton from '../../actionButton/components/ActionButton'
 import * as componentTypes from '../../action/component-types'
 import { ACTION } from '../../../user/constants'
@@ -64,7 +65,7 @@ export default {
         }
     },
     components: {
-        Select2, ActionsTable, NewSmsAction, NewEmailAction, ActionButton
+        Select2, ActionsTable, NewSmsAction, NewEmailAction, NewWhatsappAction, ActionButton
     },
     computed: {
         ...mapState('step', [

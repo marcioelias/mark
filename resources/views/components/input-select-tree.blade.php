@@ -29,9 +29,9 @@
     @if(isset($label))
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
-    @endif  
+    @endif
     <select class="form-control selectpicker {{$css}}" {{ $liveSearch ? 'data-live-search=true' : '' }} id="{{$id}}" name="{{$name}}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}>
-        @if(isset($options)) 
+        @if(isset($options))
         @foreach($options as $option)
             {!! $option !!}
         @endforeach

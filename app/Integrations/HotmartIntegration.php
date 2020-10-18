@@ -26,24 +26,28 @@ class HotmartIntegration extends Integration {
 
     public function getMappedEventType() {
         switch ($this->eventType) {
-            case 'billet_printed':
-                return PostbackEventType::IMPRESSAO_BOLETO;
-                break;
-
-            case 'wayting_payment':
-                return PostbackEventType::IMPRESSAO_BOLETO;
-                break;
-
             case 'approved':
-                return PostbackEventType::COMPRA_FINALIZADA;
+                return PostbackEventType::APPROVED;
                 break;
 
             case 'canceled':
-                return PostbackEventType::COMPRA_CANCELADA;
+                return PostbackEventType::CANCELED;
                 break;
 
-            case 'completed':
-                return PostbackEventType::COMPRA_FINALIZADA;
+            case 'billet_printed':
+                return PostbackEventType::BILLET_PRINTED;
+                break;
+
+            case 'refunded':
+                return PostbackEventType::REFUNDED;
+                break;
+
+            case 'dispute':
+                return PostbackEventType::DISPUTE;
+                break;
+
+            case 'wayting_payment':
+                return PostbackEventType::WAITING_PAYMENT;
                 break;
         }
     }

@@ -67,7 +67,7 @@ mix.copy('node_modules/animate.css/animate.min.css', 'public/css');
 mix.copy('node_modules/select2/dist/js/select2.full.min.js', 'public/js/scripts');
 mix.copy('node_modules/jquery-mask-plugin/dist/jquery.mask.min.js', 'public/js/scripts');
 mix.copy('node_modules/apexcharts/dist/apexcharts.min.js', 'public/vendors/js/charts');
-mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts');
+//mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts');
 mix.copy('node_modules/quill/dist/quill.bubble.css', 'public/css');
 mix.copy('node_modules/quill/dist/quill.snow.css', 'public/css');
 
@@ -76,6 +76,7 @@ mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .js('resources/js/core/app.js', 'public/js/core')
   .js('resources/js/user/funnel.js', 'public/js/user')
   .js('resources/js/user/funnelShow.js', 'public/js/user')
+  .js('resources/js/user/funnelOrgChart.js', 'public/js/user')
   .js('node_modules/insert-text-at-cursor', 'public/js')
   .sass('resources/sass/bootstrap.scss', 'public/css')
   .sass('resources/sass/bootstrap-extended.scss', 'public/css')
@@ -83,6 +84,7 @@ mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .sass('resources/sass/components.scss', 'public/css')
   .sass('resources/sass/custom-rtl.scss', 'public/css')
   .sass('resources/sass/custom-laravel.scss', 'public/css')
+  .sass('resources/sass/organogram.scss', 'public/css')
   .sass('resources/sass/custom.scss', 'public/css');
 
 mix.then(() => {

@@ -17,8 +17,8 @@
     @if(isset($label))
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
-    @endif  
-    
+    @endif
+
     <div class="form-group">
         <div class="input-group date" id="{{$id}}_picker" data-target-input="nearest">
             <input type="text" class="form-control {{$css}}" name="{{$name}}" id="{{$id}}" value="{{ isset($inputValue) ? $inputValue : old($field) }}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}>
@@ -49,12 +49,12 @@ $(function () {
 
         });
         $('#{{$id}}_picker').val('{{ isset($inputValue) ? $inputValue : old($field) }}');
-        @if($picker_begin == $id) 
+        @if($picker_begin == $id)
             $("#{{$picker_begin}}_picker").on("dp.change", function (e) {
                 $('#{{$picker_end}}_picker').data("DateTimePicker").minDate(e.date);
             });
         @endif
-        @if($picker_end == $id) 
+        @if($picker_end == $id)
             $("#{{$picker_end}}_picker").on("dp.change", function (e) {
                 $('#{{$picker_begin}}_picker').data("DateTimePicker").maxDate(e.date);
             });

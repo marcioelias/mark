@@ -8,12 +8,13 @@ return [
      * Avaiables: ['sms_mobile']
      */
 
-    'default' => env('SMS_GATAWEY_DRIVER', 'sms_mobile'),
+    'default' => env('SMS_GATEWAY_DRIVER', 'sms_mobile'),
 
     'drivers' => [
         'sms_mobile' => [
-            'key' =>  env('SMS_GATAWEY_KEY', ''),
-            'url' => env('SMS_GATAWEY_URL', '')
+            'service' => env('SMS_GATEWAY_SERVICE', ''),
+            'key' =>  env('SMS_GATEWAY_KEY', ''),
+            'url' => env('SMS_GATEWAY_URL', '')
         ]
     ]
 ];

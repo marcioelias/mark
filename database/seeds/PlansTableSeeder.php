@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Feature;
 use App\Models\Plan;
 use Illuminate\Database\Seeder;
 
@@ -12,13 +13,19 @@ class PlansTableSeeder extends Seeder
      */
     public function run()
     {
-        Plan::create([
+        $plan = new Plan([
             'marketplace_code' => 'd166bc9efec4b99953fa17aa5912d648',
             'plan_name' => 'Plano 1000',
-            'num_postbacks' => 1000,
+            'plan_cycle_days' => 30,
             'plan_value' => 129.90,
-            'created_at' => now()
         ]);
-        factory(Plan::class, 5)->create();
+        $plan->save();
+
+        foreach (Feature::all() as $feature) {
+            $plan->features()->attach($feature->id, ['enabled' => true, 'limit' => 1000]);
+        }
+
+
+        //factory(Plan::class, 5)->create();
     }
 }

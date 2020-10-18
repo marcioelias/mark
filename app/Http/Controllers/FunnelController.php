@@ -122,7 +122,7 @@ class FunnelController extends Controller
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
                 foreach ($request->steps as $step) {
                     $newStep = new FunnelStep([
-                        //'funnel_step_sequence' => $step['funnel_step_sequence'],
+                        'funnel_step_sequence' => $step['funnel_step_sequence'],
                         'postback_event_type_id' => $step['postback_event_type_id'],
                     ]);
                     try {
@@ -205,8 +205,57 @@ class FunnelController extends Controller
             ]
         ];
 
+        $res = [
+            'id' => $funnel->id,
+            //'name' => 'Funil',
+            'description' => $funnel->funnel_description,
+        ];
+
+        foreach ($funnel->steps as $step) {
+            $stepRes = [
+                'id' => $step->id,
+                //'name' => 'Passo',
+                'description' => $step->postbackEventType->postback_event_type
+            ];
+            foreach ($step->actions as $action) {
+                $stepRes['children'][] = [
+                    'id' => $action->id,
+                    //'name' => 'Ação',
+                    'description' => $action->action_description
+                ];
+            }
+            $res['children'][] = $stepRes;
+        }
+
+        //return response()->json($res);
+
         return $this->getView('user.funnels.show')
-                    ->withFunnel($funnel->load(['lead_statuses', 'steps.actions']));
+                    ->withFunnel($funnel->load(['steps.actions']));
+    }
+
+    public function showJson(Funnel $funnel) {
+        $res = [
+            'id' => $funnel->id,
+            //'name' => 'Funil',
+            'description' => $funnel->funnel_description,
+        ];
+        foreach ($funnel->steps as $step) {
+            $stepRes = [
+                'id' => $step->id,
+                //'name' => 'Passo',
+                'description' => $step->postbackEventType->postback_event_type
+            ];
+            foreach ($step->actions as $action) {
+                $stepRes['children'][] = [
+                    'id' => $action->id,
+                    //'name' => 'Ação',
+                    'description' => $action->action_description
+                ];
+            }
+            $res['children'][] = $stepRes;
+        }
+
+        return response()->json($res);
     }
 
     /**

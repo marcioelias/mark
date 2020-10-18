@@ -2,7 +2,7 @@
     'captions' => $fields,
     'rows' => $products,
     'model' => 'product',
-    'tableTitle' => 'Products',
+    'tableTitle' => 'Produtos',
     'displayField' => 'product_name',
     'actions' => ['edit', 'destroy'],
     'orderData' => $orderData ?? false

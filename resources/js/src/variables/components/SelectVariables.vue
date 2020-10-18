@@ -30,7 +30,7 @@ export default {
             'ActionGetVariablesFromApi'
         ]),
         insertVariable(value) {
-            insertTextAtCursor(this.$parent.$refs['sms_body'], value)
+            insertTextAtCursor(this.$parent.$refs[this.component], value)
         }
     },
     mounted() {

@@ -19,7 +19,6 @@ class ProductController extends Controller
     public function fields() {
         return array(
             'product_name' => 'Produto',
-            'funnel_description' => 'Funil de vendas',
             'plataform_name' => 'Plataforma',
             'product_price' => 'Preço',
             'active' => ['label' => 'Ativo', 'type' => 'bool']
@@ -48,19 +47,17 @@ class ProductController extends Controller
         ]);
 
         if ($request->searchField) {
-            $products = Product::select(['products.*', 'plataforms.plataform_name', 'funnels.funnel_description'])
+            $products = Product::select(['products.*', 'plataforms.plataform_name'])
                             ->join('plataform_configs', 'plataform_configs.id', 'products.plataform_config_id')
                             ->join('plataforms', 'plataforms.id', 'plataform_configs.plataform_id')
-                            ->join('funnels', 'products.funnel_id', 'funnels.id')
                             ->where('product_name', 'like', "%$request->searchField%")
                             ->orWhere('plataform_name', 'like', "%$request->searchField%")
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         } else {
-            $products = Product::select(['products.*', 'plataforms.plataform_name', 'funnels.funnel_description'])
+            $products = Product::select(['products.*', 'plataforms.plataform_name'])
                             ->join('plataform_configs', 'plataform_configs.id', 'products.plataform_config_id')
                             ->join('plataforms', 'plataforms.id', 'plataform_configs.plataform_id')
-                            ->join('funnels', 'products.funnel_id', 'funnels.id')
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         }
@@ -95,9 +92,10 @@ class ProductController extends Controller
                                 ->orderBy('plataforms.plataform_name')
                                 ->get();
 
-        $funnels = Funnel::where('is_sales_funnel', true)
-                        ->orderBy('funnel_description', 'ASC')
-                        ->get();
+        $funnels = Funnel::SalesFunnel()
+                    ->Active()
+                    ->orderBy('funnel_description', 'asc')
+                    ->get();
 
         return $this->getView('user.products.create')
                     ->withPlataforms($plataforms)
@@ -119,7 +117,7 @@ class ProductController extends Controller
             'product_price' => 'required|min:0',
             'plataform_config_id' => 'required',
             'plataform_code' => "required|unique:products,plataform_code,NULL,NULL,user_id,$userId,plataform_config_id,$request->plataform_config_id",
-            'funnel_id' => "required"
+            'funnel_id' => 'required'
         ]);
 
         $product = new Product($request->all());
@@ -159,14 +157,15 @@ class ProductController extends Controller
                                 ->orderBy('plataforms.plataform_name')
                                 ->get();
 
-        $funnels = Funnel::where('is_sales_funnel', true)
-                        ->orderBy('funnel_description', 'ASC')
-                        ->get();
+        $funnels = Funnel::SalesFunnel()
+                    ->Active()
+                    ->orderBy('funnel_description', 'asc')
+                    ->get();
 
         return $this->getView('user.products.edit')
+                    ->withFunnels($funnels)
                     ->withProduct($product)
-                    ->withPlataforms($plataforms)
-                    ->withFunnels($funnels);
+                    ->withPlataforms($plataforms);
     }
 
     /**
@@ -185,7 +184,7 @@ class ProductController extends Controller
             'product_price' => 'required|min:0',
             'plataform_config_id' => 'required',
             'plataform_code' => "required|unique:products,plataform_code,$product->id,id,user_id,$userId,plataform_config_id,$request->plataform_config_id",
-            'funnel_id' => "required"
+            'funnel_id' => 'required'
         ]);
 
         $product->fill($request->all());

@@ -44,7 +44,6 @@ class QueueNotifications extends Command
     {
         $schedules = Schedule::runnable()->notQueued()->pending()->get();
         foreach($schedules as $schedule) {
-            //Log::debug($schedule);
             $schedule->queued_at = Carbon::now();
             $schedule->save();
 

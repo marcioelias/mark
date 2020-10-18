@@ -11,8 +11,12 @@ Route::get('teste', function() {
 /* Webhook routes */
 Route::post('webhook/system/monetizze', 'WebhookMonetizzeController@receive');
 
+/* Webhook whatsapp routes */
+//Route::post('webhook/system/whatsapp', 'WhatsappIn');
+
 /* Webhook user routes */
 Route::post('webhook/{plataformConfig}', 'WebhookCallController@receiveUserWebhook')->name('webhook.url');
+
 
 /* Administrative routes */
 Route::prefix('admin')->group(function() {
@@ -74,6 +78,8 @@ Route::prefix('')->group(function() {
 		Route::resource('lead', 'LeadController')->except('create');
 		Route::resource('whatsapp_template', 'WhatsappTemplateController')->except('show');
 		Route::resource('lead_status', 'LeadStatusController')->except('show');
+		Route::resource('customer', 'CustomerController')->except('show');
+		Route::resource('whatsapp_instance', 'WhatsappInstanceController')->except('show');
 
 		Route::get('postback', 'PostbackController@index')->name('postback.index');
 		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');
@@ -87,9 +93,9 @@ Route::prefix('')->group(function() {
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
 		Route::get('funnel/{funnel}/json', 'FunnelController@getFunnelJson');
-		Route::get('leads/{funnelStep}', 'LeadController@getLeadsFromStep')->name('step.leads');
 		Route::get('message/{funnelStepAction}/{lead}', 'FunnelStepActionController@getActionMessage')->name('action.message');
 		Route::get('schedules/{funnelStep}/{lead', 'ScheduleController@getSchedulesByStepLead')->name('step.lead.schedules');
+		Route::get('funnel/{funnel}/show/json', 'FunnelController@showJson');
 
 
 		/* mail template routes */

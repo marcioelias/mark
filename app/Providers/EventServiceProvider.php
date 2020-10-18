@@ -6,10 +6,18 @@ use App\Events\LeadGoToStep;
 use App\Events\NewLeadCreated;
 use App\Events\NewRunnableAction;
 use App\Events\NotificationSent;
+use App\Events\OnAddLeadToStep;
+use App\Events\OnCreateWhatsappInstance;
+use App\Events\OnLeadCreated;
+use App\Events\OnLeadUpdated;
 use App\Events\SetLeadTag;
 use App\Listeners\AddLeadToFunnel;
 use App\Listeners\AddSchedulesForStepActions;
 use App\Listeners\DispatchNotificationAction;
+use App\Listeners\DoOnAddLeadToStep;
+use App\Listeners\DoOnCreateWhatsappInstance;
+use App\Listeners\DoOnLeadCreated;
+use App\Listeners\DoOnLeadUpdated;
 use App\Listeners\ProcessRuleTags;
 use App\Listeners\SetNotificationDone;
 use Illuminate\Support\Facades\Event;
@@ -28,6 +36,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        OnLeadCreated::class => [
+            DoOnLeadCreated::class,
+        ],
+        OnLeadUpdated::class => [
+            DoOnLeadUpdated::class,
+        ],
+        OnAddLeadToStep::class => [
+            DoOnAddLeadToStep::class,
+        ],
         NewLeadCreated::class => [
             ProcessRuleTags::class,
         ],
@@ -42,6 +59,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         NotificationSent::class => [
             SetNotificationDone::class,
+        ],
+        OnCreateWhatsappInstance::class => [
+            DoOnCreateWhatsappInstance::class,
         ],
     ];
 

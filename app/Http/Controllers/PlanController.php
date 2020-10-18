@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feature;
 use App\Models\Plan;
 use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PlanController extends Controller
 {
@@ -16,6 +20,7 @@ class PlanController extends Controller
         return array(
             'plan_name' => 'Plano',
             'num_postbacks' => 'Mum. Postbacks',
+            'whatsapp_enabled' => ['label' => 'Whatsapp', 'type' => 'bool'],
             'plan_value' => ['label' => 'Valor', 'type' => 'decimal', 'decimais' => 2]
         );
     }
@@ -73,7 +78,8 @@ class PlanController extends Controller
                 'name'=>"Novo"
             ]
         ];
-        return $this->getView('plans.create');
+        $features = Feature::orderBy('order', 'asc')->get();
+        return $this->getView('plans.create')->withFeatures($features);
     }
 
     /**
@@ -84,15 +90,37 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
+/*         return response()->json($request->all());
+ */
         $this->validate($request, [
             'marketplace_code' => 'required|unique:plans',
             'plan_name' => 'required',
-            'num_postbacks' => 'required',
             'plan_value' => 'required'
         ]);
 
-        $plan = new Plan($request->all());
-        return response()->json($plan->save());
+        DB::beginTransaction();
+        try {
+            $plan = new Plan($request->all());
+            $plan->save();
+
+            $features = Feature::all();
+            $enableds = $request->enabled;
+            $limits = $request->limit;
+            foreach ($features as $feature) {
+                $plan->features()->attach($feature->id, [
+                    'enabled' => Arr::exists($enableds, $feature->id),
+                    'limit' => Arr::exists($limits, $feature->id) ? $limits[$feature->id] : 0
+                ]);
+            }
+
+            DB::commit();
+            return response()->json(true);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json($e->getMessage());
+        }
+
     }
 
     /**
@@ -132,12 +160,28 @@ class PlanController extends Controller
         $this->validate($request, [
             'marketplace_code' => "required|unique:plans,marketplace_code,$plan->id,id",
             'plan_name' => 'required',
-            'num_postbacks' => 'required',
             'plan_value' => 'required'
         ]);
 
-        $plan->fill($request->all());
-        return response()->json($plan->save());
+        DB::beginTransaction();
+        try {
+            $plan->fill($request->all());
+            $plan->save();
+
+            foreach (Feature::all() as $feature) {
+                $plan->features()->updateExistingPivot($feature->id, [
+                    'enabled' => Arr::exists($request->enabled, $feature->id),
+                    'limit' => Arr::exists($request->limit, $feature->id) ? $request->limit[$feature->id] : 0
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json(true);
+        } catch (\Exception $e) {
+            Log::debug($e);
+            DB::rollBack();
+        }
     }
 
     /**

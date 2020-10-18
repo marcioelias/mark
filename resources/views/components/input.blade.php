@@ -7,16 +7,16 @@
     $disabled = isset($disabled) ? $disabled : false;
 @endphp
 
-@if($inputType == 'hidden')           
+@if($inputType == 'hidden')
     <input id="{{$field}}" type="{{$inputType}}" name="{{$field}}" value="{{ isset($value) ? $value : old($field) }}">
 @else
-    <div class="form-group {{ $errors->has($field) ? ' has-error' : '' }}">      
+    <div class="form-group {{ $errors->has($field) ? ' has-error' : '' }}">
         <div class="row">
             <div class="col col-sm col-md{{$inputSize}} col-lg{{$inputSize}} col-xg{{$inputSize}}">
                 @if(isset($label))
                     @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
                     @endcomponent
-                @endif  
+                @endif
                 @if($inputType == 'textarea')
                     <textarea class="form-control" rows="5" id="{{$field}}" name="{{$field}}">{{ isset($value) ? $value : old($field) }}</textarea>
                 @elseif($inputType == 'select')

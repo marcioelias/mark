@@ -39,6 +39,10 @@ class Schedule extends Model
         return $this->belongsTo(FunnelStep::class);
     }
 
+    public function funnelStepAction() {
+        return $this->belongsTo(FunnelStepAction::class);
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

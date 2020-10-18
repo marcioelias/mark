@@ -22,12 +22,14 @@
         <div class="form-control-position">
             <i class="feather icon-{{ $icon['type'] }}"></i>
         </div>
+        <div class="invalid-feedback" id="error-{{ $id }}"></div>
     </fieldset>
     @else
     @isset($label)
     <x-label :label="$label" :field="$field" />
     @endisset
     <input type="text" name="{{ $field }}" class="form-control {{$css}}" id="{{$id}}" value="{{ isset($inputValue) ? $inputValue : old($field) }}" step="any" placeholder="{{ isset($label) ? $label : '' }}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }} {{ $readOnly ? 'readonly' : '' }}>
-    @endif
     <div class="invalid-feedback" id="error-{{ $id }}"></div>
+    @endif
+
 </div>

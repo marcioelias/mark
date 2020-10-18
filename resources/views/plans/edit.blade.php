@@ -30,11 +30,11 @@
         'inputs' => [
             [
                 'type' => 'number',
-                'field' => 'num_postbacks',
-                'label' => 'Núm. Postbacks',
+                'field' => 'plan_cycle_days',
+                'label' => 'Ciclo de Cobrança (dias)',
                 'required' => true,
                 'inputSize' => 6,
-                'inputValue' => $plan->num_postbacks
+                'inputValue' => $plan->plan_cycle_days
             ],
             [
                 'type' => 'text',
@@ -53,4 +53,48 @@
         ]
     ])
     @endcomponent
+    <div class="card">
+        <div class="card-header bg-primary text-white p-1">
+            Configuração de Funcionalidades/Limitações
+        </div>
+        <div class="table-responsive-md">
+            <table class="table table-striped table-hover">
+                <thead class="bg-primary text-white">
+                    <tr class="d-flex align-items-center">
+                        <th class="col-6" scope="col">Funcionalidade</th>
+                        <th class="col-3" scope="col">Status</th>
+                        <th class="col-3" scope="col">Limite</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($plan->features->sortBy('order') as $feature)
+                    <tr class="d-flex align-items-center">
+                        <th class="col-6 border-0" scope="row">{{ $feature->feature }}</th>
+                        <th class="col-3 border-0">
+                            <div class="custom-control custom-switch switch-md custom-switch-primary">
+                                    <input type="checkbox" name="enabled[{{ $feature->id }}]" class="custom-control-input" id="{{ $feature->id }}_enabled" {{ $feature->pivot->enabled ? 'checked' : '' }} onchange="activeLimit('{{ $feature->id }}_limit', $('#{{ $feature->id }}_enabled').is(':checked'))">
+                                    <label class="custom-control-label" for="{{ $feature->id }}_enabled" title="Habilita/Desabilita a funcionalidade" data-toggle="tooltip">
+                                        <span class="switch-icon-left"><i class="feather icon-check"></i></span>
+                                        <span class="switch-icon-right"><i class="feather icon-check"></i></span>
+                                    </label>
+                                </div>
+                            </th>
+                        <th class="col-3 border-0">
+                            <input type="text" name="limit[{{ $feature->id }}]" id="{{ $feature->id }}_limit" value="{{ $feature->pivot->limit }}" {{ $feature->pivot->enabled ? '' : 'disabled' }} class="form-control" title="0 = Sem Limite" data-toggle="tooltip">
+                        </th>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection
+
+@push('custom-script')
+    <script>
+        function activeLimit(el, enabled) {
+            $(`#${el}`).prop('disabled', !enabled)
+                   .val(0)
+        }
+    </script>
+@endpush

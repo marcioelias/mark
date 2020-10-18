@@ -8,11 +8,12 @@ use App\Models\PaymentType;
 use App\Models\User;
 use App\Traits\ModelUtilsTrait;
 use App\Traits\MultiTenantable;
+use App\Traits\VisibleRecords;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class Lead extends Model
 {
-    use MultiTenantable, ModelUtilsTrait;
+    use MultiTenantable, ModelUtilsTrait, VisibleRecords;
 
     protected $fillable = [
         'user_id',
@@ -25,8 +26,7 @@ class Lead extends Model
         'value',
         'paid_at',
         'lead_status_id',
-        'last_step_finished_at',
-        'funnel_step_id'
+        'visible'
     ];
 
     public function user() {
@@ -49,8 +49,8 @@ class Lead extends Model
         return $this->belongsTo(LeadStatus::class);
     }
 
-    public function funnelStep() {
-        return $this->belongsTo(FunnelStep::class);
+    public function funnelStepLeads() {
+        return $this->hasMany(FunnelStepLead::class);
     }
 
     public function schedules() {

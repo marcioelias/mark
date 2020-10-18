@@ -21,4 +21,8 @@ return [
     "Whatsapp 2.0" => "Whatsapp 2.0",
     "Message Models" => "Modelos de Msg",
     "Send Whatsapp" => "Enviar Whatsapp",
+    "Status" => "Status",
+    "Marketing Actions" => "Ações de Marketing",
+    "Customers" => "Clientes",
+    "Whatsapp Instances" => "Instâncias Whatsapp",
 ];

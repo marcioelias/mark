@@ -16,7 +16,7 @@
     @if(isset($label))
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
-    @endif  
+    @endif
 
     <input type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control {{$css}}" name="{{$name}}" id="{{$id}}" min="{{$numMin}}" max="{{$numMax}}" step="{{$numStep}}" value="{{ isset($inputValue) ? $inputValue : old($field) }}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}  {{$readOnly}}>
 

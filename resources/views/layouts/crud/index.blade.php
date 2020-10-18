@@ -13,7 +13,7 @@
 @endsection
 
 @push('document-ready')
-$('select').select2({
+$('select:not(.swal2-select)').select2({
     placeholder: {
         id: '',
         text: ''

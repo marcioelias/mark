@@ -5,7 +5,7 @@
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item" v-for="(item, index) in orderedActions" :key="index">
-                <i class="fas fa-2x" :class="getActionIcon(item)"></i> {{ item.action_description }}
+                <i :class="getActionIcon(item)"></i> {{ item.action_description }}
             </li>
         </ul>
         <div class="card-footer">
@@ -64,8 +64,9 @@ export default {
         getActionIcon(item) {
             let act = this.actionTypes.find(a => a.id === item.action_type_id)
             return {
-               'fa-envelope': act.action_type_name == 'email',
-               'fa-sms': act.action_type_name == 'sms',
+               'fas fa-envelope fa-2x': act.action_type_name == 'email',
+               'fas fa-sms fa-2x': act.action_type_name == 'sms',
+               'fab fa-whatsapp fa-2x': act.action_type_name == 'whatsapp',
             }
         }
     }

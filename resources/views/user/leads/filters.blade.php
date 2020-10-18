@@ -9,17 +9,6 @@
         <input type="text" value="{{ $_GET['lead_dt_end'] ?? '' }}" id="lead_dt_end" name="lead_dt_end" class="form-control pickadate">
     </div>
     <div class="col-md-4 mb-1">
-        <label for="tag_id">Tag</label>
-        <select name="tag_id" id="tag_id" class="form-control select2 submit-on-change" data-width="100%">
-            <option value="" {{ !isset($_GET['tag_id']) ? 'selected' : '' }} disabled></option>
-            <option value="none" {{ isset($_GET['tag_id']) && $_GET['tag_id'] === 'none' ? 'selected' : '' }}>Sem Tag</option>
-            @foreach ($tags as $tag)
-            <option value="{{ $tag->id }}" {{ (isset($_GET['tag_id']) && $_GET['tag_id'] === $tag->id) ? 'selected' : '' }}>{{ $tag->tag_name }}</option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="col-md-4 mb-1">
         <label for="product_id">Produto</label>
         <select name="product_id" id="product_id" class="form-control select2 submit-on-change" data-width="100%">
             <option value="" {{ !isset($_GET['product_id']) ? 'selected' : '' }} disabled></option>

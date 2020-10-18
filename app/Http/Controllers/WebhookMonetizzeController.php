@@ -8,6 +8,7 @@ use App\Models\Plan;
 use App\Models\TempPassword;
 use App\Models\User;
 use App\Traits\PostbackTrait;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +61,7 @@ class WebhookMonetizzeController extends Controller implements Postback
 
     public function updateAssinatura(User $user, array $postback) {
         $user->active = (int) $postback['tipoEvento']['codigo'] === (int) 101;
+        $user->activated_at = Carbon::now();
         $user->save();
     }
 
@@ -79,8 +81,12 @@ class WebhookMonetizzeController extends Controller implements Postback
             'phone_number' => $postback['comprador']['telefone'],
             'plan_id' => $plan['id'],
             'password' => bcrypt($tmpPass['temp_password']),
-            'active' => $postback['assinatura']['status'] === 'Ativa'
         ]);
+
+        if ($postback['assinatura']['status'] === 'Ativa') {
+            $user->active = true;
+            $user->activated_at = Carbon::now();
+        }
 
         if ($user->save()) {
             $user->temp_password()->save($tmpPass);

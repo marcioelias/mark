@@ -14,15 +14,17 @@ class ActionSendEmail extends Mailable
     public $sender;
     public $title;
     public $message;
+    public $replyTo;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $sender, string $title, string $msg)
+    public function __construct(string $sender, string $replyTo, string $title, string $msg)
     {
         $this->sender = $sender;
+        $this->reply_to = $replyTo;
         $this->title = $title;
         $this->msg = $msg;
     }
@@ -35,7 +37,8 @@ class ActionSendEmail extends Mailable
     public function build()
     {
         return $this->subject($this->title)
-                    ->from($this->sender)
+                    ->from(config('mail.from.address'), $this->sender)
+                    ->replyTo($this->reply_to, $this->sender)
                     ->view('mail.html.default_notification')
                     ->with([
                         'title' => $this->title,

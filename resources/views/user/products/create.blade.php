@@ -42,34 +42,29 @@
         'inputs' => [
             [
                 'type' => 'select',
-                'field' => 'funnel_id',
-                'label' => 'Funil de Vendas',
-                'items' => $funnels,
-                'displayField' => 'funnel_description',
-                'keyField' => 'id',
-                'inputSize' => 12
-            ],
-        ]
-    ])
-    @endcomponent
-    @component('components.form-group', [
-        'inputs' => [
-            [
-                'type' => 'select',
                 'field' => 'plataform_config_id',
                 'label' => 'Plataforma',
                 'items' => $plataforms,
                 'displayField' => 'plataform_name',
                 'keyField' => 'id',
-                'inputSize' => 6
+                'inputSize' => 4
             ],
             [
                 'type' => 'text',
                 'field' => 'plataform_code',
                 'label' => 'Código',
                 'required' => true,
-                'inputSize' => 6
+                'inputSize' => 4
             ],
+            [
+                'type' => 'select',
+                'field' => 'funnel_id',
+                'label' => 'Funil de Vendas',
+                'items' => $funnels,
+                'displayField' => 'funnel_description',
+                'keyField' => 'id',
+                'inputSize' => 4
+            ]
         ]
     ])
     @endcomponent

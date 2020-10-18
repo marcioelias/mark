@@ -10,6 +10,5 @@
     'searchParmsData' => [
         'products' => $products,
         'paymentTypes' => $paymentTypes,
-        'leadStatuses' => $leadStatuses,
-        'tags' => $tags]
+        'leadStatuses' => $leadStatuses]
 ]])

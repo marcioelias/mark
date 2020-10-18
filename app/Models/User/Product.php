@@ -31,4 +31,8 @@ class Product extends Model
     public function funnel() {
         return $this->belongsTo(Funnel::class);
     }
+
+    public function whatsappInstance() {
+        return $this->hasOne(WhatsappInstance::class);
+    }
 }

@@ -11,8 +11,14 @@
         {
             "url": "",
             "name": "Cadastros",
-            "icon": "feather icon-zap",
+            "icon": "feather icon-layers",
             "submenu": [
+                {
+                    "url": "customer.index",
+                    "name": "Customers",
+                    "activeUrls": ["customer", "customer/create", "customer/{customer}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
                 {
                     "url": "product.index",
                     "name": "Products",
@@ -30,7 +36,7 @@
         {
             "url": "funnel.index",
             "name": "Funnels",
-            "icon": "feather icon-zap",
+            "icon": "feather icon-filter",
             "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"],
             "i18n": "nav.sk_layout_2_columns"
         },
@@ -73,6 +79,12 @@
                     "url": "plataform_config.index",
                     "name": "Plataforms",
                     "activeUrls": ["plataform_config", "plataform_config/create", "plataform_config/{plataformConfig}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "whatsapp_instance.index",
+                    "name": "Whatsapp Instances",
+                    "activeUrls": ["whatsapp_instance", "whatsapp_instance/create", "whatsapp_instance/{whatsappInstance}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]

@@ -11,7 +11,7 @@
         <tbody>
             <tr v-for="(item, index) in OrderedActions" :key="index">
                 <td class="align-middle" scope="row">
-                    <i class="fas" :class="getActionIcon(item)"></i> {{ item.action_description }}
+                    <i :class="getActionIcon(item)"></i> {{ item.action_description }}
                 </td>
                 <td class="align-middle">
                     {{ item.action_data.options.days_after }} dias
@@ -93,13 +93,18 @@ export default {
                 case 'sms':
                     return componentTypes.NEW_SMS_ACTION
                     break;
+
+                case 'whatsapp':
+                    return componentTypes.NEW_WHATSAPP_ACTION
+                    break;
             }
         },
         getActionIcon(item) {
             let act = this.actionTypes.find(a => a.id === item.action_type_id)
             return {
-               'fa-envelope': act.action_type_name == 'email',
-               'fa-sms': act.action_type_name == 'sms',
+               'fas fa-envelope': act.action_type_name == 'email',
+               'fas fa-sms': act.action_type_name == 'sms',
+               'fab fa-whatsapp': act.action_type_name == 'whatsapp'
             }
         }
     }

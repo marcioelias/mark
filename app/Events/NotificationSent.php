@@ -18,15 +18,17 @@ class NotificationSent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $schedule;
+    public $notificationData;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Schedule $schedule)
+    public function __construct(Schedule $schedule, string $notificationData)
     {
         $this->schedule = $schedule;
+        $this->notificationData = $notificationData;
         // Log::info('Event: NotificationSent');
         // Log::debug($schedule);
     }

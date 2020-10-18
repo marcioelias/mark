@@ -37,18 +37,8 @@ class UsersTableSeeder extends Seeder
             ]
         ];
 
-        $leadStatuses = [
-            ['status' => 'Ativo'],
-            ['status' => 'Remarketing'],
-            ['status' => 'Inativo'],
-        ];
-
         foreach ($users as $user) {
             $newUser = User::create($user);
-            foreach($leadStatuses as $leadStatus) {
-                $newLeadStatus = new LeadStatus($leadStatus);
-                $newUser->leadStatuses()->save($newLeadStatus);
-            }
         }
 
         factory(User::class, 100)->create();

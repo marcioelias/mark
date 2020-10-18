@@ -46,4 +46,12 @@ class Funnel extends Model
         return $query->where('product_id', $product_id)
                     ->where('tag_id', $tag_id);
     }
+
+    public function scopeSalesFunnel($query) {
+        return $query->where('is_sales_funnel', true);
+    }
+
+    public function scopeActive($query, $active = true) {
+        return $query->where('active', $active);
+    }
 }

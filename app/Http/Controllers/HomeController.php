@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User\LeadStatus;
+use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    use LayoutConfigTrait;
     /**
      * Show the application dashboard.
      *

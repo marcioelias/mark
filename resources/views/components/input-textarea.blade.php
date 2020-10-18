@@ -13,7 +13,7 @@
         @component('components.label', ['label' => $label, 'field' => $field, 'required' => $required])
         @endcomponent
     @endif
-    <textarea rows="{{$rows}}" class="form-control {{$css}}" name="{{$name}}" id="{{$id}}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}>{!! isset($inputValue) ? nl2br($inputValue) : old($field) !!}</textarea>  
+    <textarea rows="{{$rows}}" class="form-control {{$css}}" name="{{$name}}" id="{{$id}}" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}>{!! isset($inputValue) ? nl2br($inputValue) : old($field) !!}</textarea>
 
     @if ($errors->has($field))
         <span class="invalid-feedback">

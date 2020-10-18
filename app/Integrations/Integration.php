@@ -2,10 +2,15 @@
 
 namespace App\Integrations;
 
+use App\Constants\DefaultLeadStatuses;
+use App\Constants\FeatureTypes;
 use App\Constants\LeadStatus;
 use App\Constants\PostbackEventType;
 use App\Enums\PostbackField;
+use App\Models\User;
 use App\Models\User\Customer;
+use App\Models\User\Funnel;
+use App\Models\User\FunnelStep;
 use App\Models\User\Lead;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Postback;
@@ -14,6 +19,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class Integration {
@@ -21,6 +27,7 @@ class Integration {
     protected $request;
     protected $plataformConfig;
     protected $mappedFields;
+    protected User $user;
 
 
     public $token;
@@ -41,6 +48,7 @@ class Integration {
     public function __construct(Request $request, PlataformConfig $plataformConfig) {
         $this->request = $request;
         $this->plataformConfig = $plataformConfig;
+        $this->user = $this->getUser();
         $this->mappedFields = $this->setMappedRequestFields();
         $this->getDataFromRequest();
     }
@@ -84,7 +92,7 @@ class Integration {
         if ($product) {
             return $product;
         } else {
-            throw new Exception('Produto não encontrado', 500);
+            throw new Exception('Produto não encontrado', 404);
         }
     }
 
@@ -115,6 +123,22 @@ class Integration {
         return $this->plataformConfig;
     }
 
+    public function getUser() {
+        return User::find($this->getPlataformConfig()->user_id);
+    }
+
+    private function userActive(User $user): bool
+    {
+        $expireAt = Carbon::parse($user->activated_at)->addDays($user->plan->plan_cycle_days ?? 30);
+        Log::info('Account Expiration: '.$expireAt);
+        if (Carbon::now()->gt($expireAt)) {
+            $user->active = false;
+            $user->save();
+        }
+        Log::info('Account Active: '.$user->active);
+        return $user->active;
+    }
+
     public function getPayload() {
         return json_encode($this->request->all());
     }
@@ -125,23 +149,15 @@ class Integration {
 
     public function getLeadStatus() {
         switch ($this->getMappedEventType()) {
-            case PostbackEventType::ABANDONO_CHECKOUT:
-                return LeadStatus::ABANDONO;
+            case PostbackEventType::BILLET_PRINTED:
+            case PostbackEventType::WAITING_PAYMENT:
+            case PostbackEventType::DISPUTE:
+                return DefaultLeadStatuses::ACTIVE;
                 break;
-            case PostbackEventType::IMPRESSAO_BOLETO:
-                return LeadStatus::EM_ABERTO;
-                break;
-            case PostbackEventType::BOLETO_VENCENDO:
-                return LeadStatus::VENCENDO;
-                break;
-            case PostbackEventType::BOLETO_VENCIDO:
-                return LeadStatus::VENCIDO;
-                break;
-            case PostbackEventType::COMPRA_FINALIZADA:
-                return LeadStatus::FINALIZADO;
-                break;
-            case PostbackEventType::COMPRA_CANCELADA:
-                return LeadStatus::CANCELADO;
+            case PostbackEventType::APPROVED:
+            case PostbackEventType::CANCELED:
+            case PostbackEventType::REFUNDED:
+                return DefaultLeadStatuses::INACTIVE;
                 break;
         }
     }
@@ -153,7 +169,8 @@ class Integration {
                 'product_id' => $this->product->id,
                 'customer_id' => $this->customer->id,
                 'postback_event_type_id' => $this->getMappedEventType(),
-                'transaction_code' => $this->transactionCode
+                'transaction_code' => $this->transactionCode,
+                'visible' => ($this->userActive($this->user) && $this->user->postbacksAvailable())
             ],
             [
                 'payload' => $this->getPayload()
@@ -162,39 +179,7 @@ class Integration {
     }
 
     public function getLead() {
-        $lead = Lead::where('user_id', $this->getPlataformConfig()->user_id)
-                    ->where('product_id', $this->product->id)
-                    ->where('customer_id', $this->customer->id)
-                    ->where('transaction_code', $this->transactionCode)
-                    ->first();
-
-        if ($lead) {
-            $lead->fill([
-                    'billet_url' => $this->billetUrl,
-                    'billet_barcode' => $this->billetBarcode,
-                    'value' => $this->value,
-                    'paid_at' => $this->getPaidAt(),
-                    'lead_status_id' => $this->getLeadStatus()
-                ]);
-        } else {
-            $lead = new Lead([
-                'user_id' => $this->getPlataformConfig()->user_id,
-                'product_id' => $this->product->id,
-                'customer_id' => $this->customer->id,
-                'transaction_code' => $this->transactionCode,
-                'payment_type_id' => $this->getMappedPaymentType(),
-                'billet_url' => $this->billetUrl,
-                'billet_barcode' => $this->billetBarcode,
-                'value' => $this->value,
-                'paid_at' => $this->getPaidAt(),
-                'lead_status_id' => $this->getLeadStatus(),
-                'last_step_finished_at' => Carbon::now()
-            ]);
-        }
-        $lead->save();
-
-        return $lead;
-        /* return Lead::updateOrCreate(
+        return Lead::updateOrCreate(
             [
                 'user_id' => $this->getPlataformConfig()->user_id,
                 'product_id' => $this->product->id,
@@ -202,12 +187,67 @@ class Integration {
                 'transaction_code' => $this->transactionCode
             ],
             [
+                'payment_type_id' => $this->getMappedPaymentType(),
                 'billet_url' => $this->billetUrl,
                 'billet_barcode' => $this->billetBarcode,
                 'value' => $this->value,
                 'paid_at' => $this->getPaidAt(),
-                'lead_status_id' => $this->getLeadStatus()
+                'lead_status_id' => $this->getLeadStatus(),
+                'visible' => $this->user->active && $this->user->leadsAvailable()
             ]
-        ); */
+        );
+
+        // $lead = Lead::where('user_id', $this->getPlataformConfig()->user_id)
+        //             ->where('product_id', $this->product->id)
+        //             ->where('customer_id', $this->customer->id)
+        //             ->where('transaction_code', $this->transactionCode)
+        //             ->first();
+
+        // if ($lead) {
+        //     $lead->fill([
+        //             'billet_url' => $this->billetUrl,
+        //             'billet_barcode' => $this->billetBarcode,
+        //             'value' => $this->value,
+        //             'paid_at' => $this->getPaidAt(),
+        //             'lead_status_id' => $this->getLeadStatus()
+        //         ]);
+        // } else {
+        //     $lead = new Lead([
+        //         'user_id' => $this->getPlataformConfig()->user_id,
+        //         'product_id' => $this->product->id,
+        //         'customer_id' => $this->customer->id,
+        //         'transaction_code' => $this->transactionCode,
+        //         'payment_type_id' => $this->getMappedPaymentType(),
+        //         'billet_url' => $this->billetUrl,
+        //         'billet_barcode' => $this->billetBarcode,
+        //         'value' => $this->value,
+        //         'paid_at' => $this->getPaidAt(),
+        //         'lead_status_id' => $this->getLeadStatus(),
+        //         'funnel_id' => $this->getSalesFunnel()->id,
+        //         'visible' => $this->getUser()->active && $this->getUser()->leadsAvailable()
+        //     ]);
+        // }
+        // $lead->save();
+
+        // return $lead;
+    }
+
+    public function getSalesFunnelFirstStepId() {
+        $funnelStep = FunnelStep::select('funnel_steps.*')
+                        ->join('funnels', 'funnels.id', 'funnel_steps.funnel_id')
+                        ->where('funnels.is_sale_funnel', true)
+                        ->where('funnel_steps.postback_event_type_id', PostbackEventType::BILLET_PRINTED)
+                        ->first();
+
+        return $funnelStep->id;
+    }
+
+    public function validateFeature(FeatureTypes $featureType) {
+        $feature = $this->user->plan->feature->firstWhere('id', $featureType)->pivot;
+        return $feature->enabled && ($feature->limit == 0 || ($feature->limit > $this->getUserFeatureUsage($featureType)));
+    }
+
+    private function getUserFeatureUsage(FeatureTypes $featureType) {
+        return 0; //obter o total usado pelo usuário no mês atual
     }
 }

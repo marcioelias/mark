@@ -11,7 +11,7 @@ class FunnelStep extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'funnel_id', 'postback_event_type_id'
+        'user_id', 'funnel_id', 'funnel_step_sequence', 'postback_event_type_id'
     ];
 
     public function user() {
@@ -30,7 +30,11 @@ class FunnelStep extends Model
         return $this->hasMany(FunnelStepAction::class, 'funnel_step_id');
     }
 
-    public function leads() {
-        return $this->hasMany(Lead::class);
+    public function funnelStepLeads() {
+        return $this->hasMany(FunnelStepLead::class);
+    }
+
+    public function firstAction() {
+        $this->actions()->orderBy('action_sequence', 'asc')->first();
     }
 }

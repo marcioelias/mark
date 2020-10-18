@@ -108,12 +108,14 @@
                         @if(is_array($actions))
                             @foreach($actions as $action)
                                 @if(is_array($action))
-                                    @if(isset($action['custom_action']))
-                                        @component($action['custom_action'], ['data' => $row])
-                                        @endcomponent
-                                    @else
-                                        @component('components.action', ['action' => $action['action'], 'model' => $model, 'row' => $row, 'displayField' => $displayField, 'keyField'=> $keyField, 'target' => $action['target']])
-                                        @endcomponent
+                                    @if($action['visible'] ?? true)
+                                        @if(isset($action['custom_action']))
+                                            @component($action['custom_action'], ['data' => $row])
+                                            @endcomponent
+                                        @else
+                                            @component('components.action', ['action' => $action['action'], 'model' => $model, 'row' => $row, 'displayField' => $displayField, 'keyField'=> $keyField, 'target' => $action['target']])
+                                            @endcomponent
+                                        @endif
                                     @endif
                                 @else
                                     @component('components.action', ['action' => $action, 'model' => $model, 'row' => $row, 'displayField' => $displayField, 'keyField'=> $keyField])
@@ -162,15 +164,25 @@ $('.deleteBtn').on('click', function(e) {
                 success: function() {
                     Swal.fire({
                         title: 'Concluído',
-                        text: 'Registro removico com sucesso!',
+                        text: 'Registro removido com sucesso!',
                         icon: 'success',
                         heightAuto: false,
                     }).then(function() {
                         location.reload(true)
                     })
-                }
+                },
+                {{-- error: function(err) {
+                    console.log(err.responseJSON.message)
+                } --}}
             })
         }
+    }).catch(function(err) {
+        Swal.fire({
+            title: 'Não removido',
+            text: err.responseJSON.message,
+            icon: 'error',
+            heightAuto: false,
+        })
     })
 })
 $('#clear-search-form').on('click', function() {

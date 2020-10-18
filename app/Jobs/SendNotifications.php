@@ -9,6 +9,8 @@ use App\Models\User\FunnelStepAction;
 use App\Models\User\Lead;
 use App\Models\User\Schedule;
 use App\Models\Variable;
+use App\SMS\GatewaySms;
+use App\SMS\SmsFactory;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,6 +28,7 @@ class SendNotifications implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $schedule;
+    private $notificationData;
 
     /**
      * Create a new job instance.
@@ -56,6 +59,7 @@ class SendNotifications implements ShouldQueue
     }
 
     private function send() {
+        $this->notificationData = $this->getNotificationData();
         switch ($this->schedule->action->action_type_id) {
             case ActionTypes::EMAIL:
                 $this->sendEmail();
@@ -65,27 +69,23 @@ class SendNotifications implements ShouldQueue
                 $this->sendSMS();
         }
 
-        event(new NotificationSent($this->schedule));
+        event(new NotificationSent($this->schedule, $this->notificationData));
     }
 
     private function sendSMS() {
-        $msg = $this->getNotificationData();
-        Http::post('https://api.dev.test/api/sms', ['data' => $msg]);
+        $msg = $this->notificationData;
+        $to = $this->schedule->lead->customer->customer_phone_number;
+        SmsFactory::getSmsGateway($msg, $to)->send();
+        //Http::post('https://api.dev.test/api/sms', ['data' => $msg]);
     }
 
     private function sendEmail() {
-        $from = $this->schedule->user->email;
+        $from = $this->schedule->user->name;
+        $replyTo = $this->schedule->user->email;
         $to = $this->schedule->lead->customer->customer_email;
         $subject = $this->getMailSubject();
-        $msg = $this->getNotificationData();
-        Mail::to($to)->send(new ActionSendEmail($from, $subject, $msg));
-
-        /* Mail::send([], [], function ($message) use ($from, $to, $subject, $msg) {
-            $message->to($to)
-                    ->subject($subject)
-                    ->from($from)
-                    ->setBody($msg, 'text/html');
-        }); */
+        $msg = $this->notificationData;
+        Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
     }
 
     private function getNotificationData() {

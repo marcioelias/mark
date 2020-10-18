@@ -46,10 +46,10 @@
                         'dataOnStyle' => $dataOnStyle,
                         'dataOffStyle' => $dataOffStyle,
                         'label' => $item->$label,
-                        'field' => $field, 
+                        'field' => $field,
                         'value' => $item->$value,
                         'inputValue' => $inputValue
-                    ]) 
+                    ])
                     @endcomponent
                 </li>
                 @endforeach

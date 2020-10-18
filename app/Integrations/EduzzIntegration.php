@@ -27,15 +27,27 @@ class EduzzIntegration extends Integration {
     public function getMappedEventType() {
         switch ($this->eventType) {
             case '1':
-                return PostbackEventType::IMPRESSAO_BOLETO;
+                return PostbackEventType::BILLET_PRINTED;
                 break;
 
             case '3':
-                return PostbackEventType::COMPRA_FINALIZADA;
+                return PostbackEventType::APPROVED;
                 break;
 
             case '4':
-                return PostbackEventType::COMPRA_CANCELADA;
+                return PostbackEventType::CANCELED;
+                break;
+
+            case '6':
+                return PostbackEventType::DISPUTE;
+                break;
+
+            case '7':
+                return PostbackEventType::REFUNDED;
+                break;
+
+            case '15':
+                return PostbackEventType::WAITING_PAYMENT;
                 break;
         }
     }
