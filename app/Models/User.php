@@ -56,9 +56,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function boot():void {
         parent::boot();
 
-        static::creating(function (self $user) {
+        /* static::creating(function (self $user) {
             $user->plan_cycle_ends = Carbon::now()->addDays(30);
-        });
+        }); */
     }
 
     public function postbacksAvailable() {
