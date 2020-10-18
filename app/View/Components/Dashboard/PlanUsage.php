@@ -39,7 +39,7 @@ class PlanUsage extends Component
                 'feature' => $feature->feature,
                 'enabled' => $feature->pivot->enabled,
                 'limit' => $feature->pivot->limit,
-                'usage' => $this->featureUsage($feature->id, $startDate) ?? 0
+                'usage' => $this->featureUsage($feature->id, $startDate) ?? now()
             ];
         }
 
