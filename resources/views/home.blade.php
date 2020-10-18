@@ -16,7 +16,7 @@
     {{-- <div class="col-lg-6 col-md-12">
         <img src="http://whatsapp.integracaoconvertall.com/getQR?token=C87390B">
     </div> --}}
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-lg-3 col-sm-6 col-12">
             <div class="card">
                 <div class="card-header d-flex flex-column align-items-start pb-0">
@@ -81,7 +81,7 @@
                 <div class="resize-triggers"><div class="expand-trigger"><div style="width: 270px; height: 101px;"></div></div><div class="contract-trigger"></div></div></div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row">
         <div class="col-md-4 col-12">
             <x-dashboard.plan-usage />

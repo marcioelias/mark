@@ -32,14 +32,14 @@ class PlanUsage extends Component
 
     public function getStatistics() {
         $features = Auth::user()->plan->features->sortBy('order');
-        $startDate = Auth::user()->activated_at;
+        $startDate = Auth::user()->activated_at ?? now();
         $stats = [];
         foreach ($features as $feature) {
             $stats[] = [
                 'feature' => $feature->feature,
                 'enabled' => $feature->pivot->enabled,
                 'limit' => $feature->pivot->limit,
-                'usage' => $this->featureUsage($feature->id, $startDate) ?? now()
+                'usage' => $this->featureUsage($feature->id, $startDate) ?? 0
             ];
         }
 
