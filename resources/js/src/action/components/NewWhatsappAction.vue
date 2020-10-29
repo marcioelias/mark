@@ -138,7 +138,6 @@ import NumberEdit from '../../components/NumberEdit'
 import flatPickr from 'vue-flatpickr-component'
 import * as componentTypes from '../component-types'
 import insertTextAtCursor from 'insert-text-at-cursor'
-import VEmojiPicker, { emojisDefault, categoriesDefault,  } from "v-emoji-picker";
 
 import 'flatpickr/dist/flatpickr.css'
 
@@ -164,7 +163,7 @@ export default {
         }
     },
     components: {
-        SelectVariables, NumberEdit, flatPickr, VEmojiPicker
+        SelectVariables, NumberEdit, flatPickr
     },
     computed: {
         ...mapState('action', [

@@ -4,56 +4,54 @@
 // @import "node_modules/@fortawesome/fontawesome-free/scss/brands.scss";
 // @import "node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
 
-@import '~@fortawesome/fontawesome-free/scss/brands';
+@import "~@fortawesome/fontawesome-free/scss/brands";
 /* @import '~@fortawesome/fontawesome-free/scss/regular'; */
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
 
 .table td {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
 }
 
 .table th {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
 }
 
-
 .input-divider-left .form-control-position i {
-    padding: 0.2rem 0.5rem;
-    border-right: 1px solid #d9d9d9;
+  padding: 0.2rem 0.5rem;
+  border-right: 1px solid #d9d9d9;
 }
 
 .btn-table-order {
-    padding: 0.3rem !important;
-    color: white !important;
-    font-size: large;
+  padding: 0.3rem !important;
+  color: white !important;
+  font-size: large;
 }
 
 .icon-btn-sm-outline-padding {
-    padding: calc(0.9rem - 1px) !important;
+  padding: calc(0.9rem - 1px) !important;
 }
 
 .icon-btn-sm-padding {
-    padding: 0.5rem 1rem !important;
+  padding: 0.5rem 1rem !important;
 }
-
 
 /* Select 2 */
 .select2-container--default .select2-selection--single {
-    border: 1px solid #d9d9d9 !important;
-    color: #5f5f5f !important;
+  border: 1px solid #d9d9d9 !important;
+  color: #5f5f5f !important;
 }
 
 .select2-container--classic .select2-selection--single:focus,
 .select2-container--default .select2-selection--single:focus {
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
 .select2-container--classic.select2-container--open .select2-selection--single,
 .select2-container--default.select2-container--open .select2-selection--single {
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
 .btn-secondary ~ .dropdown-menu .dropdown-item:not(.active):not(:active):hover,
@@ -89,4 +87,13 @@ $sides: (top, bottom, left, right); // Leave this variable alone
 .emoji-menu {
   left: -50px !important;
   top: -250px !important;
+}
+
+.tableFixHead {
+  overflow-y: auto;
+  height: 200px;
+}
+.tableFixHead thead tr {
+  position: sticky;
+  top: 0;
 }

@@ -2,14 +2,12 @@
 
 namespace App\Integrations;
 
-use App\Constants\DefaultLeadStatuses;
 use App\Constants\FeatureTypes;
-use App\Constants\LeadStatus;
+use App\Constants\LeadStatuses;
 use App\Constants\PostbackEventType;
 use App\Enums\PostbackField;
 use App\Models\User;
 use App\Models\User\Customer;
-use App\Models\User\Funnel;
 use App\Models\User\FunnelStep;
 use App\Models\User\Lead;
 use App\Models\User\PlataformConfig;
@@ -150,14 +148,22 @@ class Integration {
     public function getLeadStatus() {
         switch ($this->getMappedEventType()) {
             case PostbackEventType::BILLET_PRINTED:
+                return LeadStatuses::BILLET_PRINTED;
+                break;
             case PostbackEventType::WAITING_PAYMENT:
+                return LeadStatuses::WAITING_PAYMENT;
+                break;
             case PostbackEventType::DISPUTE:
-                return DefaultLeadStatuses::ACTIVE;
+                return LeadStatuses::DISPUTE;
                 break;
             case PostbackEventType::APPROVED:
+                return LeadStatuses::APPROVED;
+                break;
             case PostbackEventType::CANCELED:
+                return LeadStatuses::CANCELED;
+                break;
             case PostbackEventType::REFUNDED:
-                return DefaultLeadStatuses::INACTIVE;
+                return LeadStatuses::REFUNDED;
                 break;
         }
     }

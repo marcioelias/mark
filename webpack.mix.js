@@ -70,11 +70,13 @@ mix.copy('node_modules/apexcharts/dist/apexcharts.min.js', 'public/vendors/js/ch
 //mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts');
 mix.copy('node_modules/quill/dist/quill.bubble.css', 'public/css');
 mix.copy('node_modules/quill/dist/quill.snow.css', 'public/css');
+//mix.copy('node_modules/@ttskch/select2-bootstrap4-theme/src/layout.scss', 'public/css');
 
 
 mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .js('resources/js/core/app.js', 'public/js/core')
   .js('resources/js/user/funnel.js', 'public/js/user')
+  .js('resources/js/user/marketingAction.js', 'public/js/user')
   .js('resources/js/user/funnelShow.js', 'public/js/user')
   .js('resources/js/user/funnelOrgChart.js', 'public/js/user')
   .js('node_modules/insert-text-at-cursor', 'public/js')
@@ -87,7 +89,7 @@ mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .sass('resources/sass/organogram.scss', 'public/css')
   .sass('resources/sass/custom.scss', 'public/css');
 
-mix.then(() => {
+/* mix.then(() => {
   if (process.env.MIX_CONTENT_DIRECTION === "rtl") {
     let command = `node ${path.resolve('node_modules/rtlcss/bin/rtlcss.js')} -d -e ".css" ./public/css/ ./public/css/`;
     exec(command, function (err, stdout, stderr) {
@@ -97,6 +99,6 @@ mix.then(() => {
     });
     // exec('./node_modules/rtlcss/bin/rtlcss.js -d -e ".css" ./public/css/ ./public/css/');
   }
-});
+}); */
 
 mix.version();

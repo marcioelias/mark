@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User\Customer;
+use App\Models\User\Lead;
 use App\Traits\LayoutConfigTrait;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
 
 class CustomerController extends Controller
@@ -171,5 +177,98 @@ class CustomerController extends Controller
             }
         }
 
+    }
+
+    /**
+     * Get a list of customers based on the filters passed by request
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCustomersJson(Request $request): JsonResponse
+    {
+        $query = $this->getCustomerFilters($request);
+        return response()->json(
+                    $query->orderBy($this->orderField, $this->orderType)
+                        ->orderByDesc(
+                             Lead::select('leads.created_at')
+                                ->whereColumn('leads.customer_id', 'customers.id')
+                                ->orderBy('leads.created_at', 'desc')
+                                ->limit(1)
+                        )
+                        ->get()
+                    );
+    }
+
+    /**
+     * Return a query builder with all joins needed to run the query
+     *
+     * @return Builder
+     */
+    public function getCustomerJoins(): Builder {
+        return Customer::distinct()
+                        ->select('customers.*', 'products.product_name', 'customer_statuses.customer_status', 'payment_types.payment_type', DB::raw('0 as checked'))
+                        ->leftJoin('leads', 'leads.customer_id', 'customers.id')
+                        ->leftJoin('products', 'products.id', 'leads.product_id')
+                        ->leftJoin('payment_types', 'payment_types.id', 'leads.payment_type_id')
+                        ->join('customer_statuses', 'customer_statuses.id', 'customers.customer_status_id');
+    }
+
+    /**
+     * Given a set of filters passed by a request, get a builder instance with the
+     * filter applyed.
+     *
+     * @param Request $request
+     * @return Builder
+     */
+    public function getCustomerFilters(Request $request): Builder
+    {
+        $query = $this->getCustomerJoins();
+
+        if ($request->customerStatus) {
+            $query->where('customers.customer_status_id', $request->customerStatus);
+        }
+        if ($request->dtLastLeadBegin && $request->dtLastLeadEnd) {
+            $query->whereBetween('leads.created_at', [
+                $this->parseBeginDate($request->dtLastLeadBegin),
+                $this->parseEndDate($request->dtLastLeadEnd)
+            ]);
+        } else if ($request->dtLastLeadBegin && !$request->dtLastLeadEnd) {
+            $query->where('leads.created_at', '>=', $this->parseBeginDate($request->dtLastLeadBegin));
+        } else if (!$request->dtLastLeadBegin && $request->dtLastLeadEnd) {
+            $query->where('leads.created_at', '<=', $this->parseEndDate($request->dtLastLeadEnd));
+        }
+        if ($request->productId) {
+            $query->where('products.id', $request->productId);
+        }
+        if ($request->paymentTypeId) {
+            $query->where('payment_types.id', $request->paymentTypeId);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Parse the date received, set the timezone to application timezone and set
+     * the time to the start of the day
+     *
+     * @param string $date
+     * @return object
+     */
+    public function parseBeginDate(string $date): object
+    {
+        return Carbon::parse($date)->setTimezone(config('app.timezone'))->startOfDay();
+    }
+
+    /**
+     * Parse the date received, set the timezone to application timezone and set
+     * the time to the end of the day
+     *
+     * @param string $date
+     * @return object
+     */
+    public function parseEndDate(string $date): object
+    {
+        return Carbon::parse($date)->setTimezone(config('app.timezone'))->endOfDay();
     }
 }

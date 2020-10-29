@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -34909,22 +34909,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use({
   install: function install(Vue) {
     Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_1___default.a.create({
       baseURL: "https://convertall.com.br",
-      //'http://ec2-18-221-128-147.us-east-2.compute.amazonaws.com/',
       headers: {
         common: {
           'X-Requested-With': 'XMLHttpRequest'
         }
       }
-    });
-    Vue.prototype.$http.interceptors.response.use(function (res) {
-      return res;
-    }, function (err) {
-      if (err.response.status === 401) {
-        //window.location = '/'
-        window.location.reload();
-      }
-
-      Promise.reject(err);
     });
   }
 });
@@ -35582,6 +35571,13 @@ var GetPostbackEventTypesForSelect = function GetPostbackEventTypesForSelect(sta
       return st.postback_event_type_id == pt.id;
     });
   });
+
+  if (state.isEditingStep) {
+    aux.push(state.postbackEventTypes.find(function (pt) {
+      return state.steps[state.currentStep].postback_event_type_id == pt.id;
+    }));
+  }
+
   aux.forEach(function (postbackEventType) {
     res.push({
       id: postbackEventType.id,
@@ -36013,6 +36009,564 @@ var setupState = function setupState() {
   };
 };
 /* harmony default export */ __webpack_exports__["default"] = (setupState());
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/index.js":
+/*!***************************************************!*\
+  !*** ./resources/js/src/marketingAction/index.js ***!
+  \***************************************************/
+/*! exports provided: store */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./store */ "./resources/js/src/marketingAction/store/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "store", function() { return _store__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/actions.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/actions.js ***!
+  \***********************************************************/
+/*! exports provided: ActionSetHttpErrors, ActionSetIsLoading, ActionSetDescription, ActionSetProductId, ActionSetStartDate, ActionSetStartTime, ActionSetCustomers, ActionSetIsEditingCustomers, ActionSetMessageType, ActionSetMessage, ActionAddEmailMessageImage, ActionSetEmailSubject, ActionCancelMessage, ActionSetFilterCustomerStatus, ActionSetFilterDtLastLeadBegin, ActionSetFilterDtLastLeadEnd, ActionSetFilterProductId, ActionSetFilterPaymentTypeId, ActionSetOrderType, ActionSetOrderField, ActionToggleCustomerSelect, ActionGetProducts, ActionGetCustomerStatuses, ActionGetPaymentTypes, ActionSearchCustomers, ActionSaveMarketingAction */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetHttpErrors", function() { return ActionSetHttpErrors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetIsLoading", function() { return ActionSetIsLoading; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetDescription", function() { return ActionSetDescription; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetProductId", function() { return ActionSetProductId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetStartDate", function() { return ActionSetStartDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetStartTime", function() { return ActionSetStartTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetCustomers", function() { return ActionSetCustomers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetIsEditingCustomers", function() { return ActionSetIsEditingCustomers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetMessageType", function() { return ActionSetMessageType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetMessage", function() { return ActionSetMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionAddEmailMessageImage", function() { return ActionAddEmailMessageImage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetEmailSubject", function() { return ActionSetEmailSubject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionCancelMessage", function() { return ActionCancelMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetFilterCustomerStatus", function() { return ActionSetFilterCustomerStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetFilterDtLastLeadBegin", function() { return ActionSetFilterDtLastLeadBegin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetFilterDtLastLeadEnd", function() { return ActionSetFilterDtLastLeadEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetFilterProductId", function() { return ActionSetFilterProductId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetFilterPaymentTypeId", function() { return ActionSetFilterPaymentTypeId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetOrderType", function() { return ActionSetOrderType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSetOrderField", function() { return ActionSetOrderField; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionToggleCustomerSelect", function() { return ActionToggleCustomerSelect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionGetProducts", function() { return ActionGetProducts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionGetCustomerStatuses", function() { return ActionGetCustomerStatuses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionGetPaymentTypes", function() { return ActionGetPaymentTypes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSearchCustomers", function() { return ActionSearchCustomers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ActionSaveMarketingAction", function() { return ActionSaveMarketingAction; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/src/marketingAction/store/mutation-types.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+var ActionSetHttpErrors = function ActionSetHttpErrors(_ref, payload) {
+  var commit = _ref.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_HTTP_ERRORS"], payload);
+};
+var ActionSetIsLoading = function ActionSetIsLoading(_ref2, payload) {
+  var commit = _ref2.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_IS_LOADING"], payload);
+};
+var ActionSetDescription = function ActionSetDescription(_ref3, payload) {
+  var commit = _ref3.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_DESCRIPTION"], payload);
+};
+var ActionSetProductId = function ActionSetProductId(_ref4, payload) {
+  var commit = _ref4.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_PRODUCT_ID"], payload);
+};
+var ActionSetStartDate = function ActionSetStartDate(_ref5, payload) {
+  var commit = _ref5.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_START_DATE"], payload);
+};
+var ActionSetStartTime = function ActionSetStartTime(_ref6, payload) {
+  var commit = _ref6.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_START_TIME"], payload);
+};
+var ActionSetCustomers = function ActionSetCustomers(_ref7, payload) {
+  var commit = _ref7.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_CUSTOMERS"], payload);
+};
+var ActionSetIsEditingCustomers = function ActionSetIsEditingCustomers(_ref8, payload) {
+  var commit = _ref8.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_IS_EDITING_CUSTOMERS"], payload);
+};
+var ActionSetMessageType = function ActionSetMessageType(_ref9, payload) {
+  var commit = _ref9.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_MESSAGE_TYPE"], payload);
+};
+var ActionSetMessage = function ActionSetMessage(_ref10, payload) {
+  var commit = _ref10.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_MESSAGE"], payload);
+};
+var ActionAddEmailMessageImage = function ActionAddEmailMessageImage(_ref11, payload) {
+  var commit = _ref11.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["ADD_EMAIL_MESSAGE_IMAGE"], payload);
+};
+var ActionSetEmailSubject = function ActionSetEmailSubject(_ref12, payload) {
+  var commit = _ref12.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_EMAIL_SUBJECT"], payload);
+};
+var ActionCancelMessage = function ActionCancelMessage(_ref13) {
+  var commit = _ref13.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_MESSAGE_TYPE"], null);
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["RESET_MESSAGE"]);
+};
+var ActionSetFilterCustomerStatus = function ActionSetFilterCustomerStatus(_ref14, payload) {
+  var commit = _ref14.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_FILTER_CUSTOMER_STATUS"], payload);
+};
+var ActionSetFilterDtLastLeadBegin = function ActionSetFilterDtLastLeadBegin(_ref15, payload) {
+  var commit = _ref15.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_FILTER_DT_LAST_LEAD_BEGIN"], payload);
+};
+var ActionSetFilterDtLastLeadEnd = function ActionSetFilterDtLastLeadEnd(_ref16, payload) {
+  var commit = _ref16.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_FILTER_DT_LAST_LEAD_END"], payload);
+};
+var ActionSetFilterProductId = function ActionSetFilterProductId(_ref17, payload) {
+  var commit = _ref17.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_FILTER_PRODUCT_ID"], payload);
+};
+var ActionSetFilterPaymentTypeId = function ActionSetFilterPaymentTypeId(_ref18, payload) {
+  var commit = _ref18.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_FILTER_PAYMENT_TYPE_ID"], payload);
+};
+var ActionSetOrderType = function ActionSetOrderType(_ref19, payload) {
+  var commit = _ref19.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_ORDER_TYPE"], payload);
+};
+var ActionSetOrderField = function ActionSetOrderField(_ref20, payload) {
+  var commit = _ref20.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_ORDER_FIELD"], payload);
+};
+var ActionToggleCustomerSelect = function ActionToggleCustomerSelect(_ref21, payload) {
+  var commit = _ref21.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_CUSTOMER_CHECK"], payload);
+};
+var ActionGetProducts = /*#__PURE__*/function () {
+  var _ref24 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref22, _ref23) {
+    var commit, vm;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            commit = _ref22.commit;
+            vm = _ref23.vm;
+            _context.next = 4;
+            return vm.$http.get('products/json').then(function (res) {
+              return commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_PRODUCTS"], res.data || []);
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function ActionGetProducts(_x, _x2) {
+    return _ref24.apply(this, arguments);
+  };
+}();
+var ActionGetCustomerStatuses = /*#__PURE__*/function () {
+  var _ref27 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref25, _ref26) {
+    var commit, vm;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            commit = _ref25.commit;
+            vm = _ref26.vm;
+            _context2.next = 4;
+            return vm.$http.get('customer/statuses/json').then(function (res) {
+              return commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_CUSTOMER_STATUSES"], res.data);
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function ActionGetCustomerStatuses(_x3, _x4) {
+    return _ref27.apply(this, arguments);
+  };
+}();
+var ActionGetPaymentTypes = /*#__PURE__*/function () {
+  var _ref30 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref28, _ref29) {
+    var commit, vm;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            commit = _ref28.commit;
+            vm = _ref29.vm;
+            _context3.next = 4;
+            return vm.$http.get('payment_types/json').then(function (res) {
+              return commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_PAYMENT_TYPES"], res.data);
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+
+          case 4:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function ActionGetPaymentTypes(_x5, _x6) {
+    return _ref30.apply(this, arguments);
+  };
+}();
+var ActionSearchCustomers = /*#__PURE__*/function () {
+  var _ref33 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref31, _ref32) {
+    var state, commit, vm;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            state = _ref31.state, commit = _ref31.commit;
+            vm = _ref32.vm;
+            _context4.next = 4;
+            return vm.$http.post('customers/json', _objectSpread({}, state.filters)).then(function (res) {
+              return commit(_mutation_types__WEBPACK_IMPORTED_MODULE_1__["SET_CUSTOMERS"], res.data);
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+
+          case 4:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+
+  return function ActionSearchCustomers(_x7, _x8) {
+    return _ref33.apply(this, arguments);
+  };
+}();
+var ActionSaveMarketingAction = function ActionSaveMarketingAction(_ref34, _ref35) {
+  var state = _ref34.state,
+      commit = _ref34.commit;
+  var vm = _ref35.vm;
+  return vm.$http.post('marketing_action', {
+    description: state.description,
+    product_id: state.product_id,
+    action_type_id: state.messageType,
+    message: _objectSpread({}, state.message),
+    start_date: state.startDate,
+    start_time: state.startTime,
+    customers: state.customers.filter(function (customer) {
+      return customer.checked;
+    }).map(function (c) {
+      return c.id;
+    })
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/getters.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/getters.js ***!
+  \***********************************************************/
+/*! exports provided: GetProductsForSelect, GetCustomerStatusesForSelect, GetPaymentTypesForSelect, GetOrderedCustomers */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetProductsForSelect", function() { return GetProductsForSelect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetCustomerStatusesForSelect", function() { return GetCustomerStatusesForSelect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetPaymentTypesForSelect", function() { return GetPaymentTypesForSelect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GetOrderedCustomers", function() { return GetOrderedCustomers; });
+var GetProductsForSelect = function GetProductsForSelect(state) {
+  var res = [];
+  state.products.forEach(function (product) {
+    res.push({
+      id: product.id,
+      text: product.product_name
+    });
+  });
+  return res;
+};
+var GetCustomerStatusesForSelect = function GetCustomerStatusesForSelect(state) {
+  var res = [];
+  state.customerStatuses.forEach(function (status) {
+    res.push({
+      id: status.id,
+      text: status.customer_status
+    });
+  });
+  return res;
+};
+var GetPaymentTypesForSelect = function GetPaymentTypesForSelect(state) {
+  var res = [];
+  state.paymentTypes.forEach(function (paymentType) {
+    res.push({
+      id: paymentType.id,
+      text: paymentType.payment_type
+    });
+  });
+  return res;
+};
+var GetOrderedCustomers = function GetOrderedCustomers(state) {
+  function compare(a, b, c) {
+    if (c === 'ASC') {
+      if (typeof a == 'string') {
+        return a.localeCompare(b);
+      } else {
+        return a - b;
+      }
+    } else {
+      if (typeof a == 'string') {
+        return b.localeCompare(a);
+      } else {
+        return b - a;
+      }
+    }
+  }
+
+  return state.customers.slice().sort(function (a, b) {
+    return compare(a[state.order.field], b[state.order.field], state.order.type);
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/index.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/index.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./actions */ "./resources/js/src/marketingAction/store/actions.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters */ "./resources/js/src/marketingAction/store/getters.js");
+/* harmony import */ var _state__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./state */ "./resources/js/src/marketingAction/store/state.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mutations */ "./resources/js/src/marketingAction/store/mutations.js");
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: _state__WEBPACK_IMPORTED_MODULE_2__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_1__,
+  actions: _actions__WEBPACK_IMPORTED_MODULE_0__,
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_3__["default"],
+  namespaced: true
+});
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/mutation-types.js":
+/*!******************************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/mutation-types.js ***!
+  \******************************************************************/
+/*! exports provided: SET_HTTP_ERRORS, SET_IS_LOADING, SET_DESCRIPTION, SET_PRODUCT_ID, SET_START_DATE, SET_START_TIME, SET_PRODUCTS, SET_CUSTOMERS, SET_IS_EDITING_CUSTOMERS, SET_MESSAGE_TYPE, SET_MESSAGE, SET_CUSTOMER_STATUSES, SET_PAYMENT_TYPES, SET_FILTER_CUSTOMER_STATUS, SET_FILTER_DT_LAST_LEAD_BEGIN, SET_FILTER_DT_LAST_LEAD_END, SET_FILTER_PRODUCT_ID, SET_FILTER_PAYMENT_TYPE_ID, SET_ORDER_FIELD, SET_ORDER_TYPE, TOGGLE_CUSTOMER_CHECK, ADD_EMAIL_MESSAGE_IMAGE, SET_EMAIL_SUBJECT, RESET_MESSAGE */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_HTTP_ERRORS", function() { return SET_HTTP_ERRORS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_IS_LOADING", function() { return SET_IS_LOADING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_DESCRIPTION", function() { return SET_DESCRIPTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_PRODUCT_ID", function() { return SET_PRODUCT_ID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_START_DATE", function() { return SET_START_DATE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_START_TIME", function() { return SET_START_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_PRODUCTS", function() { return SET_PRODUCTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CUSTOMERS", function() { return SET_CUSTOMERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_IS_EDITING_CUSTOMERS", function() { return SET_IS_EDITING_CUSTOMERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_MESSAGE_TYPE", function() { return SET_MESSAGE_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_MESSAGE", function() { return SET_MESSAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_CUSTOMER_STATUSES", function() { return SET_CUSTOMER_STATUSES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_PAYMENT_TYPES", function() { return SET_PAYMENT_TYPES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_FILTER_CUSTOMER_STATUS", function() { return SET_FILTER_CUSTOMER_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_FILTER_DT_LAST_LEAD_BEGIN", function() { return SET_FILTER_DT_LAST_LEAD_BEGIN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_FILTER_DT_LAST_LEAD_END", function() { return SET_FILTER_DT_LAST_LEAD_END; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_FILTER_PRODUCT_ID", function() { return SET_FILTER_PRODUCT_ID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_FILTER_PAYMENT_TYPE_ID", function() { return SET_FILTER_PAYMENT_TYPE_ID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ORDER_FIELD", function() { return SET_ORDER_FIELD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ORDER_TYPE", function() { return SET_ORDER_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_CUSTOMER_CHECK", function() { return TOGGLE_CUSTOMER_CHECK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_EMAIL_MESSAGE_IMAGE", function() { return ADD_EMAIL_MESSAGE_IMAGE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_EMAIL_SUBJECT", function() { return SET_EMAIL_SUBJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESET_MESSAGE", function() { return RESET_MESSAGE; });
+var SET_HTTP_ERRORS = 'SET_HTTP_ERRORS';
+var SET_IS_LOADING = 'SET_IS_LOADING';
+var SET_DESCRIPTION = 'SET_DESCRIPTION';
+var SET_PRODUCT_ID = 'SET_PRODUCT_ID';
+var SET_START_DATE = 'SET_START_DATE';
+var SET_START_TIME = 'SET_START_TIME';
+var SET_PRODUCTS = 'SET_PRODUCTS';
+var SET_CUSTOMERS = 'SET_CUSTOMERS';
+var SET_IS_EDITING_CUSTOMERS = 'SET_IS_EDITING_CUSTOMERS';
+var SET_MESSAGE_TYPE = 'SET_MESSAGE_TYPE';
+var SET_MESSAGE = 'SET_MESSAGE';
+var SET_CUSTOMER_STATUSES = 'SET_CUSTOMER_STATUSES';
+var SET_PAYMENT_TYPES = 'SET_PAYMENT_TYPES';
+var SET_FILTER_CUSTOMER_STATUS = 'SET_FILTER_CUSTOMER_STATUS';
+var SET_FILTER_DT_LAST_LEAD_BEGIN = 'SET_FILTER_DT_LAST_LEAD_BEGIN';
+var SET_FILTER_DT_LAST_LEAD_END = 'SET_FILTER_DT_LAST_LEAD_END';
+var SET_FILTER_PRODUCT_ID = 'SET_FILTER_PRODUCT_ID';
+var SET_FILTER_PAYMENT_TYPE_ID = 'SET_FILTER_PAYMENT_TYPE_ID';
+var SET_ORDER_FIELD = 'SET_ORDER_FIELD';
+var SET_ORDER_TYPE = 'SET_ORDER_TYPE';
+var TOGGLE_CUSTOMER_CHECK = 'TOGGLE_CUSTOMER_CHECK';
+var ADD_EMAIL_MESSAGE_IMAGE = 'ADD_EMAIL_MESSAGE_IMAGE';
+var SET_EMAIL_SUBJECT = 'SET_EMAIL_SUBJECT';
+var RESET_MESSAGE = 'RESET_MESSAGE';
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/mutations.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/mutations.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutation-types */ "./resources/js/src/marketingAction/store/mutation-types.js");
+var _types$SET_HTTP_ERROR;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_types$SET_HTTP_ERROR = {}, _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_HTTP_ERRORS"], function (state, payload) {
+  state.httpErrors = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_IS_LOADING"], function (state, payload) {
+  state.isLoading = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_DESCRIPTION"], function (state, payload) {
+  state.description = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_PRODUCT_ID"], function (state, payload) {
+  state.product_id = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_START_DATE"], function (state, payload) {
+  state.startDate = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_START_TIME"], function (state, payload) {
+  state.startTime = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_PRODUCTS"], function (state, payload) {
+  state.products = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_CUSTOMERS"], function (state, payload) {
+  state.customers = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_IS_EDITING_CUSTOMERS"], function (state, payload) {
+  state.isEditingCustomers = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_MESSAGE_TYPE"], function (state, payload) {
+  state.messageType = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_MESSAGE"], function (state, payload) {
+  state.message.data = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER_CUSTOMER_STATUS"], function (state, payload) {
+  state.filters.customerStatus = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER_DT_LAST_LEAD_BEGIN"], function (state, payload) {
+  state.filters.dtLastLeadBegin = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER_DT_LAST_LEAD_END"], function (state, payload) {
+  state.filters.dtLastLeadEnd = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER_PRODUCT_ID"], function (state, payload) {
+  state.filters.productId = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_FILTER_PAYMENT_TYPE_ID"], function (state, payload) {
+  state.filters.paymentTypeId = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_CUSTOMER_STATUSES"], function (state, payload) {
+  state.customerStatuses = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_PAYMENT_TYPES"], function (state, payload) {
+  state.paymentTypes = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ORDER_FIELD"], function (state, payload) {
+  state.order.field = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_ORDER_TYPE"], function (state, payload) {
+  state.order.type = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["TOGGLE_CUSTOMER_CHECK"], function (state, payload) {
+  state.customers.forEach(function (customer) {
+    return customer.checked = payload;
+  });
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["ADD_EMAIL_MESSAGE_IMAGE"], function (state, payload) {
+  state.message.options.images.push(payload);
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["SET_EMAIL_SUBJECT"], function (state, payload) {
+  state.message.options.subject = payload;
+}), _defineProperty(_types$SET_HTTP_ERROR, _mutation_types__WEBPACK_IMPORTED_MODULE_0__["RESET_MESSAGE"], function (state) {
+  state.message = {
+    data: '',
+    options: {
+      subject: '',
+      images: []
+    }
+  };
+}), _types$SET_HTTP_ERROR);
+
+/***/ }),
+
+/***/ "./resources/js/src/marketingAction/store/state.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/src/marketingAction/store/state.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  httpErrors: [],
+  isLoading: false,
+  description: '',
+  product_id: null,
+  startDate: null,
+  startTime: null,
+  products: [],
+  customers: [],
+  customerStatuses: [],
+  paymentTypes: [],
+  filters: {
+    customerStatus: null,
+    dtLastLeadBegin: null,
+    dtLastLeadEnd: null,
+    productId: null,
+    paymentTypeId: null
+  },
+  order: {
+    field: 'customer_name',
+    type: 'ASC'
+  },
+  messageType: null,
+  message: {
+    data: '',
+    options: {
+      subject: '',
+      images: []
+    }
+  },
+  isEditingCustomers: true
+});
 
 /***/ }),
 
@@ -36510,6 +37064,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_action__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/action */ "./resources/js/src/action/index.js");
 /* harmony import */ var _src_funnelShow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../src/funnelShow */ "./resources/js/src/funnelShow/index.js");
 /* harmony import */ var _src_actionButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../src/actionButton */ "./resources/js/src/actionButton/index.js");
+/* harmony import */ var _src_marketingAction__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../src/marketingAction */ "./resources/js/src/marketingAction/index.js");
+
 
 
 
@@ -36522,7 +37078,8 @@ __webpack_require__.r(__webpack_exports__);
   step: _src_step__WEBPACK_IMPORTED_MODULE_2__["store"],
   action: _src_action__WEBPACK_IMPORTED_MODULE_3__["store"],
   funnelShow: _src_funnelShow__WEBPACK_IMPORTED_MODULE_4__["store"],
-  actionButton: _src_actionButton__WEBPACK_IMPORTED_MODULE_5__["store"]
+  actionButton: _src_actionButton__WEBPACK_IMPORTED_MODULE_5__["store"],
+  marketingAction: _src_marketingAction__WEBPACK_IMPORTED_MODULE_6__["store"]
 });
 
 /***/ }),
@@ -36579,7 +37136,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /*!***************************************************!*\
   !*** multi ./resources/js/user/funnelOrgChart.js ***!
   \***************************************************/

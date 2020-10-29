@@ -2,8 +2,7 @@
 
 namespace App\View\Components\Dashboard;
 
-use App\Constants\DefaultLeadStatuses;
-use App\Models\User\LeadStatus;
+use App\Constants\LeadStatuses;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
@@ -45,12 +44,12 @@ class ConvertPercentage extends Component
     private function getConvertedLeads(DateTime $startDate) {
         return Auth::user()->leads
                             ->where('created_at', '>=', $startDate)
-                            ->where('lead_status_id', DefaultLeadStatuses::INACTIVE)
+                            ->where('lead_status_id', LeadStatuses::APPROVED)
                             ->count() ?? 0;
     }
 
     private function getPercent() {
-        return $this->leads > 0 ? ($this->converted * 100) / $this->leads : 0;
+        return $this->leads > 0 ? round(($this->converted * 100) / $this->leads, 1) : 0;
     }
 
 }

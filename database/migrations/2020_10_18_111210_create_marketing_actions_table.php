@@ -18,10 +18,11 @@ class CreateMarketingActionsTable extends Migration
             $table->uuid('user_id');
             $table->string('marketing_action_description');
             $table->uuid('product_id');
-            $table->uuid('funnel_id');
+            $table->uuid('action_type_id');
+            $table->text('action_message');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('funnel_id')->references('id')->on('funnels');
+            $table->foreign('action_type_id')->references('id')->on('action_types');
             $table->timestamps();
         });
     }

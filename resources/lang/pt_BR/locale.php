@@ -25,4 +25,5 @@ return [
     "Marketing Actions" => "Ações de Marketing",
     "Customers" => "Clientes",
     "Whatsapp Instances" => "Instâncias Whatsapp",
+    "Customer Status" => "Status de Cliente"
 ];

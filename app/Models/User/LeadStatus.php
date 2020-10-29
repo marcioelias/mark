@@ -2,12 +2,12 @@
 
 namespace App\Models\User;
 
-use App\Traits\NullableMultiTenantable;
+use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 
 class LeadStatus extends Model
 {
-    use NullableMultiTenantable;
+    use MultiTenantable;
 
     protected $fillable = [
         'user_id',

@@ -20,15 +20,15 @@
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {
-                    "url": "product.index",
-                    "name": "Products",
-                    "activeUrls": ["product", "product/create", "product/{product}/edit"],
+                    "url": "customer_status.index",
+                    "name": "Customer Status",
+                    "activeUrls": ["customer_status", "customer_status/create", "customer_status/{customer_status}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {
-                    "url": "lead_status.index",
-                    "name": "Status",
-                    "activeUrls": ["lead_status", "lead_status/create", "lead_status/{lead_status}/edit"],
+                    "url": "product.index",
+                    "name": "Products",
+                    "activeUrls": ["product", "product/create", "product/{product}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
                 }
             ]
@@ -52,8 +52,10 @@
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {
-                    "url": "",
-                    "name": "Marketing Actions"
+                    "url": "marketing_action.index",
+                    "name": "Marketing Actions",
+                    "activeUrls": ["marketing_action", "marketing_action/create", "marketing_action/{marketing_action}/edit"],
+                    "i18n": "nav.sk_layout_2_columns"
                 }
             ]
         },

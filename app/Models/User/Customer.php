@@ -20,4 +20,8 @@ class Customer extends Model
     public function Postbacks() {
         return $this->hasMany(Postback::class);
     }
+
+    public function marketingActions() {
+        return $this->belongsToMany(MarketingAction::class);
+    }
 }

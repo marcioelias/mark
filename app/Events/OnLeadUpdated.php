@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App\Events;
 
 use App\Models\User\Postback;
 use Illuminate\Broadcasting\Channel;
@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class OnLeadUpdated
 {
@@ -24,6 +25,7 @@ class OnLeadUpdated
      */
     public function __construct(Postback $postback)
     {
+        Log::info('OnLeadUpdated -> evento chamado');
         $this->postback = $postback;
     }
 

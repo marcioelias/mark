@@ -1,6 +1,7 @@
 <?php
   use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 //Auth::routes(['verify' => true]);
 
@@ -77,9 +78,10 @@ Route::prefix('')->group(function() {
 		Route::resource('funnel', 'FunnelController');
 		Route::resource('lead', 'LeadController')->except('create');
 		Route::resource('whatsapp_template', 'WhatsappTemplateController')->except('show');
-		Route::resource('lead_status', 'LeadStatusController')->except('show');
 		Route::resource('customer', 'CustomerController')->except('show');
+		Route::resource('customer_status', 'CustomerStatusController')->except('show');
 		Route::resource('whatsapp_instance', 'WhatsappInstanceController')->except('show');
+		Route::resource('marketing_action', 'MarketingActionController')->except('show');
 
 		Route::get('postback', 'PostbackController@index')->name('postback.index');
 		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');
@@ -88,7 +90,8 @@ Route::prefix('')->group(function() {
 
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');
-		Route::get('lead_statuses/json', 'LeadStatusController@getLeadStatusesJson');
+		Route::get('funnels/remarketing/json', 'FunnelController@getRemarketingFunnelsJson');
+		//Route::get('lead_statuses/json', 'LeadStatusController@getLeadStatusesJson');
 		Route::get('postback_event_types/json', 'PostbackEventTypeController@getPostbackEventTypeJson');
 		Route::get('variables/json', 'VariableController@getVariablesJson');
 		Route::get('action_types/json', 'ActionTypeController@getActionTypesJson');
@@ -96,6 +99,9 @@ Route::prefix('')->group(function() {
 		Route::get('message/{funnelStepAction}/{lead}', 'FunnelStepActionController@getActionMessage')->name('action.message');
 		Route::get('schedules/{funnelStep}/{lead', 'ScheduleController@getSchedulesByStepLead')->name('step.lead.schedules');
 		Route::get('funnel/{funnel}/show/json', 'FunnelController@showJson');
+		Route::get('customer/statuses/json', 'CustomerStatusController@getCustomerStatusJson');
+		Route::get('payment_types/json', 'PaymentTypeController@getPaymentTypesJson');
+		Route::post('customers/json', 'CustomerController@getCustomersJson');
 
 
 		/* mail template routes */

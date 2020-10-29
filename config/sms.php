@@ -15,6 +15,9 @@ return [
             'service' => env('SMS_GATEWAY_SERVICE', ''),
             'key' =>  env('SMS_GATEWAY_KEY', ''),
             'url' => env('SMS_GATEWAY_URL', '')
+        ],
+        'sandbox' => [
+            'url' => env('SMS_GATEWAY_SERVICE', '')
         ]
     ]
 ];

@@ -122,7 +122,7 @@ class FunnelController extends Controller
                 /* se ocorreu tudo bem ao salvar o funil, inclui os passos */
                 foreach ($request->steps as $step) {
                     $newStep = new FunnelStep([
-                        'funnel_step_sequence' => $step['funnel_step_sequence'],
+                        //'funnel_step_sequence' => $step['funnel_step_sequence'],
                         'postback_event_type_id' => $step['postback_event_type_id'],
                     ]);
                     try {
@@ -178,7 +178,7 @@ class FunnelController extends Controller
             }
 
         } catch (\Exception $e) {
-            Log::emergency($e);
+            Log::emergency($e->getMessage());
             DB::rollBack();
             return response()->json($e->getMessage());
         }
@@ -399,5 +399,12 @@ class FunnelController extends Controller
 
     public function getFunnelJson(Funnel $funnel) {
         return response()->json($funnel->load('steps.actions'));
+    }
+
+    public function getRemarketingFunnelsJson() {
+        return response()->json(Funnel::RemarketingFunnel()
+                                    ->Active()
+                                    ->orderBy('funnel_description', 'ASC')
+                                    ->get());
     }
 }

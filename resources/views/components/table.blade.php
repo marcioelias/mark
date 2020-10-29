@@ -170,16 +170,13 @@ $('.deleteBtn').on('click', function(e) {
                     }).then(function() {
                         location.reload(true)
                     })
-                },
-                {{-- error: function(err) {
-                    console.log(err.responseJSON.message)
-                } --}}
+                }
             })
         }
     }).catch(function(err) {
         Swal.fire({
             title: 'Não removido',
-            text: err.responseJSON.message,
+            text: err.responseJSON,
             icon: 'error',
             heightAuto: false,
         })

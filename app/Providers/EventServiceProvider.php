@@ -45,12 +45,12 @@ class EventServiceProvider extends ServiceProvider
         OnAddLeadToStep::class => [
             DoOnAddLeadToStep::class,
         ],
-        NewLeadCreated::class => [
+        /* NewLeadCreated::class => [
             ProcessRuleTags::class,
         ],
         SetLeadTag::class => [
             AddLeadToFunnel::class,
-        ],
+        ], */
         LeadGoToStep::class => [
             AddSchedulesForStepActions::class,
         ],

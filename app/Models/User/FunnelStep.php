@@ -11,7 +11,7 @@ class FunnelStep extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'funnel_id', 'funnel_step_sequence', 'postback_event_type_id'
+        'user_id', 'funnel_id', 'postback_event_type_id'
     ];
 
     public function user() {

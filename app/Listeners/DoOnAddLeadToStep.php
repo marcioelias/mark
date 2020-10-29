@@ -10,6 +10,7 @@ use App\Models\User\Lead;
 use App\Models\User\Postback;
 use App\Models\User\Schedule;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
@@ -37,8 +38,15 @@ class DoOnAddLeadToStep
         $this->scheduleAction($event->postback, $event->funnelStepLead);
     }
 
+    /**
+     * Create a schedule task to handle the action
+     *
+     * @param Postback $postback
+     * @param FunnelStepLead $funnelStepLead
+     * @return void
+     */
     private function scheduleAction(Postback $postback, FunnelStepLead $funnelStepLead) {
-        $action = $this->getAction($funnelStepLead, $postback);
+        $action = $this->getAction($funnelStepLead);
 
         $schedule = new Schedule([
             'user_id' => $postback->user_id,
@@ -54,24 +62,62 @@ class DoOnAddLeadToStep
         $schedule->save();
     }
 
-    private function getScheduleStartAt(FunnelStepAction $funnelStepAction, FunnelStepLead $funnelStepLead) {
+    /**
+     * Get start datetime of an Action based on the number of the days that the action
+     * is configured to run after the ingress event of the step
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @param FunnelStepLead $funnelStepLead
+     * @return DateTime
+     */
+    private function getScheduleStartAt(FunnelStepAction $funnelStepAction, FunnelStepLead $funnelStepLead): DateTime
+    {
         return Carbon::parse($funnelStepLead->created_at)->startOfDay()
                                                          ->addDays($funnelStepAction->action_data['options']['days_after'] ?? 0);
     }
 
-    private function getSheduleStartPeriod(FunnelStepAction $funnelStepAction) {
+    /**
+     * Get minimum time of the day to start running a action, in format HH:nn
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return string
+     */
+    private function getSheduleStartPeriod(FunnelStepAction $funnelStepAction): string
+    {
         return Carbon::parse($funnelStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
     }
 
-    private function getSheduleEndPeriod(FunnelStepAction $funnelStepAction) {
+    /**
+     * Get maximum time of the day to start running a action, in format HH:nn
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return string
+     */
+    private function getSheduleEndPeriod(FunnelStepAction $funnelStepAction): string
+    {
         return Carbon::parse($funnelStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
     }
 
-    private function getDelayBeforeStart(FunnelStepAction $funnelStepAction) {
+    /**
+     * Get te number of minutes that the action must dalay his execution
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return integer
+     */
+    private function getDelayBeforeStart(FunnelStepAction $funnelStepAction): int
+    {
         return $funnelStepAction->action_data['options']['delay_minutes'] ?? 0;
     }
 
-    private function getAction(FunnelStepLead $funnelStepLead, Postback $postback) {
-        return $funnelStepLead->funnelStep->actions()->orderBy('action_sequence')->first();
+
+    /**
+     * Get the first action to be executed at current step
+     *
+     * @param FunnelStepLead $funnelStepLead
+     * @return FunnelStepAction
+     */
+    private function getAction(FunnelStepLead $funnelStepLead): FunnelStepAction
+    {
+        return $funnelStepLead->funnelStep->actions()->orderBy('action_sequence', 'asc')->first();
     }
 }

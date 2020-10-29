@@ -12,6 +12,11 @@ export const GetLeadStatusesForSelect = state => {
 export const GetPostbackEventTypesForSelect = state => {
     let res = []
     let aux = state.postbackEventTypes.filter(pt => !state.steps.find(st => st.postback_event_type_id == pt.id))
+
+    if (state.isEditingStep) {
+        aux.push((state.postbackEventTypes.find(pt => state.steps[state.currentStep].postback_event_type_id == pt.id)))
+    }
+
     aux.forEach(postbackEventType => {
         res.push({
             id: postbackEventType.id,

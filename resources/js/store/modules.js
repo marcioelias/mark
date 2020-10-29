@@ -4,6 +4,7 @@ import { store as step } from '../src/step'
 import { store as action } from '../src/action'
 import { store as funnelShow } from '../src/funnelShow'
 import { store as actionButton } from '../src/actionButton'
+import { store as marketingAction } from '../src/marketingAction'
 
 export default {
     funnel,
@@ -11,5 +12,6 @@ export default {
     step,
     action,
     funnelShow,
-    actionButton
+    actionButton,
+    marketingAction
 }

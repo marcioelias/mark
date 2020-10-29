@@ -37,8 +37,14 @@ class DoOnLeadCreated
         $this->addLeadToStep($event->postback);
     }
 
+    /**
+     * Add the Lead to corresponding event type setp on the funnel, if it exists
+     *
+     * @param Postback $postback
+     * @return void
+     */
     private function addLeadToStep(Postback $postback) {
-        $salesFunnel = Funnel::where('user_id', $postback->user_id)->salesFunnel()->first();
+        $salesFunnel = $postback->product->funnel;
         if ($salesFunnel) {
             $funnelStep = FunnelStep::where('funnel_id', $salesFunnel->id)
                                 ->where('postback_event_type_id', $postback->postback_event_type_id)
@@ -52,33 +58,11 @@ class DoOnLeadCreated
 
                 $funnelStepLead->save();
 
+                /**
+                 * Dispatch the event indicating that this Lead was assigned with a Funnel Step
+                 */
                 event(new OnAddLeadToStep($postback, $funnelStepLead));
             }
         }
     }
-
-    /* private function scheduleAction(Postback $postback) {
-
-        Schedule::create([
-            'lead_id' => $postback->lead_id,
-            'funnel_step_id' => $postback->lead->funnel_step_id,
-            'funnel_step_action_id' => $postback->lead->funnelStep->firstAction(),
-            'start_at' => $this->getScheduleStartTime($postback)
-        ]);
-    }
-
-    private function getScheduleStartTime(Postback $postback) {
-        $funnelStep = $postback->lead->funnelStep;
-        $action = $funnelStep->firstAction();
-        $leadCreatedAt = CarbonImmutable::parse($postback->lead->created_at);
-        $actionData = $action->action_data;
-        $daysAfter = Arr::get($actionData, 'options.days_after', 0);
-        $startAt =  Arr::get($actionData, 'options.start_time', '00:00').':00';
-        $endAt = Arr::get($actionData, 'options.start_time', '23:59').':59';
-        $delayMinutes = Arr::get($actionData, 'options.delay_minutes', 0);
-
-
-    } */
-
-
 }

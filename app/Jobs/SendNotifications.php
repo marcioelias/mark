@@ -17,6 +17,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SqsQueue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -47,15 +48,11 @@ class SendNotifications implements ShouldQueue
      */
     public function handle()
     {
-        Redis::throttle('sendNotification')->allow(1)->every(10)->block(10)->then(function () {
-            try {
-                $this->send();
-            } catch (Exception $e) {
-                Log::emergency($e);
-            }
-        }, function () {
-            return $this->release(5);
-        });
+        try {
+            $this->send();
+        } catch (Exception $e) {
+            Log::emergency($e);
+        }
     }
 
     private function send() {
@@ -76,7 +73,6 @@ class SendNotifications implements ShouldQueue
         $msg = $this->notificationData;
         $to = $this->schedule->lead->customer->customer_phone_number;
         SmsFactory::getSmsGateway($msg, $to)->send();
-        //Http::post('https://api.dev.test/api/sms', ['data' => $msg]);
     }
 
     private function sendEmail() {

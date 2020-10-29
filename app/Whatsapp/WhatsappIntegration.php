@@ -5,6 +5,7 @@ namespace App\Whatsapp;
 use App\Models\User\WhatsappInstance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class WhatsappIntegration {
 
@@ -20,11 +21,22 @@ class WhatsappIntegration {
     }
 
     public function createInstance() {
-        Http::post($this->apiUrl, [
-            'clienteid' => Auth::user()->id,
-            'senha' => $this->apiHash,
+        $response = Http::post($this->apiUrl.'/nova_instancia_whatsapp_api', [
+            'clienteid' => $this->whatsappInstance->id,
             'port' => $this->whatsappInstance->port
         ]);
     }
 
 }
+
+
+
+
+/* Log::info('url: '.$this->apiUrl.'/nova_instancia_whatsapp_api');
+        Log::info('data: ');
+        Log::debug([
+            'clienteid' => $this->whatsappInstance->id,
+            'port' => $this->whatsappInstance->port
+        ]);
+        Log::info('response');
+        Log::debug($response); */

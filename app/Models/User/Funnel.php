@@ -51,6 +51,10 @@ class Funnel extends Model
         return $query->where('is_sales_funnel', true);
     }
 
+    public function scopeRemarketingFunnel($query) {
+        return $query->where('is_sales_funnel', false);
+    }
+
     public function scopeActive($query, $active = true) {
         return $query->where('active', $active);
     }

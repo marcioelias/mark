@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Constants\PostbackEventType;
 use App\Events\NewLeadCreated;
 use App\Events\OnLeadCreated;
+use App\Events\OnLeadUpdated;
 use App\Integrations\IntegrationFactory;
 use App\Models\User\Lead;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Postback;
-use App\Providers\OnLeadUpdated;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,10 +54,12 @@ class WebhookCallController extends Controller
     private function dispatchEvents(Postback $postback) {
         switch ($postback->postback_event_type_id) {
             case PostbackEventType::BILLET_PRINTED:
+                Log::info('Boleto Impresso -> Novo Lead');
                 event(new OnLeadCreated($postback));
                 break;
 
             default:
+                Log::info('Outro evento -> Atualiza o Lead');
                 event(new OnLeadUpdated($postback));
                 break;
         }
