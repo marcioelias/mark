@@ -45,7 +45,7 @@ class MessagesAvailable implements Rule
      */
     public function message()
     {
-        return 'Saldo de Mensagens excede o necessário para rodar essa Ação de Marketing.';
+        return 'Saldo de Mensagens excede o necessário para executar essa Ação de Marketing.';
     }
 
     /**
