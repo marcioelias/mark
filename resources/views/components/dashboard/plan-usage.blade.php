@@ -7,7 +7,7 @@
             @foreach ($getStatistics as $statistic)
             @if ($statistic['enabled'])
             @php
-                $percent = $statistic['limit'] == 0 ? 0 : (100 * $statistic['usage'] / $statistic['limit'])
+                $percent = round($statistic['limit'] == 0 ? 0 : (100 * $statistic['usage'] / $statistic['limit']), 1)
             @endphp
             <div class="d-flex justify-content-between mb-25">
                 <div class="browser-info">

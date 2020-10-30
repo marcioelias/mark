@@ -7,6 +7,7 @@ use App\Models\User\Customer;
 use App\Models\User\Funnel;
 use App\Models\User\MarketingAction;
 use App\Models\User\Product;
+use App\Rules\MessagesAvailable;
 use App\Traits\LayoutConfigTrait;
 use Carbon\Carbon;
 use Exception;
@@ -115,7 +116,7 @@ class MarketingActionController extends Controller
                 'description' => "required|unique:marketing_actions,marketing_action_description,NULL,NULL,user_id,$userId",
                 'product_id' => 'required',
                 'action_type_id' => 'required',
-                'message' => 'required',
+                'message' => ['required', new MessagesAvailable($request->action_type_id, count($request->customers)) ],
                 'customers' => 'min:1'
             ], [
                 'description.unique' => 'Já existe uma Ação de Marketing com essa mesma descrição.',

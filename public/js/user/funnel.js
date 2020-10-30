@@ -93816,7 +93816,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use({
   install: function install(Vue) {
     Vue.prototype.$http = axios__WEBPACK_IMPORTED_MODULE_1___default.a.create({
-      baseURL: "https://convertall.com.br",
+      baseURL: "https://mark2.dev.test",
       headers: {
         common: {
           'X-Requested-With': 'XMLHttpRequest'

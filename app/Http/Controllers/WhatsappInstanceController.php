@@ -8,8 +8,11 @@ use App\Models\User\Product;
 use App\Models\User\WhatsappInstance;
 use App\Models\WhatsappInstanceStatus;
 use App\Traits\LayoutConfigTrait;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WhatsappInstanceController extends Controller
 {
@@ -111,13 +114,24 @@ class WhatsappInstanceController extends Controller
             'description' => "required|unique:whatsapp_instances,description,NULL,NULL,user_id,$userId",
         ]);
 
-        $whatsappInstance = new WhatsappInstance($request->all());
-        $whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::PENDING;
-        $whatsappInstance->port = $this->getNewInstancePort();
+        DB::beginTransaction();
+        try {
+            $whatsappInstance = new WhatsappInstance($request->all());
+            $whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::PENDING;
+            $whatsappInstance->port = $this->getNewInstancePort();
 
-        $whatsappInstance->save();
+            $whatsappInstance->save();
 
-        event(new OnCreateWhatsappInstance($whatsappInstance));
+            //event(new OnCreateWhatsappInstance($whatsappInstance));
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency($e->getMessage());
+            return $e->getMessage();
+        }
+
+
 
         return response()->json($whatsappInstance);
     }
