@@ -12,8 +12,17 @@ export const ActionSetDescription = ({ commit }, payload) => {
     commit(types.SET_DESCRIPTION, payload)
 }
 
-export const ActionSetProductId = ({ commit }, payload) => {
+export const ActionSetProductId = ({ state, commit, dispatch }, payload) => {
     commit(types.SET_PRODUCT_ID, payload)
+    if (payload) {
+        let prod = state.products.find(p => p.id == payload)
+        commit(types.SET_WHATSAPP_ENABLE, prod.whatsapp_instance)
+        if (!prod.whatsapp_instance && state.messageType == '1ef0d03c-9f90-408a-b14b-ccee49a2dd6d') {
+            dispatch('ActionCancelMessage')
+        }
+    } else {
+        commit(types.SET_WHATSAPP_ENABLE, false)
+    }
 }
 
 export const ActionSetStartDate = ({ commit }, payload) => {
@@ -30,6 +39,10 @@ export const ActionSetCustomers = ({ commit }, payload) => {
 
 export const ActionSetIsEditingCustomers = ({ commit }, payload) => {
     commit(types.SET_IS_EDITING_CUSTOMERS, payload)
+}
+
+export const ActionSetWhatsappEnable = ({ commit }, payload) => {
+    commit(types.SET_WHATSAPP_ENABLE, payload)
 }
 
 export const ActionSetMessageType = ({ commit }, payload) => {

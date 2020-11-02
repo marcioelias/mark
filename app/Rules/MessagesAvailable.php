@@ -2,8 +2,10 @@
 
 namespace App\Rules;
 
+use App\Constants\ActionTypes;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MessagesAvailable implements Rule
 {
@@ -16,7 +18,7 @@ class MessagesAvailable implements Rule
      *
      * @return void
      */
-    public function __construct(String $actionType, int $total)
+    public function __construct(String $actionType = '', int $total = 0)
     {
         $this->user = Auth::user();
         $this->activatedAt = $this->user->activated_at ?? now();
@@ -35,7 +37,8 @@ class MessagesAvailable implements Rule
     {
         $available = $this->getMessagesAvailable();
         $used = $this->getSmsUsed();
-        return $available > 0 && (($available - $used) < (int) $this->total);
+
+        return $available > 0 && (($available - $used) > (int) $this->total);
     }
 
     /**
@@ -45,7 +48,20 @@ class MessagesAvailable implements Rule
      */
     public function message()
     {
-        return 'Saldo de Mensagens excede o necessário para executar essa Ação de Marketing.';
+        return "Saldo de Mensagens ".$this->getMessageTypeDescription()." disponível excede o necessário para executar essa Ação de Marketing.";
+    }
+
+    /**
+     * Return a string identifying the type of action
+     *
+     * @return string
+     */
+    private function getMessageTypeDescription(): string {
+        if ($this->actionType === ActionTypes::SMS) {
+            return 'SMS';
+        } else {
+            return 'de E-mail';
+        }
     }
 
     /**

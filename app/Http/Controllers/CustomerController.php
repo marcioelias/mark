@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
 
 class CustomerController extends Controller
@@ -270,5 +271,100 @@ class CustomerController extends Controller
     public function parseEndDate(string $date): object
     {
         return Carbon::parse($date)->setTimezone(config('app.timezone'))->endOfDay();
+    }
+
+
+    /**
+     * Show the form for import customers.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import() {
+        return $this->getView('user.customers.import');
+    }
+
+    /**
+     * Upload the CSV file for importing customers
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Request $request) {
+        if($request->hasFile('file') && $request->file('file')->isValid()) {
+            return response()->json($this->parseCSVFile($request->file('file')));
+        }
+    }
+
+    public function processImport(Request $request) {
+        //Log::debug($request->all());
+        $this->validate($request, [
+            'customer_status_id' => 'required',
+            'customers' => 'required|min:1'
+        ],
+        [
+            'customers.required' => 'Sem dados para importar',
+            'customers.min' => 'Sem dados para importar',
+        ],
+        [
+            'customer_status_id' => 'Status'
+        ]);
+
+        $ok = 0;
+        $err = 0;
+        foreach ($request->customers as $fields) {
+            try {
+                $customerData = [];
+                foreach($fields as $field) {
+                    if ($field['column']) {
+                        $customerData[$field['column']] = $field['content'];
+                    }
+                }
+                $validator = Validator::make($customerData, [
+                    'customer_name' => 'required',
+                    'customer_email' => 'required|email',
+                    'customer_phone_number' => 'required'
+                ]);
+
+                if ($validator->fails()) {
+                    $err++;
+                } else {
+                    $customer = Customer::firstOrNew($customerData, [
+                        'customer_status_id' => $request->customer_status_id
+                    ]);
+
+                    $customer->save();
+                    $ok++;
+                }
+            } catch (Exception $e) {
+                Log::debug($e->getMessage());
+                $err++;
+            }
+        }
+
+        return response()->json([
+            'redirect' => route('customer.index'),
+            'title' => 'Importação Concluída',
+            'message' => $err > 0 ? "$ok clientes importados com sucesso, $err não puderam ser importados." : "$ok clientes importados com sucesso!"
+        ]);
+    }
+
+    private function parseCSVFile(String $file) {
+        $res = [];
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            while (($line = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $columns = count($line);
+                $row = [];
+                for ($column = 0; $column < $columns; $column++) {
+                    $row[] = [
+                        'index' => $column,
+                        'column' => '',
+                        'content' => $line[$column]
+                    ];
+                }
+                $res[] = $row;
+            }
+            fclose($handle);
+        }
+        return $res;
     }
 }

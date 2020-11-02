@@ -28,6 +28,17 @@
     @component('components.form-group', [
         'inputs' => [
             [
+                'type' => 'textarea',
+                'field' => 'sms_package_description',
+                'label' => 'Descrição',
+                'required' => true,
+            ]
+        ]
+    ])
+    @endcomponent
+    @component('components.form-group', [
+        'inputs' => [
+            [
                 'type' => 'number',
                 'field' => 'sms_amount',
                 'label' => 'Quantidade de SMS',

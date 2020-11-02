@@ -28,5 +28,6 @@ export default {
             images: []
         }
     },
-    isEditingCustomers: true
+    isEditingCustomers: true,
+    whatsappEnable: false
 }

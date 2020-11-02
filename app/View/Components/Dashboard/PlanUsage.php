@@ -69,7 +69,7 @@ class PlanUsage extends Component
                 break;
 
             case FeatureTypes::WHATSAPP:
-                return $this->whatsappStats($startAt);
+                return $this->whatsappStats();
                 break;
         }
     }
@@ -96,7 +96,7 @@ class PlanUsage extends Component
                            ->count() ?? 0;
     }
 
-    private function whatsappStats(DateTime $startDate) {
-        return Auth::user()->leads->where('created_at', '>=', $startDate)->count() ?? 0;
+    private function whatsappStats() {
+        return Auth::user()->whatsappInstances->count() ?? 0;
     }
 }

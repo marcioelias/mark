@@ -12,6 +12,7 @@ use App\Models\User\Product;
 use App\Models\User\Tag;
 use App\Models\User\LeadStatus;
 use App\Models\User\Postback;
+use App\Models\User\WhatsappInstance;
 use App\Notifications\CustomVerifyEmailNotification;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
@@ -29,7 +30,24 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone_number', 'customer_code', 'plan_id', 'password', 'first_login_at', 'active', 'activated_at'
+        'name',
+        'last_name',
+        'doc_number',
+        'zip_code',
+        'street_name',
+        'street_number',
+        'neighborhood',
+        'city',
+        'state',
+        'email',
+        'phone_area',
+        'phone_number',
+        'customer_code',
+        'plan_id',
+        'password',
+        'first_login_at',
+        'active',
+        'activated_at'
     ];
 
     /**
@@ -59,6 +77,14 @@ class User extends Authenticatable implements MustVerifyEmail
         /* static::creating(function (self $user) {
             $user->plan_cycle_ends = Carbon::now()->addDays(30);
         }); */
+    }
+
+    public function profileComplete() {
+        return $this->name &&
+                $this->email &&
+                $this->doc_number &&
+                $this->street_name &&
+                $this->city;
     }
 
     public function postbacksAvailable() {
@@ -217,5 +243,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function actions() {
         return $this->hasMany(Action::class);
+    }
+
+    public function whatsappInstances() {
+        return $this->hasMany(WhatsappInstance::class);
     }
 }

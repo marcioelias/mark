@@ -9,17 +9,16 @@
                         caption=""
                         field="customer_name">
                         <fieldset>
-                        <div class="vs-checkbox-con vs-checkbox-primary">
-                            <input type="checkbox" class="mr-1" @click="toggleCustomerCheck" v-model="selectedAll">
-                            <span class="vs-checkbox vs-checkbox-sm">
-                                <span class="vs-checkbox--check">
-                                    <i class="vs-icon feather icon-check"></i>
+                            <div class="vs-checkbox-con vs-checkbox-primary">
+                                <input type="checkbox" class="mr-1" @click="toggleCustomerCheck" v-model="selectedAll">
+                                <span class="vs-checkbox vs-checkbox-sm">
+                                    <span class="vs-checkbox--check">
+                                        <i class="vs-icon feather icon-check"></i>
+                                    </span>
                                 </span>
-                            </span>
-                            <span class="">Nome</span>
-                        </div>
-                    </fieldset>
-
+                                <span class="">Nome</span>
+                            </div>
+                        </fieldset>
                     </customer-list-header>
                     <customer-list-header
                         caption="E-mail"

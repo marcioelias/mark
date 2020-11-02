@@ -21,7 +21,7 @@
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
               <li class="nav-item d-none d-lg-block">
-                <a class="nav-link" href="#" data-toggle="tooltip" data-placement="top" title="Comprar SMS">
+                <a class="nav-link" href="{{ route('sms.buy') }}" data-toggle="tooltip" data-placement="top" title="Comprar SMS">
                     <i class="ficon feather icon-message-square"></i> <strong>1000 SMS Disponíveis</strong>
                 </a>
               </li>
@@ -145,8 +145,10 @@
 						<img class="round" src="{{asset('images/portrait/small/avatar-s-11.jpg') }}" alt="avatar" height="40" width="40" />
 					</span> --}}
               	</a>
-              	<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="javascript:void(0)"><i
-                	class="feather icon-user"></i> Minha conta</a><a class="dropdown-item" href="javascript:void(0)">{{--<i
+              	<div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="{{ route('user.profile') }}">
+                    <i class="feather icon-user"></i> Minha conta</a>
+                  <a class="dropdown-item" href="javascript:void(0)">{{--<i
                     class="feather icon-mail"></i> My
 					Inbox</a><a class="dropdown-item" href="javascript:void(0)"><i class="feather icon-check-square"></i>
 					Task</a><a class="dropdown-item" href="javascript:void(0)"><i class="feather icon-message-square"></i>

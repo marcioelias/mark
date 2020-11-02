@@ -97,3 +97,11 @@ $sides: (top, bottom, left, right); // Leave this variable alone
   position: sticky;
   top: 0;
 }
+
+div.is-invalid span.selection span.select2-selection[role=combobox] {
+  border-color: #ea5455 !important;
+}
+
+select.is-invalid + span.select2 span.selection span.select2-selection[role=combobox] {
+  border-color: #ea5455 !important;
+}

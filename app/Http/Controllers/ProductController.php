@@ -209,7 +209,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getProductsJson() {
-        $products = Product::orderBy('product_name', 'asc')->get();
+        $products = Product::with('whatsappInstance')->orderBy('product_name', 'asc')->get();
 
         return response()->json($products);
     }

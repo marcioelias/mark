@@ -16,8 +16,9 @@
         </div>
         <div class="col-4">
             <button class="btn btn-block btn-lg"
-                    :class="{ 'btn-outline-success': !httpErrors.hasOwnProperty('action_type_id'), 'btn-outline-danger': httpErrors.hasOwnProperty('action_type_id') }"
-                    @click="ActionSetMessageType(ACTION.WHATSAPP)">
+                    :class="{ 'btn-outline-success': !httpErrors.hasOwnProperty('action_type_id') && whatsappEnable, 'btn-outline-danger': httpErrors.hasOwnProperty('action_type_id') && whatsappEnable, 'btn-outline-light': !whatsappEnable }"
+                    @click="ActionSetMessageType(ACTION.WHATSAPP)"
+                    :disabled="!whatsappEnable">
                 <i class="fab fa-whatsapp"></i> Whatsapp
             </button>
         </div>
@@ -38,7 +39,8 @@ export default {
     },
     computed: {
         ...mapState('marketingAction', [
-            'httpErrors'
+            'httpErrors',
+            'whatsappEnable'
         ])
     },
     methods: {

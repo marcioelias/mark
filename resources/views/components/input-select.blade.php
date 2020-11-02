@@ -11,7 +11,7 @@
     $div_css = isset($div_css) ? $div_css : '';
     $searchById = isset($searchById) ? $searchById : false;
 @endphp
-<div class="col col-sm col-md{{$inputSize}} col-lg{{$inputSize}} {{ $errors->has($field) ? ' has-error' : '' }} {{$div_css}}">
+<div class="col col-sm col-md{{$inputSize}} col-lg{{$inputSize}} {{ $errors->has($field) ? ' is-invalid' : '' }} {{$div_css}}">
     @isset($label)
     <x-label :label="$label" :field="$field" />
     @endisset
@@ -36,9 +36,5 @@
         @endif
     </select>
 
-    @if ($errors->has($field))
-        <span class="invalid-feedback d-block">
-            <strong>{{ $errors->first($field) }}</strong>
-        </span>
-    @endif
+    <div class="invalid-feedback" id="error-{{ $id }}"></div>
 </div>

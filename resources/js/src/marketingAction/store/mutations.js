@@ -78,5 +78,8 @@ export default {
                 images: []
             }
         }
+    },
+    [types.SET_WHATSAPP_ENABLE] (state, payload) {
+        state.whatsappEnable = payload
     }
 }

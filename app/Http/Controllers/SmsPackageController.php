@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\MercadoPago\MercadoPago;
 use App\Models\SmsPackage;
 use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SmsPackageController extends Controller
@@ -89,8 +91,15 @@ class SmsPackageController extends Controller
     {
         $this->validate($request, [
             'sms_package_name' => 'required|unique:sms_packages',
+            'sms_package_description' => 'required',
             'sms_amount' => 'required',
             'package_value' => 'required'
+        ],[],
+        [
+            'sms_package_name' => 'Pacote',
+            'sms_package_description' => 'Descrição',
+            'sms_amount' => 'Quantidade de SMS',
+            'package_value' => 'Valor'
         ]);
 
         $smsPackage = new SmsPackage($request->all());
@@ -133,8 +142,15 @@ class SmsPackageController extends Controller
     {
         $this->validate($request, [
             'sms_package_name' => "required|unique:sms_packages,sms_package_name,$smsPackage->id,id",
+            'sms_package_description' => 'required',
             'sms_amount' => 'required',
             'package_value' => 'required'
+        ],[],
+        [
+            'sms_package_name' => 'Pacote',
+            'sms_package_description' => 'Descrição',
+            'sms_amount' => 'Quantidade de SMS',
+            'package_value' => 'Valor'
         ]);
 
         $smsPackage->fill($request->all());
@@ -151,5 +167,18 @@ class SmsPackageController extends Controller
     public function destroy(SmsPackage $smsPackage)
     {
         //
+    }
+
+    public function buyPackage() {
+        if (Auth::user()->profileComplete()) {
+            $packages = SmsPackage::where('active', true)
+                                ->orderBy('sms_amount', 'ASC')
+                                ->get();
+            return $this->getView('sms_packages.buy_package')
+                        ->withMercadoPago(new MercadoPago())
+                        ->withPackages($packages);
+        } else {
+            return redirect()->route('user.profile')->withErrors(['msg' => 'Antes de efetuar compras, por favor complete seus dados!']);
+        }
     }
 }

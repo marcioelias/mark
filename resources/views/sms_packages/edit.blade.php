@@ -27,6 +27,18 @@
 ])
 @endcomponent
 @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'textarea',
+                'field' => 'sms_package_description',
+                'label' => 'Descrição',
+                'required' => true,
+                'inputValue' => $smsPackage->sms_package_description
+            ]
+        ]
+    ])
+    @endcomponent
+@component('components.form-group', [
     'inputs' => [
         [
             'type' => 'number',

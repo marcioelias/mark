@@ -5,6 +5,7 @@
     $autofocus = isset($autofocus) ? $autofocus : false;
     $required = isset($required) ? $required : false;
     $div_css = isset($div_css) ? $div_css : '';
+    $id = $id ?? $field
 @endphp
 <div class="col col-sm col-md{{$inputSize}} col-lg{{$inputSize}} {{$div_css}}">
     @if(isset($label))
@@ -13,7 +14,7 @@
     @endif
 
     <input type="password" class="form-control{{ $errors->has($field) ? ' is-invalid' : '' }}" name="{{$name}}" id="{{$id}}" value="" {{ $required ? 'required' : '' }}  {{ $autofocus ? 'autofocus' : '' }} {{ $disabled ? 'disabled="disabled"' : '' }}>
-
+    <div class="invalid-feedback" id="error-{{ $id }}"></div>
     @if ($errors->has($field))
         <span class="invalid-feedback">
             <strong>{{ __($errors->first($field)) }}</strong>

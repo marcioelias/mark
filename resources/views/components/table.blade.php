@@ -35,12 +35,12 @@
                     </a>
                     @endif
                 </div>
-            </div>
-            <div class="row mr-1">
-                @foreach($customMethods as $customMethod)
-                    @component($customMethod['component'])
-                    @endcomponent
-                @endforeach
+                <div>
+                    @foreach($customMethods as $customMethod)
+                        @component($customMethod['component'])
+                        @endcomponent
+                    @endforeach
+                </div>
             </div>
             @if(isset($searchParms))
             @component($searchParms, $searchParmsData ?? [])

@@ -16,7 +16,7 @@
                 {
                     "url": "customer.index",
                     "name": "Customers",
-                    "activeUrls": ["customer", "customer/create", "customer/{customer}/edit"],
+                    "activeUrls": ["customer", "customer/create", "customer/{customer}/edit", "customers/import"],
                     "i18n": "nav.sk_layout_2_columns"
                 },
                 {

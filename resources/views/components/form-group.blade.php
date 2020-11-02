@@ -6,6 +6,7 @@
                 $input['inputSize'] = isset($input['inputSize']) ? $input['inputSize'] : '12';
                 $input['inputValue'] = isset($input['inputValue']) ? $input['inputValue'] : null;
                 $input['css'] = isset($input['css']) ? $input['css'] : '';
+                $input['css_class'] = isset($input['css_class']) ? $input['css_class'] : '';
                 $input['disabled'] = isset($input['disabled']) ? $input['disabled'] : false;
                 $input['name'] = isset($input['name']) ? $input['name'] : $input['field'];
                 $input['id'] = isset($input['id']) ? $input['id'] : $input['field'];
@@ -50,6 +51,7 @@
                     'name' => $input['name'],
                     'id' => $input['id'],
                     'css' => $input['css'],
+                    'css_class' => $input['css_class'],
                     'div_css' => $input['div_css'],
                     'vModel' => $input['vModel'],
                     'readOnly' => $input['readOnly'],

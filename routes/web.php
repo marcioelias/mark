@@ -83,8 +83,15 @@ Route::prefix('')->group(function() {
 		Route::resource('whatsapp_instance', 'WhatsappInstanceController')->except('show');
 		Route::resource('marketing_action', 'MarketingActionController')->except('show');
 
+		Route::get('customers/import', 'CustomerController@import')->name('customers.import');
+		Route::post('customers/upload', 'CustomerController@upload')->name('customers.upload');
+		Route::post('customers/import', 'CustomerController@processImport')->name('customers.process.import');
 		Route::get('postback', 'PostbackController@index')->name('postback.index');
 		Route::get('postback/{postback}', 'PostbackController@show')->name('postback.show');
+		Route::get('user/profile', 'UserController@profile')->name('user.profile');
+		Route::patch('user/profile/{user}', 'UserController@updateProfile')->name('user.profile.update');
+
+		Route::get('sms/buy', 'SmsPackageController@buyPackage')->name('sms.buy');
 
 		Route::get('plataform_config/get_url/{plataformConfig}', 'PlataformConfigController@getWebhookUrl');
 

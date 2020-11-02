@@ -116,7 +116,7 @@ class MarketingActionController extends Controller
                 'description' => "required|unique:marketing_actions,marketing_action_description,NULL,NULL,user_id,$userId",
                 'product_id' => 'required',
                 'action_type_id' => 'required',
-                'message' => ['required', new MessagesAvailable($request->action_type_id, count($request->customers)) ],
+                'message' => ['required', new MessagesAvailable($request->action_type_id ?? '', count($request->customers ?? 0)) ],
                 'customers' => 'min:1'
             ], [
                 'description.unique' => 'Já existe uma Ação de Marketing com essa mesma descrição.',

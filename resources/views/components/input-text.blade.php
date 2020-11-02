@@ -5,6 +5,7 @@
     $autofocus = isset($autofocus) ? $autofocus : false;
     $required = isset($required) ? $required : false;
     $css = isset($css) ? $css : '';
+    $css_class = isset($css_class) ? $css_class : '';
     $div_css = isset($div_css) ? $div_css : '';
     $vModel = isset($vModel) ? $vModel : false;
     $readOnly = isset($readOnly) ? $readOnly : false;
