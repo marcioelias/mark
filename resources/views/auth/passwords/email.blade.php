@@ -1,6 +1,6 @@
 @extends('layouts/fullLayoutMaster')
 
-@section('title', 'Forgot Password')
+@section('title', 'Esqueceu a senha')
 
 @section('page-style')
 {{-- Page Css files --}}
