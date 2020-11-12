@@ -4,6 +4,6 @@
     'model' => 'marketing_action',
     'tableTitle' => 'Ações de Marketing',
     'displayField' => 'marketing_action_description',
-    'actions' => ['edit', 'destroy'],
+    'actions' => ['show', 'destroy'],
     'orderData' => $orderData ?? false
 ]])

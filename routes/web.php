@@ -83,7 +83,7 @@ Route::prefix('')->group(function() {
 		Route::resource('customer', 'CustomerController')->except('show');
 		Route::resource('customer_status', 'CustomerStatusController')->except('show');
 		Route::resource('whatsapp_instance', 'WhatsappInstanceController')->except('show');
-		Route::resource('marketing_action', 'MarketingActionController')->except('show');
+		Route::resource('marketing_action', 'MarketingActionController')->except('edit');
 
 		Route::get('customers/import', 'CustomerController@import')->name('customers.import');
 		Route::post('customers/upload', 'CustomerController@upload')->name('customers.upload');
