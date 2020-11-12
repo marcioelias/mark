@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\TransactionTypes;
+use App\Events\OnBuySMSPackage;
 use App\MercadoPago\MercadoPago;
 use App\Models\SmsPackage;
+use App\Models\TransactionType;
+use App\Models\User\SmsUserTransaction;
 use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -179,6 +183,23 @@ class SmsPackageController extends Controller
                         ->withPackages($packages);
         } else {
             return redirect()->route('user.profile')->withErrors(['msg' => 'Antes de efetuar compras, por favor complete seus dados!']);
+        }
+    }
+
+    public function buyPackageResponse(String $response) {
+        switch ($response) {
+            case 'success':
+                return redirect()->route('index');
+                break;
+
+            case 'failure':
+                return redirect()->route('sms.buy');
+                break;
+
+            case 'pending':
+                return redirect()->route('index');
+                break;
+
         }
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models\User;
 
+use App\Constants\MarketingActionStatuses;
 use App\Models\ActionType;
 use App\Models\User;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -19,7 +21,8 @@ class MarketingAction extends Model implements HasMedia
         'product_id',
         'action_type_id',
         'action_message',
-        'marketing_action_status_id'
+        'marketing_action_status_id',
+        'start_at'
     ];
 
     protected $casts = [
@@ -39,6 +42,10 @@ class MarketingAction extends Model implements HasMedia
     }
 
     public function customers() {
-        return $this->belongsToMany(Customer::class);
+        return $this->belongsToMany(Customer::class)->wherePivot('finished_at', null)->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message']);
+    }
+
+    public function scopePending(Builder $query) {
+        return $query->where('marketing_action_status_id', MarketingActionStatuses::PENDING);
     }
 }

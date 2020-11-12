@@ -27,7 +27,8 @@ class CustomerController extends Controller
         return array(
             'customer_name' => 'Nome',
             'customer_phone_number' => 'Telefone',
-            'customer_email' => 'E-mail'
+            'customer_email' => 'E-mail',
+            'customer_status' => 'Status'
         );
     }
 
@@ -53,13 +54,17 @@ class CustomerController extends Controller
         ]);
 
         if ($request->searchField) {
-            $customers = Customer::where('customer_name', 'like', "%$request->searchField%")
+            $customers = Customer::select('customers.*', 'customer_statuses.customer_status')
+                                ->join('customer_statuses', 'customer_statuses.id', 'customers.customer_status_id')
+                                ->where('customer_name', 'like', "%$request->searchField%")
                                 ->orWhere('customer_phone_number', 'like', "%$request->searchField%")
                                 ->orWhere('customer_email', 'like', "%$request->searchField%")
                                 ->orderBy($this->orderField, $this->orderType)
                                 ->paginate($this->paginate);
         } else {
-            $customers = Customer::orderBy($this->orderField, $this->orderType)
+            $customers = Customer::select('customers.*', 'customer_statuses.customer_status')
+                                ->join('customer_statuses', 'customer_statuses.id', 'customers.customer_status_id')
+                                ->orderBy($this->orderField, $this->orderType)
                                 ->paginate($this->paginate);
         }
 

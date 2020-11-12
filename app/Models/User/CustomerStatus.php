@@ -10,6 +10,7 @@ class CustomerStatus extends Model
     use NullableMultiTenantable;
 
     protected $fillable = [
+        'id',
         'user_id',
         'customer_status'
     ];

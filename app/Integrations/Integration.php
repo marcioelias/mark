@@ -17,7 +17,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class Integration {
@@ -95,18 +94,23 @@ class Integration {
     }
 
     public function getCustomer() {
-        $this->customer = Customer::updateOrCreate(
-            [
-                'user_id' => $this->plataformConfig->user_id,
-                'customer_email' => $this->customerEmail
-            ],
-            [
-                'customer_name' => $this->customerName,
-                'customer_phone_number' => $this->customerPhone
-            ]
-        );
+        try {
+            $this->customer = Customer::updateOrCreate(
+                [
+                    'user_id' => $this->plataformConfig->user_id,
+                    'customer_email' => $this->customerEmail
+                ],
+                [
+                    'customer_name' => $this->customerName,
+                    'customer_phone_number' => $this->customerPhone,
+                ]
+            );
 
-        return $this->customer;
+            return $this->customer;
+
+        } catch (Exception $e) {
+            Log::emergency($e);
+        }
     }
 
     public function getMappedEventType() {
@@ -128,12 +132,11 @@ class Integration {
     private function userActive(User $user): bool
     {
         $expireAt = Carbon::parse($user->activated_at)->addDays($user->plan->plan_cycle_days ?? 30);
-        Log::info('Account Expiration: '.$expireAt);
         if (Carbon::now()->gt($expireAt)) {
             $user->active = false;
             $user->save();
         }
-        Log::info('Account Active: '.$user->active);
+
         return $user->active;
     }
 
@@ -169,7 +172,7 @@ class Integration {
     }
 
     public function getPostback() {
-        return Postback::firstOrNew(
+        return Postback::firstOrCreate(
             [
                 'user_id' => $this->getPlataformConfig()->user_id,
                 'product_id' => $this->product->id,
@@ -202,40 +205,6 @@ class Integration {
                 'visible' => $this->user->active && $this->user->leadsAvailable()
             ]
         );
-
-        // $lead = Lead::where('user_id', $this->getPlataformConfig()->user_id)
-        //             ->where('product_id', $this->product->id)
-        //             ->where('customer_id', $this->customer->id)
-        //             ->where('transaction_code', $this->transactionCode)
-        //             ->first();
-
-        // if ($lead) {
-        //     $lead->fill([
-        //             'billet_url' => $this->billetUrl,
-        //             'billet_barcode' => $this->billetBarcode,
-        //             'value' => $this->value,
-        //             'paid_at' => $this->getPaidAt(),
-        //             'lead_status_id' => $this->getLeadStatus()
-        //         ]);
-        // } else {
-        //     $lead = new Lead([
-        //         'user_id' => $this->getPlataformConfig()->user_id,
-        //         'product_id' => $this->product->id,
-        //         'customer_id' => $this->customer->id,
-        //         'transaction_code' => $this->transactionCode,
-        //         'payment_type_id' => $this->getMappedPaymentType(),
-        //         'billet_url' => $this->billetUrl,
-        //         'billet_barcode' => $this->billetBarcode,
-        //         'value' => $this->value,
-        //         'paid_at' => $this->getPaidAt(),
-        //         'lead_status_id' => $this->getLeadStatus(),
-        //         'funnel_id' => $this->getSalesFunnel()->id,
-        //         'visible' => $this->getUser()->active && $this->getUser()->leadsAvailable()
-        //     ]);
-        // }
-        // $lead->save();
-
-        // return $lead;
     }
 
     public function getSalesFunnelFirstStepId() {

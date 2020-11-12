@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Constants\WppInstStatuses;
 use App\Events\OnCreateWhatsappInstance;
+use App\Jobs\CreateWhatsappInstanceJob;
 use App\Models\User\Product;
 use App\Models\User\WhatsappInstance;
 use App\Models\WhatsappInstanceStatus;
 use App\Traits\LayoutConfigTrait;
+use App\Whatsapp\WhatsappIntegration;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -122,7 +124,7 @@ class WhatsappInstanceController extends Controller
 
             $whatsappInstance->save();
 
-            //event(new OnCreateWhatsappInstance($whatsappInstance));
+            CreateWhatsappInstanceJob::dispatch($whatsappInstance);
 
             DB::commit();
         } catch (Exception $e) {
@@ -213,5 +215,31 @@ class WhatsappInstanceController extends Controller
     private function getNewInstancePort() {
         $lastPort = WhatsappInstance::max('port');
         return $lastPort ? $lastPort + 1 : config('whatsapp-api.port_start');
+    }
+
+    public function getQrCode(WhatsappInstance $whatsappInstance) {
+        $qrcode = (new WhatsappIntegration($whatsappInstance))->getQrCode();
+        return response()->json(['qrcode' => $qrcode]);
+    }
+
+    public function setStatus(Request $request) {
+        try {
+            $whatsappInstance = WhatsappInstance::subdomain($request->PASTA)
+                                            ->hash($request->PASSWORD)
+                                            ->firstOrFail();
+            if ($whatsappInstance) {
+                $whatsappInstance->whatsapp_instance_status_id = $request->STATUS === 'CONECTADO' ? WppInstStatuses::CONNECTED : WppInstStatuses::DISCONNECTED;
+                $whatsappInstance->save();
+            }
+            return response()->json(['status' => 'ok']);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Não autorizado'], 401);
+        }
+
+    }
+
+    public function disconnect(WhatsappInstance $whatsappInstance) {
+        $response = (new WhatsappIntegration($whatsappInstance))->disconnect();
+        return response()->json(['status' => $response]);
     }
 }

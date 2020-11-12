@@ -20,7 +20,7 @@ class HomeController extends Controller
         if (!Auth::user()->first_login_at) {
             return redirect()->route('password.change');
         } else {
-            return view('home');
+            return $this->getView('home');
         }
     }
 }

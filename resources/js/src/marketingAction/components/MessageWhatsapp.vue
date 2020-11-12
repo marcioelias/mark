@@ -12,7 +12,7 @@
                 <label for="exampleFormControlTextarea1">Texto da Mensagem</label>
                 <div id="emoji-input-container">
                     <div class="emoji-input-box">
-                        <textarea ref="whatsapp_message" class="form-control" v-model="data" @click="showDialog = false"></textarea>
+                        <textarea ref="whatsapp_message" class="form-control" v-model="currentMessage" @click="showDialog = false"></textarea>
                         <button class="btn" id="toggleEmoji" @click="toogleDialogEmoji"><i class="fa fa-smile text-light"></i></button>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export default {
             this.$refs.whatsapp_message.clear()
         },
         getInputObj() {
-            console.log(this.$parent.$refs['whatsapp_message'])
+            //console.log(this.$parent.$refs['whatsapp_message'])
             return this.$parent.$refs['whatsapp_message'];
         },
         toogleDialogEmoji() {

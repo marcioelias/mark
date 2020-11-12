@@ -2,8 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Constants\CustomerStatuses;
 use App\Events\OnAddLeadToStep;
 use App\Events\OnLeadCreated;
+use App\Models\User\Customer;
 use App\Models\User\Funnel;
 use App\Models\User\FunnelStep;
 use App\Models\User\FunnelStepLead;
@@ -13,6 +15,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class DoOnLeadCreated
 {
@@ -44,6 +47,7 @@ class DoOnLeadCreated
      * @return void
      */
     private function addLeadToStep(Postback $postback) {
+        $this->updateCustomerStatus($postback->lead->customer);
         $salesFunnel = $postback->product->funnel;
         if ($salesFunnel) {
             $funnelStep = FunnelStep::where('funnel_id', $salesFunnel->id)
@@ -64,5 +68,16 @@ class DoOnLeadCreated
                 event(new OnAddLeadToStep($postback, $funnelStepLead));
             }
         }
+    }
+
+    /**
+     * Update customer, setting the current status to Active
+     *
+     * @param Customer $customer
+     * @return void
+     */
+    private function updateCustomerStatus(Customer $customer) {
+        $customer->customer_status_id = CustomerStatuses::ACTIVE;
+        $customer->save();
     }
 }

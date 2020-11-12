@@ -10,7 +10,6 @@ class ActionTypeController extends Controller
 {
     public function getActionTypesJson() {
         $featuresPlan = Auth::user()->plan->enabledFeatures()->whereHas('actionType')->get();
-        //return response()->json($featuresPlan);
         foreach ($featuresPlan as $feature) {
             $featuredActionTypes[] = $feature->actionType;
         }

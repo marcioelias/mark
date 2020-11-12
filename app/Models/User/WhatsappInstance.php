@@ -5,6 +5,7 @@ namespace App\Models\User;
 use App\Models\WhatsappInstanceStatus;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class WhatsappInstance extends Model
 {
@@ -33,4 +34,11 @@ class WhatsappInstance extends Model
         return $this->belongsTo(WhatsappInstanceStatus::class);
     }
 
+    public function scopeSubdomain(Builder $query, string $subdomain) {
+        return $query->where('subdomain', $subdomain);
+    }
+
+    public function scopeHash(Builder $query, string $hash) {
+        return $query->where('hash', $hash);
+    }
 }

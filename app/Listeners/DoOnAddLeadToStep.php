@@ -14,6 +14,7 @@ use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class DoOnAddLeadToStep
 {
@@ -48,18 +49,20 @@ class DoOnAddLeadToStep
     private function scheduleAction(Postback $postback, FunnelStepLead $funnelStepLead) {
         $action = $this->getAction($funnelStepLead);
 
-        $schedule = new Schedule([
-            'user_id' => $postback->user_id,
-            'lead_id' => $postback->lead_id,
-            'funnel_step_id' => $funnelStepLead->funnelStep->id,
-            'funnel_step_action_id' => $action->id,
-            'start_at' => $this->getScheduleStartAt($action, $funnelStepLead),
-            'start_period' => $this->getSheduleStartPeriod($action),
-            'end_period' => $this->getSheduleEndPeriod($action),
-            'delay_before_start' => $this->getDelayBeforeStart($action),
-        ]);
+        if ($action) {
+            $schedule = new Schedule([
+                'user_id' => $postback->user_id,
+                'lead_id' => $postback->lead_id,
+                'funnel_step_id' => $funnelStepLead->funnelStep->id,
+                'funnel_step_action_id' => $action->id,
+                'start_at' => $this->getScheduleStartAt($action, $funnelStepLead),
+                'start_period' => $this->getSheduleStartPeriod($action),
+                'end_period' => $this->getSheduleEndPeriod($action),
+                'delay_before_start' => $this->getDelayBeforeStart($action),
+            ]);
 
-        $schedule->save();
+            $schedule->save();
+        }
     }
 
     /**
@@ -118,6 +121,6 @@ class DoOnAddLeadToStep
      */
     private function getAction(FunnelStepLead $funnelStepLead): FunnelStepAction
     {
-        return $funnelStepLead->funnelStep->actions()->orderBy('action_sequence', 'asc')->first();
+        return $funnelStepLead->funnelStep->actions()->orderBy('seconds_after', 'asc')->first();
     }
 }

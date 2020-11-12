@@ -71,8 +71,8 @@ class SetNotificationDone
     private function getNextAction(FunnelStepAction $funnelStepAction) {
         return FunnelStep::find($funnelStepAction->funnel_step_id)
                     ->actions()
-                    ->where('action_sequence', '>', $funnelStepAction->action_sequence)
-                    ->orderBy('action_sequence', 'asc')
+                    ->where('seconds_after', '>', $funnelStepAction->seconds_after)
+                    ->orderBy('seconds_after', 'asc')
                     ->first();
     }
 

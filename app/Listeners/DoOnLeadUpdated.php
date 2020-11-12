@@ -2,6 +2,8 @@
 
 namespace App\Listeners;
 
+use App\Constants\CustomerStatuses;
+use App\Constants\PostbackEventType;
 use App\Events\OnAddLeadToStep;
 use App\Events\OnLeadUpdated;
 use App\Models\User\Funnel;
@@ -35,7 +37,10 @@ class DoOnLeadUpdated
     {
         try {
             $funnelSteplead = $event->postback->lead->funnelStepLeads()->where('active', true)->orderBy('created_at', 'desc')->first();
-            $this->updateFunnelStepLead($funnelSteplead, $event->postback);
+
+            if ($funnelSteplead) {
+                $this->updateFunnelStepLead($funnelSteplead, $event->postback);
+            }
         } catch (Exception $e) {
             Log::emergency($e->getMessage());
             Log::debug($e);
@@ -54,8 +59,9 @@ class DoOnLeadUpdated
             DB::beginTransaction();
             try {
                 $this->inactiveCurrentStep($funnelSteplead);
-                $this->addLeadToNewStep($postback);
                 $this->removePendingSchedulesCurrentStep($funnelSteplead);
+                $this->addLeadToNewStep($postback);
+                $this->updateCustomerStatus($postback);
 
                 DB::commit();
             } catch (Exception $e) {
@@ -137,7 +143,7 @@ class DoOnLeadUpdated
     /**
      * Remove any pending schedule action for the given step. This is usefull when the Lead
      * change status, going to a new step, and has pending tasks of prior step that do not
-     * to be executed anymore.
+     * will be executed anymore.
      *
      * @param FunnelStepLead $funnelStepLead
      * @return void
@@ -151,5 +157,29 @@ class DoOnLeadUpdated
         foreach ($schedules as $schedule) {
             $schedule->delete();
         }
+    }
+
+    /**
+     * Update customer status based on the current status of the Lead
+     *
+     * @param Postback $postback
+     * @return void
+     */
+    private function updateCustomerStatus(Postback $postback) {
+        $customer = $postback->customer;
+        switch ($postback->postback_event_type_id) {
+            case PostbackEventType::APPROVED:
+            case PostbackEventType::CANCELED:
+            case PostbackEventType::REFUNDED:
+                $customer->customer_status_id = CustomerStatuses::INACTIVE;
+                break;
+            case PostbackEventType::BILLET_PRINTED:
+            case PostbackEventType::DISPUTE:
+            case PostbackEventType::WAITING_PAYMENT:
+                $customer->customer_status_id = CustomerStatuses::ACTIVE;
+                break;
+        }
+
+        $customer->save();
     }
 }

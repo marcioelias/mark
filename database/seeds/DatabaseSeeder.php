@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PaymentTypesTableSeeder::class);
         $this->call(LeadStatusesTableSeeder::class);
         $this->call(WhatsappInstanceStatusesTableSeeder::class);
-        $this->call(CustomerStatusesTableSeeder::class);
+        $this->call(TransactionTypesTableSeeder::class);
+        $this->call(MarketingActionStatusesTableSeeder::class);
 
 
         if (env('APP_DEBUG', false)) {
@@ -49,7 +50,8 @@ class DatabaseSeeder extends Seeder
         DB::table('lead_statuses')->truncate();
         DB::table('payment_types')->truncate();
         DB::table('whatsapp_instance_statuses')->truncate();
-        DB::table('customer_statuses')->truncate();
+        DB::table('transaction_types')->truncate();
+        DB::table('marketing_aciton_statuses')->truncate();
         Schema::enableForeignKeyConstraints();
     }
 }

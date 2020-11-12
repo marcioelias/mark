@@ -10,6 +10,12 @@
             </template>
         </div>
         <div class="card-body pl-0 pr-0">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Atenção</h4>
+                <p class="mb-0">
+                    <small>Ações de envio de mensagens de Whatsapp serão executadas somente caso o produto em questão tenha uma instância de Whatsapp configurada e conectada.</small>
+                </p>
+            </div>
             <div class="row mb-1">
                 <div class="col col-lg-4">
                     <label for="action_description">Descrição</label>
@@ -197,6 +203,7 @@ export default {
     },
     methods: {
         ...mapActions('action', [
+            'ActionSetId',
             'ActionSetActionTypeId',
             'ActionSetActionSequence',
             'ActionSetActionDescription',
@@ -213,6 +220,7 @@ export default {
             const {showDialog, ...payload } = this.$data
             this.ActionSetActionData({ ...payload })
             if (!this.isEditing) {
+                this.ActionSetId(this.$uuid)
                 this.ActionAddNewAction()
                     .then(() => {
                         this.clearForm()
@@ -254,23 +262,23 @@ export default {
             this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         },
         doOnChangeDelayDays(value) {
-            console.log(`Dias: ${value}`)
+            //console.log(`Dias: ${value}`)
         },
         doOnChangeDelayHours(value) {
-            console.log(`Horas: ${value}`)
+            //console.log(`Horas: ${value}`)
         },
         doOnChangeDelayMinutes(value) {
-            console.log(`Minutos: ${value}`)
+            //console.log(`Minutos: ${value}`)
         },
         onInput(event) {
-            console.log(event.data)
+            //console.log(event.data)
           //event.data contains the value of the textarea
         },
         clearTextarea(){
             this.$refs.whatsapp_message.clear()
         },
         getInputObj() {
-            console.log(this.$parent.$refs['whatsapp_message'])
+            //console.log(this.$parent.$refs['whatsapp_message'])
             return this.$parent.$refs['whatsapp_message'];
         },
         toogleDialogEmoji() {

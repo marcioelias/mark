@@ -13,7 +13,7 @@ class FunnelStepAction extends Model implements HasMedia
     use MultiTenantable, InteractsWithMedia;
 
     protected $fillable = [
-        'user_id', 'funnel_step_id', 'action_type_id', 'action_sequence', 'action_description', 'action_data'
+        'user_id', 'funnel_step_id', 'action_type_id', 'action_sequence', 'seconds_after', 'action_description', 'action_data'
     ];
 
     protected $casts = [

@@ -25,7 +25,6 @@ class OnLeadUpdated
      */
     public function __construct(Postback $postback)
     {
-        Log::info('OnLeadUpdated -> evento chamado');
         $this->postback = $postback;
     }
 

@@ -3,24 +3,23 @@
 namespace App\Providers;
 
 use App\Events\LeadGoToStep;
-use App\Events\NewLeadCreated;
 use App\Events\NewRunnableAction;
 use App\Events\NotificationSent;
 use App\Events\OnAddLeadToStep;
+use App\Events\OnCompleteCheckout;
 use App\Events\OnCreateWhatsappInstance;
 use App\Events\OnLeadCreated;
 use App\Events\OnLeadUpdated;
-use App\Events\SetLeadTag;
-use App\Listeners\AddLeadToFunnel;
+use App\Events\OnMercadoPagoPaymentReceived;
 use App\Listeners\AddSchedulesForStepActions;
-use App\Listeners\DispatchNotificationAction;
 use App\Listeners\DoOnAddLeadToStep;
+use App\Listeners\DoOnCompleteCheckout;
 use App\Listeners\DoOnCreateWhatsappInstance;
 use App\Listeners\DoOnLeadCreated;
 use App\Listeners\DoOnLeadUpdated;
-use App\Listeners\ProcessRuleTags;
+use App\Listeners\DoOnMercadoPagoPaymentReceived;
+use App\Listeners\DoOnNewRunnableAction;
 use App\Listeners\SetNotificationDone;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -45,23 +44,23 @@ class EventServiceProvider extends ServiceProvider
         OnAddLeadToStep::class => [
             DoOnAddLeadToStep::class,
         ],
-        /* NewLeadCreated::class => [
-            ProcessRuleTags::class,
-        ],
-        SetLeadTag::class => [
-            AddLeadToFunnel::class,
-        ], */
         LeadGoToStep::class => [
             AddSchedulesForStepActions::class,
         ],
         NewRunnableAction::class => [
-            DispatchNotificationAction::class,
+            DoOnNewRunnableAction::class,
         ],
         NotificationSent::class => [
             SetNotificationDone::class,
         ],
         OnCreateWhatsappInstance::class => [
             DoOnCreateWhatsappInstance::class,
+        ],
+        OnCompleteCheckout::class => [
+            DoOnCompleteCheckout::class,
+        ],
+        OnMercadoPagoPaymentReceived::class => [
+            DoOnMercadoPagoPaymentReceived::class,
         ],
     ];
 

@@ -43,8 +43,8 @@ export default {
     i18n
   }),
   mounted() {
-    console.log(categoriesDefault);
-    console.log('Total emojis:', emojisDefault.length)
+    //console.log(categoriesDefault);
+    //console.log('Total emojis:', emojisDefault.length)
   },
   methods: {
     toogleDialogEmoji() {

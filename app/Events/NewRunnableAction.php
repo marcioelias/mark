@@ -29,8 +29,6 @@ class NewRunnableAction
     public function __construct(Schedule $schedule)
     {
         $this->schedule = $schedule;
-        // Log::info('Event: NewRunnableAction');
-        // Log::debug($schedule);
     }
 
     /**

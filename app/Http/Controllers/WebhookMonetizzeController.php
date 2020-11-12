@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ActionTypes;
+use App\Constants\TransactionTypes;
 use App\Contracts\Postback;
 use App\Mail\NewUserCreated;
 use App\Models\Plan;
 use App\Models\TempPassword;
 use App\Models\User;
+use App\Models\User\SmsUserTransaction;
 use App\Traits\PostbackTrait;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -63,6 +66,8 @@ class WebhookMonetizzeController extends Controller implements Postback
         $user->active = (int) $postback['tipoEvento']['codigo'] === (int) 101;
         $user->activated_at = Carbon::now();
         $user->save();
+
+        $this->setSmsBalance($user, $user->plan);
     }
 
 
@@ -90,8 +95,17 @@ class WebhookMonetizzeController extends Controller implements Postback
 
         if ($user->save()) {
             $user->temp_password()->save($tmpPass);
+            $this->setSmsBalance($user, $plan);
         }
 
         event(new Registered($user));
+    }
+
+    public function setSmsBalance(User $user, Plan $plan) {
+        SmsUserTransaction::create([
+            'user_id' => $user->id,
+            'quantity' => $plan->features->where('action_type_id', ActionTypes::SMS)->first()->pivot->limit,
+            'transaction_type_id' => TransactionTypes::IN
+        ]);
     }
 }

@@ -26,6 +26,10 @@ class Postback extends Model
         return $this->belongsTo(Lead::class);
     }
 
+    public function customer() {
+        return $this->belongsTo(Customer::class);
+    }
+
     public function scopeMonthlyPostbacks($query, $begin, $end) {
         return $query->whereBetween('created_at', [$begin, $end]);
     }

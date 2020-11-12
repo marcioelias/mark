@@ -36,9 +36,18 @@ export default {
             let hora= this.delay_hours == 1 ? 'hora' : 'horas'
             return `${this.delay_days} ${dia} e ${this.delay_hours} ${hora}`
         },
+        /* ...mapGetters('step', [
+            'OrderedActions'
+        ]) */
         orderedActions() {
+           /*  let acts = this.actions.filter(a => !a.deleted)
+            return acts.sort((a, b) => a.action_sequence - b.action_sequence) */
             let acts = this.actions.filter(a => !a.deleted)
-            return acts.sort((a, b) => a.action_sequence - b.action_sequence)
+            const dayToSeconds = value => value * 86400
+            const minutesToSeconds = value => value * 60
+            const getDelay = act => dayToSeconds(act.action_data.options.days_after || 0) + minutesToSeconds(act.action_data.options.delay_minutes || 0)
+
+            return acts.sort((a, b) => getDelay(a) - getDelay(b) || a.action_sequence - b.action_sequence)
         }
     },
     props: {
@@ -52,13 +61,17 @@ export default {
             'ActionSetShowCrudStep', 'ActionIsEditingStep'
         ]),
         ...mapActions('step', [
-            'ActionLoadStep'
+            'ActionLoadStep',
+            'ActionClearState'
         ]),
         editStep() {
-            this.ActionLoadStep()
-                .then(() => {
-                    this.ActionIsEditingStep(true)
-                    this.ActionSetShowCrudStep(true)
+            this.ActionClearState()
+                .then (() => {
+                    this.ActionLoadStep()
+                        .then(() => {
+                            this.ActionIsEditingStep(true)
+                            this.ActionSetShowCrudStep(true)
+                        })
                 })
         },
         getActionIcon(item) {
@@ -67,6 +80,7 @@ export default {
                'fas fa-envelope fa-2x': act.action_type_name == 'email',
                'fas fa-sms fa-2x': act.action_type_name == 'sms',
                'fab fa-whatsapp fa-2x': act.action_type_name == 'whatsapp',
+               'fas fa-filter fa-2x': act.action_type_name == 'funnel',
             }
         }
     }

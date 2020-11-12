@@ -40,9 +40,6 @@ class WebhookCallController extends Controller
 
             $this->dispatchEvents($postback);
 
-            /* dispatch event for process tag rules */
-            //event(new NewLeadCreated($lead));
-
             return $this->handleTransactionOk($postback);
 
         } catch (\Exception $e) {
@@ -54,12 +51,10 @@ class WebhookCallController extends Controller
     private function dispatchEvents(Postback $postback) {
         switch ($postback->postback_event_type_id) {
             case PostbackEventType::BILLET_PRINTED:
-                Log::info('Boleto Impresso -> Novo Lead');
                 event(new OnLeadCreated($postback));
                 break;
 
             default:
-                Log::info('Outro evento -> Atualiza o Lead');
                 event(new OnLeadUpdated($postback));
                 break;
         }

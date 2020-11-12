@@ -342,6 +342,7 @@ export default {
 	},
 	methods: {
 		...mapActions("action", [
+			"ActionSetId",
 			"ActionSetActionTypeId",
 			"ActionSetActionSequence",
 			"ActionSetActionDescription",
@@ -358,9 +359,10 @@ export default {
 			const {editorOptions, ...payload } = this.$data
 			this.ActionSetActionData({ ...payload }).then(() => {
 				if (!this.isEditing) {
-					this.ActionAddNewAction().then(() => this.clearForm());
+					this.ActionSetId(this.$uuid)
+					this.ActionAddNewAction().then(() => this.clearForm())
 				} else {
-					this.ActionUpdateAction().then(() => this.clearForm());
+					this.ActionUpdateAction().then(() => this.clearForm())
 				}
 			});
 		},

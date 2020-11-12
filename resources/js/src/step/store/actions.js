@@ -52,5 +52,8 @@ export const ActionLoadStep = ({ commit, rootState}) => {
 }
 
 export const ActionClearState = ({ commit }) => {
-    commit(types.LOAD_STATE, setupState())
+    return new Promise((resolve, _) => {
+        commit(types.LOAD_STATE, setupState())
+        resolve()
+    })
 }

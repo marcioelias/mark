@@ -12,6 +12,7 @@ use App\Models\User\Product;
 use App\Models\User\Tag;
 use App\Models\User\LeadStatus;
 use App\Models\User\Postback;
+use App\Models\User\SmsUserTransaction;
 use App\Models\User\WhatsappInstance;
 use App\Notifications\CustomVerifyEmailNotification;
 use Carbon\Carbon;
@@ -128,21 +129,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function smsAvailable() {
         $smsFeature = $this->plan->features->find(FeatureTypes::SMS)->pivot;
         if (!$smsFeature->enabled) {
-            Log::info('SMS disabled');
             return false;
         } else {
             if ((int) $smsFeature->limit === 0) {
-                Log::info('SMS ilimited');
                 return true;
             } else {
-                $smsSent = $this->actions()
-                                ->where('excecuted_at', '>=', $this->activated_at)
-                                ->where('action_type_id', ActionTypes::SMS)
-                                ->count() ?? 0;
-                Log::info('SMS sent: '.$smsSent);
-                Log::info('SMS limit: '.$smsFeature->limit);
-                Log::info('SMS available: '. max($smsFeature->limit - $smsSent, 0));
-                return max($smsFeature->limit - $smsSent, 0);
+                return SmsUserTransaction::smsAvailable($this->id);
             }
         }
     }
@@ -247,5 +239,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function whatsappInstances() {
         return $this->hasMany(WhatsappInstance::class);
+    }
+
+    public function smsUserTransactions() {
+        return $this->hasMany(SmsUserTransaction::class);
     }
 }

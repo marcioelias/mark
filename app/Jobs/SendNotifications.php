@@ -3,14 +3,22 @@
 namespace App\Jobs;
 
 use App\Constants\ActionTypes;
+use App\Constants\TransactionTypes;
 use App\Events\NotificationSent;
 use App\Mail\ActionSendEmail;
+use App\Models\User;
+use App\Models\User\Funnel;
 use App\Models\User\FunnelStepAction;
+use App\Models\User\FunnelStepLead;
 use App\Models\User\Lead;
 use App\Models\User\Schedule;
+use App\Models\User\SmsUserTransaction;
 use App\Models\Variable;
 use App\SMS\GatewaySms;
 use App\SMS\SmsFactory;
+use App\Whatsapp\WhatsappIntegration;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -49,13 +57,13 @@ class SendNotifications implements ShouldQueue
     public function handle()
     {
         try {
-            $this->send();
+            $this->processJob();
         } catch (Exception $e) {
             Log::emergency($e);
         }
     }
 
-    private function send() {
+    private function processJob() {
         $this->notificationData = $this->getNotificationData();
         switch ($this->schedule->action->action_type_id) {
             case ActionTypes::EMAIL:
@@ -64,6 +72,15 @@ class SendNotifications implements ShouldQueue
 
             case ActionTypes::SMS:
                 $this->sendSMS();
+                break;
+
+            case ActionTypes::WHATSAPP;
+                $this->sendWhatsapp();
+                break;
+
+            case ActionTypes::REMARKETING:
+                $this->remarketing($this->schedule);
+                break;
         }
 
         event(new NotificationSent($this->schedule, $this->notificationData));
@@ -73,6 +90,16 @@ class SendNotifications implements ShouldQueue
         $msg = $this->notificationData;
         $to = $this->schedule->lead->customer->customer_phone_number;
         SmsFactory::getSmsGateway($msg, $to)->send();
+    }
+
+    private function sendWhatsapp() {
+        $msg = $this->notificationData;
+        $to = $this->schedule->lead->customer->customer_phone_number;
+        $wppInstance = $this->schedule->lead->product->whatsappInstance;
+        if ($wppInstance) {
+            $wppIntegration = new WhatsappIntegration($wppInstance);
+            $wppIntegration->sendText($msg, $to);
+        }
     }
 
     private function sendEmail() {
@@ -108,5 +135,113 @@ class SendNotifications implements ShouldQueue
         return preg_replace_callback($regex, function($match) use ($variables) {
             return $variables[trim($match[1])];
         }, $message);
+    }
+
+    private function remarketing(Schedule $schedule) {
+        $funnelStepLead = FunnelStepLead::where('lead_id', $schedule->lead_id)
+                                    ->where('funnel_step_id', $schedule->funnel_step_id)
+                                    ->first();
+
+        if ($funnelStepLead) {
+            $funnelStepLead->active = 0;
+            $funnelStepLead->save();
+        }
+
+        $funnel = Funnel::find($schedule->funnelStepAction->action_data['data']);
+        if ($funnel) {
+            $funnelStep = $funnel->steps()->first();
+            if ($funnelStep) {
+                $funnelStepLead = FunnelStepLead::create([
+                    'user_id' => $schedule->user_id,
+                    'funnel_step_id' => $funnelStep->id,
+                    'lead_id' => $schedule->lead_id
+                ]);
+
+                $funnelStepLead->save();
+
+                $this->scheduleAction($schedule, $funnelStepLead);
+            }
+        }
+    }
+    /**
+     * Create a schedule task to handle the action
+     *
+     * @param Postback $postback
+     * @param FunnelStepLead $funnelStepLead
+     * @return void
+     */
+    private function scheduleAction(Schedule $schedule, FunnelStepLead $funnelStepLead) {
+        $action = $this->getAction($funnelStepLead);
+        $schedule = new Schedule([
+            'user_id' => $schedule->user_id,
+            'lead_id' => $schedule->lead_id,
+            'funnel_step_id' => $funnelStepLead->funnelStep->id,
+            'funnel_step_action_id' => $action->id,
+            'start_at' => $this->getScheduleStartAt($action, $funnelStepLead),
+            'start_period' => $this->getSheduleStartPeriod($action),
+            'end_period' => $this->getSheduleEndPeriod($action),
+            'delay_before_start' => $this->getDelayBeforeStart($action),
+        ]);
+
+        $schedule->save();
+    }
+
+    /**
+     * Get start datetime of an Action based on the number of the days that the action
+     * is configured to run after the ingress event of the step
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @param FunnelStepLead $funnelStepLead
+     * @return DateTime
+     */
+    private function getScheduleStartAt(FunnelStepAction $funnelStepAction, FunnelStepLead $funnelStepLead): DateTime
+    {
+        return Carbon::parse($funnelStepLead->created_at)->startOfDay()
+                                                         ->addDays($funnelStepAction->action_data['options']['days_after'] ?? 0);
+    }
+
+    /**
+     * Get minimum time of the day to start running a action, in format HH:nn
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return string
+     */
+    private function getSheduleStartPeriod(FunnelStepAction $funnelStepAction): string
+    {
+        return Carbon::parse($funnelStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
+    }
+
+    /**
+     * Get maximum time of the day to start running a action, in format HH:nn
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return string
+     */
+    private function getSheduleEndPeriod(FunnelStepAction $funnelStepAction): string
+    {
+        return Carbon::parse($funnelStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
+    }
+
+    /**
+     * Get te number of minutes that the action must dalay his execution
+     *
+     * @param FunnelStepAction $funnelStepAction
+     * @return integer
+     */
+    private function getDelayBeforeStart(FunnelStepAction $funnelStepAction): int
+    {
+        return $funnelStepAction->action_data['options']['delay_minutes'] ?? 0;
+    }
+
+
+    /**
+     * Get the first action to be executed at current step
+     *
+     * @param FunnelStepLead $funnelStepLead
+     * @return FunnelStepAction
+     */
+    private function getAction(FunnelStepLead $funnelStepLead): FunnelStepAction
+    {
+        return $funnelStepLead->funnelStep->actions()->orderBy('action_sequence', 'asc')->first();
     }
 }

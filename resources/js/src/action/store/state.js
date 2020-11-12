@@ -8,7 +8,8 @@ export const setupActionState = () => {
             data: '',
             options: {}
         },
-        deleted: false
+        deleted: false,
+        remarketingFunnels: []
     }
 }
 

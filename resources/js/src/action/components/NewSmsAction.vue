@@ -139,6 +139,7 @@ export default {
     },
     methods: {
         ...mapActions('action', [
+            'ActionSetId',
             'ActionSetActionTypeId',
             'ActionSetActionSequence',
             'ActionSetActionDescription',
@@ -154,6 +155,7 @@ export default {
         saveSmsAction() {
             this.ActionSetActionData({ ...this.$data })
             if (!this.isEditing) {
+                this.ActionSetId(this.$uuid)
                 this.ActionAddNewAction()
                     .then(() => {
                         this.clearForm()
@@ -195,13 +197,13 @@ export default {
             this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         },
         doOnChangeDelayDays(value) {
-            console.log(`Dias: ${value}`)
+            //console.log(`Dias: ${value}`)
         },
         doOnChangeDelayHours(value) {
-            console.log(`Horas: ${value}`)
+            //console.log(`Horas: ${value}`)
         },
         doOnChangeDelayMinutes(value) {
-            console.log(`Minutos: ${value}`)
+            //console.log(`Minutos: ${value}`)
         }
     },
     mounted() {
@@ -209,6 +211,7 @@ export default {
         if (this.isEditing) {
             Object.assign(this.$data, this.action_data)
         } else {
+            console.log('nao esta editando?')
             this.actionDescription = 'Enviar SMS'
             this.ActionSetActionTypeId(this.GetActionTypeByName('sms').id)
             this.ActionSetActionSequence((this.actions.length ?? 0) + 1)

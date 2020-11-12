@@ -11,6 +11,8 @@ Route::get('teste', function() {
 
 /* Webhook routes */
 Route::post('webhook/system/monetizze', 'WebhookMonetizzeController@receive');
+Route::post('webhook/system/mercadopago', 'WebhookMercadoPagoController@receive');
+Route::post('webhook/whatsapp/status', 'WhatsappInstanceController@setStatus');
 
 /* Webhook whatsapp routes */
 //Route::post('webhook/system/whatsapp', 'WhatsappIn');
@@ -92,8 +94,11 @@ Route::prefix('')->group(function() {
 		Route::patch('user/profile/{user}', 'UserController@updateProfile')->name('user.profile.update');
 
 		Route::get('sms/buy', 'SmsPackageController@buyPackage')->name('sms.buy');
+		Route::get('sms/buy/{response}', 'SmsPackageController@buyPackageResponse')->name('sms.buy.response');
 
 		Route::get('plataform_config/get_url/{plataformConfig}', 'PlataformConfigController@getWebhookUrl');
+		Route::get('whatsapp_instance/{whatsappInstance}/qrcode', 'WhatsappInstanceController@getQrCode')->name('whatsapp_instance.qrcode');
+		Route::post('whatsapp_instance/{whatsappInstance}/disconnect', 'WhatsappInstanceController@disconnect')->name('whatsapp_instance.disconnect');
 
 		/* Routes to be comsumed by Vue (JSON Response) */
 		Route::get('products/json', 'ProductController@getProductsJson');

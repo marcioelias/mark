@@ -12,7 +12,7 @@
             <div class="d-flex justify-content-between mb-25">
                 <div class="browser-info">
                     <p class="mb-25">{{ $statistic['feature'] }}</p>
-                    <h4>{{ $percent }}%</h4>
+                    <h4>{{ min($percent, 100) }}%</h4>
                 </div>
                 <div class="stastics-info text-right">
                     <span>{{ $statistic['usage'] }} /

@@ -41,6 +41,7 @@ import ActionsTable from '../../action/components/ActionsTable'
 import NewSmsAction from '../../action/components/NewSmsAction'
 import NewEmailAction from '../../action/components/NewEmailAction'
 import NewWhatsappAction from '../../action/components/NewWhatsappAction'
+import NewFunnelAction from '../../action/components/NewFunnelAction'
 import ActionButton from '../../actionButton/components/ActionButton'
 import * as componentTypes from '../../action/component-types'
 import { ACTION } from '../../../user/constants'
@@ -50,6 +51,8 @@ const iniData = {
         funnel_step_sequence: null,
         postback_event_type_id: null
     }
+
+const originalSteps = {}
 
 export default {
     data() {
@@ -65,7 +68,7 @@ export default {
         }
     },
     components: {
-        Select2, ActionsTable, NewSmsAction, NewEmailAction, NewWhatsappAction, ActionButton
+        Select2, ActionsTable, NewSmsAction, NewEmailAction, NewWhatsappAction, ActionButton, NewFunnelAction
     },
     computed: {
         ...mapState('step', [
@@ -80,10 +83,10 @@ export default {
     },
     methods: {
         ...mapActions('funnel', [
-            'ActionSetShowCrudStep', 'ActionAddNewStep', 'ActionUpdateStep', 'ActionSetCurrentStep'
+            'ActionSetShowCrudStep', 'ActionAddNewStep', 'ActionUpdateStep', 'ActionSetCurrentStep', 'ActionSetSteps', 'ActionClearState'
         ]),
         ...mapActions('step', [
-            'ActionSetActionComponent', 'ActionClearState'
+            'ActionSetActionComponent', 'ActionClearState',
         ]),
         saveStep() {
             if (this.isEditingStep) {
@@ -133,7 +136,7 @@ export default {
                     this.ActionSetActionComponent(this.actionComponentTypes.NEW_WHATSAPP_ACTION)
                     break;
                 case ACTION.FUNNEL:
-                    //this.ActionSetActionComponent(this.actionComponentTypes.NEW_EMAIL_ACTION)
+                    this.ActionSetActionComponent(this.actionComponentTypes.NEW_FUNNEL_ACTION)
                     break;
 
             }
@@ -142,6 +145,7 @@ export default {
     mounted() {
         if (this.isEditingStep) {
             Object.assign(this.step, { ...this.$store.state.step })
+            Object.assign(originalSteps, this.steps)
             this.doOnAddActionClick(this.initialAction)
         }
     }

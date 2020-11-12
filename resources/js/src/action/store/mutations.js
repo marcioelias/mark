@@ -18,5 +18,11 @@ export default {
     },
     [types.LOAD_STATE] (state, payload) {
         Object.assign(state, payload)
+    },
+    [types.SET_REMARKETING_FUNNELS] (state, payload) {
+        state.remarketingFunnels = payload
+    },
+    [types.RESET_STATE] (state, payload) {
+        Object.assign(state, payload)
     }
 }
