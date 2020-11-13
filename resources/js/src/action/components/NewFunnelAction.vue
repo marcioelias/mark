@@ -117,7 +117,7 @@ export default {
         saveFunnelAction() {
             this.ActionSetActionData({ ...this.$data })
             if (!this.isEditing) {
-                this.ActionSetId(this.$uuid)
+                this.ActionSetId(this.$uuid())
                 this.ActionAddNewAction()
                     .then(() => {
                         this.clearForm()

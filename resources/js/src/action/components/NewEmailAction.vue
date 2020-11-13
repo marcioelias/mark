@@ -359,7 +359,7 @@ export default {
 			const {editorOptions, ...payload } = this.$data
 			this.ActionSetActionData({ ...payload }).then(() => {
 				if (!this.isEditing) {
-					this.ActionSetId(this.$uuid)
+					this.ActionSetId(this.$uuid())
 					this.ActionAddNewAction().then(() => this.clearForm())
 				} else {
 					this.ActionUpdateAction().then(() => this.clearForm())

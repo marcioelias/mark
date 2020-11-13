@@ -155,7 +155,7 @@ export default {
         saveSmsAction() {
             this.ActionSetActionData({ ...this.$data })
             if (!this.isEditing) {
-                this.ActionSetId(this.$uuid)
+                this.ActionSetId(this.$uuid())
                 this.ActionAddNewAction()
                     .then(() => {
                         this.clearForm()
@@ -211,7 +211,6 @@ export default {
         if (this.isEditing) {
             Object.assign(this.$data, this.action_data)
         } else {
-            console.log('nao esta editando?')
             this.actionDescription = 'Enviar SMS'
             this.ActionSetActionTypeId(this.GetActionTypeByName('sms').id)
             this.ActionSetActionSequence((this.actions.length ?? 0) + 1)

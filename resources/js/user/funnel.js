@@ -18,7 +18,7 @@ Vue.use(VueQuillEditor)
 Vue.use(Vuesax, {})
 Vue.use(VueSweetAlert2)
 Vue.use(VEmojiPicker)
-Vue.prototype.$uuid = uuidv4()
+Vue.prototype.$uuid = () => uuidv4()
 
 import '../http'
 

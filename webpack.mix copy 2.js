@@ -70,6 +70,7 @@ mix.copy('node_modules/apexcharts/dist/apexcharts.min.js', 'public/vendors/js/ch
 //mix.copy('node_modules/apexcharts/dist/apexcharts.css', 'public/vendors/css/charts');
 mix.copy('node_modules/quill/dist/quill.bubble.css', 'public/css');
 mix.copy('node_modules/quill/dist/quill.snow.css', 'public/css');
+//mix.copy('node_modules/@ttskch/select2-bootstrap4-theme/src/layout.scss', 'public/css');
 
 
 mix.js('resources/js/core/app-menu.js', 'public/js/core')
@@ -78,6 +79,7 @@ mix.js('resources/js/core/app-menu.js', 'public/js/core')
   .js('resources/js/user/marketingAction.js', 'public/js/user')
   .js('resources/js/user/funnelShow.js', 'public/js/user')
   .js('resources/js/user/funnelOrgChart.js', 'public/js/user')
+  .js('resources/js/user/customersImport.js', 'public/js/user')
   .js('node_modules/insert-text-at-cursor', 'public/js')
   .sass('resources/sass/bootstrap.scss', 'public/css')
   .sass('resources/sass/bootstrap-extended.scss', 'public/css')
