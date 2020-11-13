@@ -44,6 +44,9 @@ Route::prefix('admin')->group(function() {
 		Route::resource('sms_package', 'SmsPackageController')->except('show');
 		Route::resource('user', 'UserController')->except('show');
 
+		Route::get('profile', 'AdminController@profile')->name('admin.profile');
+		Route::patch('profile/{admin}', 'AdminController@updateProfile')->name('admin.profile.update');
+
 		/* routes that response only json, to use with vuejs */
 		Route::get('dasboard/charts/faturamento', 'AdminHomeController@getMounthlyInvoicing');
 		Route::get('dasboard/charts/clientes_plano', 'AdminHomeController@getCustomerByPlan');

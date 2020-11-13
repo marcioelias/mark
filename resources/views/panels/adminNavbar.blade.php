@@ -26,7 +26,7 @@
 						<span class="avatar-content">{{ Str::Upper(Str::substr(Auth::user()->name, 0, 3)) }}</span>
 					</div>
               	</a>
-              	<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="javascript:void(0)"><i
+              	<div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{ route('admin.profile') }}"><i
                 	class="feather icon-user"></i> Minha conta</a><a class="dropdown-item" href="javascript:void(0)">
                 <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ route('admin.logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
