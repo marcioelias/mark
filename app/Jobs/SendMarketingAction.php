@@ -14,7 +14,6 @@ use App\Models\User\FunnelStepAction;
 use App\Models\User\FunnelStepLead;
 use App\Models\User\Lead;
 use App\Models\User\MarketingAction;
-use App\Models\User\Schedule;
 use App\Models\User\SmsUserTransaction;
 use App\Models\Variable;
 use App\SMS\GatewaySms;
@@ -122,16 +121,21 @@ class SendMarketingAction implements ShouldQueue
     }
 
     private function sendEmail() {
-        $from = $this->schedule->user->name;
-        $replyTo = $this->schedule->user->email;
-        $to = $this->customer->customer_email;
-        $subject = $this->getMailSubject();
-        $msg = $this->notificationData;
-        $this->result = Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
-        if ($this->result) {
-            $this->resultMsg = 'E-mail Enviado.';
-        } else {
-            $this->resultMsg = 'Erro ao enviar E-mail.';
+        try {
+            $from = $this->marketingAction->user->name;
+            $replyTo = $this->marketingAction->user->email;
+            $to = $this->customer->customer_email;
+            $subject = $this->getMailSubject();
+            $msg = $this->notificationData;
+            $this->result = Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+            if ($this->result) {
+                $this->resultMsg = 'E-mail Enviado.';
+            } else {
+                $this->resultMsg = 'Erro ao enviar E-mail.';
+            }
+        } catch (Exception $e) {
+            $this->result = false;
+            $this->resultMsg = 'Ocorreu um erro inesperado.';
         }
     }
 
