@@ -195,7 +195,8 @@ class MarketingActionController extends Controller
      */
     public function show(MarketingAction $marketingAction)
     {
-        //
+        return $this->getView('user.marketing_actions.show')
+                    ->withMarketingAction($marketingAction->load('customers'));
     }
 
     /**

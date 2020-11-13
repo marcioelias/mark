@@ -41,6 +41,8 @@ class SendMarketingAction implements ShouldQueue
 
     protected $customer;
     private $marketingAction;
+    private $result;
+    private $resultMsg;
 
     /**
      * Create a new job instance.
@@ -83,9 +85,10 @@ class SendMarketingAction implements ShouldQueue
                 break;
         }
 
-        //event(new NotificationSent($this->schedule, $this->notificationData));
         $customerMarketingAction = $this->marketingAction->customers->find($this->customer->id);
         $customerMarketingAction->pivot->finished_at = now();
+        $customerMarketingAction->pivot->result_ok = $this->result;
+        $customerMarketingAction->pivot->result_message = $this->resultMsg;
         $customerMarketingAction->pivot->save();
 
         $this->changeMarketingActionStatus();
@@ -94,7 +97,13 @@ class SendMarketingAction implements ShouldQueue
     private function sendSMS() {
         $msg = $this->notificationData;
         $to = $this->customer->customer_phone_number;
-        SmsFactory::getSmsGateway($msg, $to)->send();
+        $response = SmsFactory::getSmsGateway($msg, $to)->send();
+        $this->result = (string) $response['status'] === (string) 'Sucesso';
+        if ($this->result) {
+            $this->resultMsg = 'SMS Enviado.';
+        } else {
+            $this->resultMsg = $response['erro'];
+        }
     }
 
     private function sendWhatsapp() {
@@ -103,7 +112,12 @@ class SendMarketingAction implements ShouldQueue
         $wppInstance = $this->marketingAction->product->whatsappInstance;
         if ($wppInstance) {
             $wppIntegration = new WhatsappIntegration($wppInstance);
-            return $wppIntegration->sendText($msg, $to);
+            $this->result = $wppIntegration->sendText($msg, $to);
+            if ($this->result) {
+                $this->resultMsg = 'Whatsapp Enviado.';
+            } else {
+                $this->resultMsg = 'Erro ao enviar Whatsapp.';
+            }
         }
     }
 
@@ -113,7 +127,12 @@ class SendMarketingAction implements ShouldQueue
         $to = $this->customer->customer_email;
         $subject = $this->getMailSubject();
         $msg = $this->notificationData;
-        Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+        $this->result = Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+        if ($this->result) {
+            $this->resultMsg = 'E-mail Enviado.';
+        } else {
+            $this->resultMsg = 'Erro ao enviar E-mail.';
+        }
     }
 
     private function getNotificationData() {

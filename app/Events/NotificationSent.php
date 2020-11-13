@@ -29,8 +29,8 @@ class NotificationSent
     {
         $this->schedule = $schedule;
         $this->notificationData = $notificationData;
-        // Log::info('Event: NotificationSent');
-        // Log::debug($schedule);
+        Log::info('Event: NotificationSent');
+        Log::debug($schedule);
     }
 
     /**

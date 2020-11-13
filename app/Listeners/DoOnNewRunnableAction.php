@@ -43,7 +43,12 @@ class DoOnNewRunnableAction
                 case ActionTypes::SMS:
                 case ActionTypes::EMAIL:
                 case ActionTypes::WHATSAPP:
-                    SendNotifications::dispatch($event->schedule)->delay(Carbon::now()->addMinutes($event->schedule->delay_before_start ?? 0));
+                    Log::info('passou aqui no DoOnNewRunnable');
+                    try {
+                        SendNotifications::dispatch($event->schedule)->delay(Carbon::now()->addMinutes($event->schedule->delay_before_start ?? 0));
+                    } catch (Exception $e) {
+                        Log::debug($e);
+                    }
                     break;
 
                 case ActionTypes::REMARKETING:

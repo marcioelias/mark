@@ -55,17 +55,14 @@ class WhatsappIntegration {
 
     public function sendText(string $msg, string $to) {
         try {
-            Log::info('url: '.$this->getEndpointURL(WhatsappEndpoints::SEND_TEXT));
-            Log::info('to: '.$this->formatPhoneNumber($to));
-            Log::info('msg: '.$msg);
             $response = Http::post($this->getEndpointURL(WhatsappEndpoints::SEND_TEXT), [
                 'to' => $this->formatPhoneNumber($to),
                 'msg' => $msg
             ])->throw();
 
-            Log::debug($response->body());
             return $response->successful();
         } catch (Exception $e) {
+            return false;
             Log::debug($e);
         }
     }

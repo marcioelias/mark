@@ -10,7 +10,7 @@ class Customer extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'customer_name', 'customer_phone_number', 'customer_email'
+        'user_id', 'customer_name', 'customer_phone_number', 'customer_email', 'customer_status_id'
     ];
 
     public function user() {
@@ -23,5 +23,9 @@ class Customer extends Model
 
     public function marketingActions() {
         return $this->belongsToMany(MarketingAction::class);
+    }
+
+    public function customerStatus() {
+        return $this->belongsTo(CustomerStatus::class);
     }
 }

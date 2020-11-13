@@ -94,7 +94,7 @@ class QueueNotifications extends Command
 
         foreach ($marketingActions as $marketingAction) {
             if ($marketingAction->action_type_id == ActionTypes::WHATSAPP) {
-                $customers = $marketingAction->customers()->limit(10)->get();
+                $customers = $marketingAction->customers()->wherePivot('finished_at', null)->limit(10)->get();
                 foreach ($customers as $customer) {
                     SendMarketingAction::dispatch($marketingAction, $customer);
                 }

@@ -42,7 +42,7 @@ class MarketingAction extends Model implements HasMedia
     }
 
     public function customers() {
-        return $this->belongsToMany(Customer::class)->wherePivot('finished_at', null)->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message']);
+        return $this->belongsToMany(Customer::class)->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message']);
     }
 
     public function scopePending(Builder $query) {

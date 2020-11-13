@@ -44,8 +44,9 @@ class GatewaySms {
             }
 
             return $response->json();
+
         } catch (\Exception $e) {
-            return false;
+            return response()->json(['status' => 'Erro', 'erro' => 'Erro desconhecido'], 500);
             Log::debug($e);
         }
     }

@@ -1,83 +1,72 @@
 @extends('layouts.contentLayoutMaster')
 
-@section('title', "Postback (Transação: $postback->transaction_code)")
+@section('title', "Visualização de Ação de Marketing")
 
 @section('content')
 
     <div class="card">
         <div class="card-header">
-            <div class="card-title">Postback</div>
-            <a href="{{ route('postback.index') }}" class="btn btn-primary">Voltar</a>
+            <div class="card-title">{{ $marketingAction->marketing_action_description }}</div>
+            <a href="{{ route('marketing_action.index') }}" class="btn btn-primary">Voltar</a>
         </div>
         <div class="card-body">
-            <div class="row mb-1">
-                <div class="col">
-                    <label for="">ID</label>
-                    <div class="form-control">{{ $postback->id }}</div>
-                </div>
-            </div>
             <div class="row">
-                <div class="col-md-4">
-                    <label for="">Transação</label>
-                    <div class="form-control">{{ $postback->transaction_code }}</div>
+                <div class="col-md-6">
+                    <label for="">Produto</label>
+                    <div class="form-control">{{ $marketingAction->product->product_name }}</div>
                 </div>
-                <div class="col-md-4">
-                    <label for="">Data</label>
-                    <div class="form-control">{{ $postback->created_at->format('d/m/Y H:i:s') }}</div>
-                </div>
-                <div class="col-md-4">
-                    <label for="">Plataforma</label>
-                    <div class="form-control">{{ $postback->product->plataformConfig->plataform->plataform_name }}</div>
+                <div class="col-md-6">
+                    <label for="">Início do Disparo</label>
+                    <div class="form-control">{{ $marketingAction->start_at }}</div>
                 </div>
             </div>
+            <div class="divider divider-primary divider-dotted">
+                <div class="divider-text">Mensagem ({{ $marketingAction->actionType->action_type_name }})</div>
+            </div>
+            @if($marketingAction->action_type_id == \App\Constants\ActionTypes::EMAIL)
             <div class="row">
                 <div class="col">
-                    <div class="card mb-0">
-                        <div class="card-header pl-0 pr-0">
-                            <div class="card-title">Produto</div>
-                        </div>
-                        <div class="card-body pl-0 pr-0">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="">Descrição</label>
-                                    <div class="form-control">{{ $postback->product->product_name }}</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="">Código na Plataforma</label>
-                                    <div class="form-control">{{ $postback->product->plataform_code }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h4>Assunto: {!! $marketingAction->action_message["options"]["subject"] !!}</h4>
                 </div>
             </div>
+            @endif
             <div class="row">
                 <div class="col">
-                    <div class="card mb-0">
-                        <div class="card-header pl-0 pr-0">
-                            <div class="card-title">Cliente</div>
-                        </div>
-                        <div class="card-body pl-0 pr-0">
-                            <div class="row mb-1">
-                                <div class="col">
-                                    <label for="">Nome</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_name }}</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="">Telefone</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_phone_number }}</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="">E-mail</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_email }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="form-control">{!! $marketingAction->action_message["data"] !!}</div>
                 </div>
             </div>
+            <div class="divider divider-primary divider-dotted">
+                <div class="divider-text">Clientes</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-striped bg-white mb-0">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th>Cliente</th>
+                            <th>E-mail</th>
+                            <th>Telefone</th>
+                            <th>Status (Cliente)</th>
+                            <th>Status (Envio)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($marketingAction->customers as $customer)
+                        <tr>
+                            <td>{{ $customer->customer_name }}</td>
+                            <td>{{ $customer->customer_email }}</td>
+                            <td>{{ $customer->customer_phone_number }}</td>
+                            <td>{{ $customer->customerStatus->customer_status }}</td>
+                            <td class="{{ $customer->pivot->result_ok ? 'bg-success' : 'bg-danger' }} text-white">
+                                <i class="fas fa-info-circle" data-toggle="tooltip"
+                                data-html="true"
+                                title="<strong class='mb-1'>{{ $customer->pivot->result_message }}</strong><hr size='1' class='bg-white p-0 my-50' /><i class='fas fa-clock mr-1'></i> {{ Carbon\Carbon::parse($customer->pivot->schedule_date)->format('d/m/Y H:i:s') }} <br class='p-1' />
+                                {{ $customer->pivot->result_ok ? '<i class=\'fas fa-paper-plane mr-1\'></i>' : '<i class=\'fas fa-times mr-1\'></i>' }} {{ Carbon\Carbon::parse($customer->pivot->finished_at)->format('d/m/Y H:i:s') }}"></i>
+                                {{ $customer->pivot->result_message }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
         </div>
     </div>
 @endsection
