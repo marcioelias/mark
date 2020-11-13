@@ -57,10 +57,16 @@
                             <td>{{ $customer->customer_phone_number }}</td>
                             <td>{{ $customer->customerStatus->customer_status }}</td>
                             <td class="{{ $customer->pivot->result_ok ? 'bg-success' : 'bg-danger' }} text-white">
-                                <i class="fas fa-info-circle" data-toggle="tooltip"
+                                <i class="fas fa-info-circle" style="cursor: pointer !important;" data-toggle="tooltip"
                                 data-html="true"
-                                title="<strong class='mb-1'>{{ $customer->pivot->result_message }}</strong><hr size='1' class='bg-white p-0 my-50' /><i class='fas fa-clock mr-1'></i> {{ Carbon\Carbon::parse($customer->pivot->schedule_date)->format('d/m/Y H:i:s') }} <br class='p-1' />
-                                {{ $customer->pivot->result_ok ? '<i class=\'fas fa-paper-plane mr-1\'></i>' : '<i class=\'fas fa-times mr-1\'></i>' }} {{ Carbon\Carbon::parse($customer->pivot->finished_at)->format('d/m/Y H:i:s') }}"></i>
+                                title="<strong class='mb-1'>
+                                            {{ $customer->pivot->result_message }}
+                                        </strong>
+                                        <hr size='1' class='bg-white p-0 my-50' />
+                                        <i class='fas fa-clock mr-1'></i> {{ Carbon\Carbon::parse($customer->pivot->schedule_date)->format('d/m/Y H:i:s') }} <br class='p-1' />
+                                        {{ $customer->pivot->result_ok ? '<i class=\'fas fa-paper-plane mr-1\'></i>' : '<i class=\'fas fa-times mr-1\'></i>' }}
+                                        {{ Carbon\Carbon::parse($customer->pivot->finished_at)->format('d/m/Y H:i:s') }}">
+                                </i>
                                 {{ $customer->pivot->result_message }}
                             </td>
                         </tr>
