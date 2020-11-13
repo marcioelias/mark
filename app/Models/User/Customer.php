@@ -22,7 +22,9 @@ class Customer extends Model
     }
 
     public function marketingActions() {
-        return $this->belongsToMany(MarketingAction::class);
+        return $this->belongsToMany(MarketingAction::class)
+                    ->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message'])
+                    ->withTimestamps();
     }
 
     public function customerStatus() {

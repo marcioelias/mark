@@ -42,10 +42,18 @@ class MarketingAction extends Model implements HasMedia
     }
 
     public function customers() {
-        return $this->belongsToMany(Customer::class)->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message']);
+        return $this->belongsToMany(Customer::class)
+                    ->withPivot(['schedule_date', 'finished_at', 'result_ok', 'result_message'])
+                    ->withTimestamps();
     }
 
     public function scopePending(Builder $query) {
         return $query->where('marketing_action_status_id', MarketingActionStatuses::PENDING);
+    }
+
+    public function scopeHasPendingActions(Builder $query) {
+        return $query->join('customer_marketing_action', 'customer_marketing_action.marketing_action_id', 'marketing_actions.id')
+                    ->whereNull('customer_marketing_action.finished_at')
+                    ->count() > 0;
     }
 }

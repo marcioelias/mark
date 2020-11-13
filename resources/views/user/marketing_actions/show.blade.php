@@ -56,9 +56,13 @@
                             <td>{{ $customer->customer_email }}</td>
                             <td>{{ $customer->customer_phone_number }}</td>
                             <td>{{ $customer->customerStatus->customer_status }}</td>
+                            @if (!$customer->pivot->finished_at)
+                                <td class="bg-light text-dark"><i class="fas fa-clock mr-1"></i> Aguardando envio...</td>
+                            @else
                             <td class="{{ $customer->pivot->result_ok ? 'bg-success' : 'bg-danger' }} text-white">
                                 <i class="fas fa-info-circle" style="cursor: pointer !important;" data-toggle="tooltip"
                                 data-html="true"
+                                data-placement="left"
                                 title="<strong class='mb-1'>
                                             {{ $customer->pivot->result_message }}
                                         </strong>
@@ -69,6 +73,7 @@
                                 </i>
                                 {{ $customer->pivot->result_message }}
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

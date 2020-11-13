@@ -166,8 +166,9 @@ class SendMarketingAction implements ShouldQueue
     }
 
     private function changeMarketingActionStatus() {
-        if (MarketingAction::pending()->count() == 0) {
+        if (!$this->marketingAction->HasPendingActions()) {
             $this->marketingAction->marketing_action_status_id = MarketingActionStatuses::DONE;
+            $this->marketingAction->save();
         }
     }
 }

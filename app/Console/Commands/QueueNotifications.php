@@ -99,7 +99,7 @@ class QueueNotifications extends Command
                     SendMarketingAction::dispatch($marketingAction, $customer);
                 }
             } else {
-                foreach ($marketingAction->customers()->get() as $customer) {
+                foreach ($marketingAction->customers()->wherePivot('finished_at', null)->get() as $customer) {
                     SendMarketingAction::dispatch($marketingAction, $customer);
                 }
             }
