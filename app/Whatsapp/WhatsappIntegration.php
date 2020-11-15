@@ -37,20 +37,36 @@ class WhatsappIntegration {
     }
 
     private function getNewInstance() {
-        return Http::post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
-            'porta' => $this->whatsappInstance->port,
-            'cliente' => $this->whatsappInstance->id
-        ]);
+        try {
+            $response = Http::post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
+                'porta' => $this->whatsappInstance->port,
+                'cliente' => $this->whatsappInstance->id
+            ]);
+
+            if ($response->successful()) {
+                return $response;
+            } else {
+                throw new Exception('Erro ao criar instância de Whatsapp');
+            }
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+
+
     }
 
     private function storeInstance(Response $response) {
+        if ($response) {
+            $this->whatsappInstance->url = $response['URL'];
+            $this->whatsappInstance->subdomain = $response['PASTA'];
+            $this->whatsappInstance->hash = $response['password'];
+            $this->whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::DISCONNECTED;
 
-        $this->whatsappInstance->url = $response['URL'];
-        $this->whatsappInstance->subdomain = $response['PASTA'];
-        $this->whatsappInstance->hash = $response['password'];
-        $this->whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::DISCONNECTED;
-
-        return $this->whatsappInstance->save();
+            return $this->whatsappInstance->save();
+        } else {
+            return false;
+        }
     }
 
     public function sendText(string $msg, string $to) {
