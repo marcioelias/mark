@@ -198,6 +198,10 @@ class WhatsappInstanceController extends Controller
         $whatsappInstance->product_id = $request->product_id;
         $whatsappInstance->save();
 
+        if (!$whatsappInstance->url) {
+            CreateWhatsappInstanceJob::dispatch($whatsappInstance);
+        }
+
         return response()->json($whatsappInstance);
     }
 
