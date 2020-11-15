@@ -46,7 +46,7 @@ class WhatsappIntegration {
             if ($response->successful()) {
                 return $response;
             } else {
-                throw new Exception('Erro ao criar instância de Whatsapp');
+                throw new Exception('Erro ao criar instância de Whatsapp. Response: ' . $response->body());
             }
         } catch (Exception $e) {
             Log::emergency($e->getMessage());
