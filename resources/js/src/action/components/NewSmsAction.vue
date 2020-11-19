@@ -15,40 +15,64 @@
                     <label for="action_description">Descrição</label>
                     <input type="text" name="action_description" id="action_description" class="form-control" v-model="actionDescription" placeholder="Exemplo: Enviar SMS">
                 </div>
-                <div class="col col-lg-2">
-                    <NumberEdit name="days_after" id="days_after" :min="0" :max="30" v-model="options.days_after">Enviar após dias</NumberEdit>
-                </div>
-                <div class="col col-lg-2">
-                    <NumberEdit name="delay_days" id="delay_days" :min="0" :max="30" v-model="options.delay_minutes">Atraso/Minutos</NumberEdit>
-                </div>
-                <div class="col col-lg-4">
-                    <label>Somente no período entre:</label>
-                    <div class="d-flex justify-content-between align-items-baseline">
-                        <flat-pickr
-                            v-model="options.start_time"
-                            class="form-control"
-                            :config="{
-                                enableTime: true,
-                                noCalendar: true,
-                                dateFormat: 'H:i',
-                                time_24hr: true
-                            }"
-                        ></flat-pickr>
-                        <span class="pl-1 pr-1"> e </span>
-                        <flat-pickr
-                            v-model="options.end_time"
-                            class="form-control"
-                            :config="{
-                                enableTime: true,
-                                noCalendar: true,
-                                dateFormat: 'H:i',
-                                minTime: options.start_time,
-                                time_24hr: true
-                            }"
-                        ></flat-pickr>
+
+                <template v-if="options.extra.envio_imediato">
+                    <div class="col col-lg-4 d-flex">
+                        <div class="btn-group" role="group" aria-label="Agendamento Disparo">
+                            <button type="button" class="btn" @click="options.extra.envio_imediato = true"
+                            :class="{'btn-primary': options.extra.envio_imediato == null, 'btn-warning': options.extra.envio_imediato}">Envio imediato</button>
+                            <button type="button" @click="options.extra.envio_imediato = false" class="btn btn-primary">Envio agendado</button>
+                        </div>
                     </div>
-                    <!-- <NumberEdit name="delay_hours" id="delay_hours" :min="0" :max="23" @on-change="doOnChangeDelayHours">horas</NumberEdit> -->
-                </div>
+                </template>
+                <template v-else>
+                    <div class="col col-lg-2">
+                        <NumberEdit name="days_after" id="days_after" :min="0" :max="30" v-model="options.days_after">Enviar após dias</NumberEdit>
+                    </div>
+                    <div class="col col-lg-2">
+                        <NumberEdit name="delay_days" id="delay_days" :min="0" :max="15" v-model="options.delay_minutes">Atraso/Minutos</NumberEdit>
+                    </div>
+                </template>
+
+                <template v-if="options.extra.qualquer_horario">
+                    <div class="col col-lg-4 d-flex">
+                        <div class="btn-group" role="group" aria-label="Horário de disparo">
+                            <button type="button" class="btn" @click="options.extra.qualquer_horario = true"
+                            :class="{'btn-primary': options.extra.qualquer_horario == null, 'btn-warning': options.extra.qualquer_horario}">Qualquer horário</button>
+                            <button type="button" class="btn btn-primary" @click="options.extra.qualquer_horario = false">Horário limitado</button>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="col col-lg-4">
+                        <label>Somente no período entre:</label>
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <flat-pickr
+                                v-model="options.start_time"
+                                class="form-control"
+                                :config="{
+                                    enableTime: true,
+                                    noCalendar: true,
+                                    dateFormat: 'H:i',
+                                    time_24hr: true
+                                }"
+                            ></flat-pickr>
+                            <span class="pl-1 pr-1"> e </span>
+                            <flat-pickr
+                                v-model="options.end_time"
+                                class="form-control"
+                                :config="{
+                                    enableTime: true,
+                                    noCalendar: true,
+                                    dateFormat: 'H:i',
+                                    minTime: options.start_time,
+                                    time_24hr: true
+                                }"
+                            ></flat-pickr>
+                        </div>
+                        <!-- <NumberEdit name="delay_hours" id="delay_hours" :min="0" :max="23" @on-change="doOnChangeDelayHours">horas</NumberEdit> -->
+                    </div>
+                </template>
                 <!-- <div class="col col-md-2">
                     <NumberEdit name="delay_minutes" id="delay_minutes" :min="0" :max="59" @on-change="doOnChangeDelayMinutes">minutos</NumberEdit>
                 </div> -->
@@ -93,7 +117,11 @@ const iniData = () => {
             days_after: 0,
             start_time: '00:00',
             end_time: '23:59',
-            delay_minutes: 0
+            delay_minutes: 0,
+            extra: {
+                envio_imediato: true,
+                qualquer_horario: true
+            }
         }
     }
 }

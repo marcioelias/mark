@@ -30,7 +30,7 @@ $('.btn-disconnect-whatsapp').on('click', async event => {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: res => {
-            if (res.data) {
+            if (res.status) {
                 Swal.fire({
                     title: 'Concluído',
                     text: 'Instância desconectada com sucesso!',

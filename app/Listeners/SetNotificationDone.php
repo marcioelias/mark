@@ -14,6 +14,7 @@ use App\Models\User\Schedule;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class SetNotificationDone
@@ -71,7 +72,8 @@ class SetNotificationDone
     private function getNextAction(FunnelStepAction $funnelStepAction) {
         return FunnelStep::find($funnelStepAction->funnel_step_id)
                     ->actions()
-                    ->where('seconds_after', '>', $funnelStepAction->seconds_after)
+                    ->where('seconds_after', '>=', $funnelStepAction->seconds_after)
+                    ->where('schedule_status_id', ScheduleStatus::PENDING)
                     ->orderBy('seconds_after', 'asc')
                     ->first();
     }

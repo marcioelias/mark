@@ -79,7 +79,7 @@
                     <tbody>
                         <tr v-if="!leads.data.length">
                             <td colspan="5" class="text-center">
-                                Nenhum Lead encontrato para este passo!
+                                Nenhum Lead encontrato para este evento!
                             </td>
                         </tr>
                         <tr v-else v-for="lead in leads.data" :key="lead.id">

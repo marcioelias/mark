@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants\WppInstStatuses;
 use App\Events\OnCreateWhatsappInstance;
 use App\Jobs\CreateWhatsappInstanceJob;
+use App\Models\DeactivatedWhatsappInstance;
 use App\Models\User\Product;
 use App\Models\User\WhatsappInstance;
 use App\Models\WhatsappInstanceStatus;
@@ -12,6 +13,7 @@ use App\Traits\LayoutConfigTrait;
 use App\Whatsapp\WhatsappIntegration;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -69,6 +71,8 @@ class WhatsappInstanceController extends Controller
                                     ->paginate($this->paginate);
         }
 
+        $this->refreshInstancesStatus($whatsappInstances);
+
         return $this->getIndex('user.whatsapp_instances.index')
                     ->withWhatsappInstances($whatsappInstances);
 
@@ -124,9 +128,9 @@ class WhatsappInstanceController extends Controller
 
             $whatsappInstance->save();
 
-            CreateWhatsappInstanceJob::dispatch($whatsappInstance);
-
             DB::commit();
+
+            CreateWhatsappInstanceJob::dispatch($whatsappInstance);
         } catch (Exception $e) {
             DB::rollBack();
             Log::emergency($e->getMessage());
@@ -213,6 +217,10 @@ class WhatsappInstanceController extends Controller
      */
     public function destroy(WhatsappInstance $whatsappInstance)
     {
+        DeactivatedWhatsappInstance::create([
+            'subdomain' => $whatsappInstance->subdomain,
+            'port' => $whatsappInstance->port
+        ]);
         return response()->json($whatsappInstance->delete());
     }
 
@@ -245,5 +253,11 @@ class WhatsappInstanceController extends Controller
     public function disconnect(WhatsappInstance $whatsappInstance) {
         $response = (new WhatsappIntegration($whatsappInstance))->disconnect();
         return response()->json(['status' => $response]);
+    }
+
+    public function refreshInstancesStatus($whatsappInstances) {
+        foreach ($whatsappInstances as $insatnce) {
+            (new WhatsappIntegration($insatnce))->updateInstanceStatus();
+        }
     }
 }

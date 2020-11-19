@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col">
                         <button class="btn btn-secondary float-right" @click="cancelSaveStep"><i class="fas fa-times"></i> Cancelar</button>
-                        <button class="btn btn-success float-right mr-1" @click="saveStep"><i class="fas fa-save"></i> Salvar passo</button>
+                        <button class="btn btn-success float-right mr-1" @click="saveStep"><i class="fas fa-save"></i> Salvar evento</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@ export default {
         },
         cancelSaveStep() {
             this.$swal.fire({
-                    title: 'Cancelar cadastro do passo?',
+                    title: 'Cancelar cadastro do evento?',
                     text: `Os dados informados serão perdidos...`,
                     icon: 'warning',
                     heightAuto: false,

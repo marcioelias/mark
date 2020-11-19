@@ -48,7 +48,7 @@
                                     <i class="fas fa-funnel-dollar fa-3x text-success"></i>
                                 </p>
                                 <h4>Funil de Venda</h4>
-                                <button class="btn btn-success float-right" @click="addFirstStep"><i class="fas fa-plus"></i> Adicionar Primeiro Passo</button>
+                                <button class="btn btn-success float-right" @click="addFirstStep"><i class="fas fa-plus"></i> Adicionar Primeiro Evento</button>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                                 <vs-tab v-for="step in OrderedSteps" :key="step.funnel_step_sequence" :label="GetPostbackEventTypeById(step.postback_event_type_id).postback_event_type" icon-pack="fas" icon="fa-angle-right" class="p-0">
                                     <step-component :step="step" />
                                 </vs-tab>
-                                <vs-tab label="Novo Passo" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
+                                <vs-tab label="Novo Evento" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
                                 </vs-tab>
                             </vs-tabs>
                             <new-step-component v-else key="crud" class="mt-1"/>
@@ -294,8 +294,8 @@ export default {
             if (this.steps.length < 1) {
                 if (this.isSalesFunnel) {
                     this.$swal.fire({
-                            title: 'Nenhum passo adicionado!',
-                            text: `Antes de salvar o Funil deve ter ao menos 1 passo.`,
+                            title: 'Nenhum evento adicionado!',
+                            text: `Antes de salvar o Funil deve ter ao menos 1 evento.`,
                             icon: 'info',
                             heightAuto: false,
                             showCancelButton: false,

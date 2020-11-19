@@ -3,6 +3,7 @@
 namespace App\Whatsapp;
 
 use App\Constants\WppInstStatuses;
+use App\Models\DeactivatedWhatsappInstance;
 use App\Models\User\WhatsappInstance;
 use Exception;
 use Illuminate\Http\Client\Response;
@@ -16,6 +17,8 @@ class WhatsappEndpoints {
     public const SEND_TEXT    = '/sendText';
     public const SEND_FILE    = '/sendMediaURL';
     public const LOGOFF       = '/deslogar';
+    public const GET_STATUS   = '/status';
+    public const RECICLE      = '/reciclar';
 }
 
 class WhatsappIntegration {
@@ -32,8 +35,11 @@ class WhatsappIntegration {
     }
 
     public function createInstance() {
-        Log::info('port: '.$this->whatsappInstance->port);
-        $this->storeInstance($this->getNewInstance());
+        if (DeactivatedWhatsappInstance::count()) {
+            $this->storeInstance($this->recicleInstance(DeactivatedWhatsappInstance::first()));
+        } else {
+            $this->storeInstance($this->getNewInstance());
+        }
     }
 
     private function getNewInstance() {
@@ -52,8 +58,6 @@ class WhatsappIntegration {
             Log::emergency($e->getMessage());
             throw $e;
         }
-
-
     }
 
     private function storeInstance(Response $response) {
@@ -99,13 +103,16 @@ class WhatsappIntegration {
     }
 
     public function disconnect() {
-        $response = Http::post($this->getEndpointURL(WhatsappEndpoints::LOGOFF), [
+        $url = $this->apiUrl.WhatsappEndpoints::LOGOFF;
+        Log::info('deslogar Url: '.$url);
+        $response = Http::post($url, [
             'pasta' => $this->whatsappInstance->subdomain
         ]);
 
-        Log::debug($response);
+        Log::info($response->body());
+        Log::info($response->status());
 
-        return $response->successful();
+        return $response->status() == 200;
     }
 
     private function formatPhoneNumber(string $phoneNumber) {
@@ -122,7 +129,46 @@ class WhatsappIntegration {
         return $countryCode.$areaCode.$number.'@c.us';
     }
 
-    private function getEndpointURL(string $endpoint) {
-        return 'https://'.$this->whatsappInstance->url.$endpoint.'?token='.$this->whatsappInstance->hash;
+    private function getEndpointURL(string $endpoint, bool $withToken = true) {
+        $token = $withToken ? '?token='.$this->whatsappInstance->hash : '';
+        return 'https://'.$this->whatsappInstance->url.$endpoint.$token;
+    }
+
+    public function recicleInstance(DeactivatedWhatsappInstance $deactivatedWhatsappInstance) {
+        try {
+            $response = Http::post($this->apiUrl.WhatsappEndpoints::RECICLE, [
+                'pasta' => $deactivatedWhatsappInstance->subdomain
+            ]);
+
+            if ($response->successful()) {
+                $this->whatsappInstance->port = $deactivatedWhatsappInstance->port;
+                $deactivatedWhatsappInstance->delete();
+                return $response;
+            } else {
+                throw new Exception('Erro ao criar instância de Whatsapp. Request: '.$this->apiUrl.WhatsappEndpoints::NEW_INSTANCE.' Response: ' . $response->body());
+            }
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getStatus() {
+        try {
+            $url = $this->getEndpointURL(WhatsappEndpoints::GET_STATUS, false)."/".$this->whatsappInstance->hash;
+            Log::info('URL Status: '.$url);
+            return Http::get($url);
+        } catch (Exception $e) {
+            Log::emergency($e);
+        }
+    }
+
+    public function updateInstanceStatus() {
+        try {
+            $this->whatsappInstance->whatsapp_instance_status_id = ((string) $this->getStatus() === (string) 'offline') ? WppInstStatuses::DISCONNECTED : WppInstStatuses::CONNECTED;
+            $this->whatsappInstance->save();
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+        }
     }
 }

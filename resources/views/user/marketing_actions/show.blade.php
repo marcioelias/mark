@@ -17,11 +17,11 @@
                 </div>
                 <div class="col-md-6">
                     <label for="">Início do Disparo</label>
-                    <div class="form-control">{{ $marketingAction->start_at }}</div>
+                    <div class="form-control">{{ Carbon\Carbon::parse($marketingAction->start_at)->format('d/m/Y H:i:s') }}</div>
                 </div>
             </div>
             <div class="divider divider-primary divider-dotted">
-                <div class="divider-text">Mensagem ({{ $marketingAction->actionType->action_type_name }})</div>
+                <div class="divider-text">Mensagem ({{ $marketingAction->actionType->action_type_description }})</div>
             </div>
             @if($marketingAction->action_type_id == \App\Constants\ActionTypes::EMAIL)
             <div class="row">

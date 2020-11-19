@@ -100,6 +100,17 @@ class SendNotifications implements ShouldQueue
         if ($wppInstance) {
             $wppIntegration = new WhatsappIntegration($wppInstance);
             $wppIntegration->sendText($msg, $to);
+            /* se configurado para enviar o arquivo do boleto, dispara uma msg com o mesmo */
+            try {
+                if ($this->schedule->action->action_data['data']['options']['send_billet'] ?? false) {
+                    $variables = $this->getVariables();
+                    if ($variables['url_boleto']) {
+                        $wppIntegration->sendFile($variables['url_boleto'], $to);
+                    }
+                }
+            } catch (Exception $e) {
+                Log::emergency($e->getMessage());
+            }
         }
     }
 
