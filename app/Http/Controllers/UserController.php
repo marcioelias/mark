@@ -113,6 +113,7 @@ class UserController extends Controller
         Log::debug($request->all());
         $user = new User($request->all());
         $user->active = ($request->active ?? false) ? true : false;
+        $user->activated_at = $user->active ? now() : null;
         $user->password = bcrypt($request->password);
 
         Log::debug($user);
@@ -181,6 +182,7 @@ class UserController extends Controller
 
         $user->fill($request->all());
         $user->active = ($request->active ?? false) ? true : false;
+        $user->activated_at = $user->active ? now() : null;
         return response()->json($user->save());
     }
 
