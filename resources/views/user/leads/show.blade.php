@@ -1,6 +1,6 @@
 @extends('layouts.contentLayoutMaster')
 
-@section('title', "Lead (Transação: $postback->transaction_code)")
+@section('title', "Lead (Transação: $lead->transaction_code)")
 
 @section('content')
 
@@ -13,21 +13,21 @@
             <div class="row mb-1">
                 <div class="col">
                     <label for="">ID</label>
-                    <div class="form-control">{{ $postback->id }}</div>
+                    <div class="form-control">{{ $lead->id }}</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <label for="">Transação</label>
-                    <div class="form-control">{{ $postback->transaction_code }}</div>
+                    <div class="form-control">{{ $lead->transaction_code }}</div>
                 </div>
                 <div class="col-md-4">
                     <label for="">Data</label>
-                    <div class="form-control">{{ $postback->created_at->format('d/m/Y H:i:s') }}</div>
+                    <div class="form-control">{{ $lead->created_at->format('d/m/Y H:i:s') }}</div>
                 </div>
                 <div class="col-md-4">
                     <label for="">Plataforma</label>
-                    <div class="form-control">{{ $postback->product->plataformConfig->plataform->plataform_name }}</div>
+                    <div class="form-control">{{ $lead->product->plataformConfig->plataform->plataform_name }}</div>
                 </div>
             </div>
             <div class="row">
@@ -40,11 +40,11 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="">Descrição</label>
-                                    <div class="form-control">{{ $postback->product->product_name }}</div>
+                                    <div class="form-control">{{ $lead->product->product_name }}</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="">Código na Plataforma</label>
-                                    <div class="form-control">{{ $postback->product->plataform_code }}</div>
+                                    <div class="form-control">{{ $lead->product->plataform_code }}</div>
                                 </div>
                             </div>
                         </div>
@@ -61,17 +61,17 @@
                             <div class="row mb-1">
                                 <div class="col">
                                     <label for="">Nome</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_name }}</div>
+                                    <div class="form-control">{{ $lead->customer->customer_name }}</div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="">Telefone</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_phone_number }}</div>
+                                    <div class="form-control">{{ $lead->customer->customer_phone_number }}</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="">E-mail</label>
-                                    <div class="form-control">{{ $postback->lead->customer->customer_email }}</div>
+                                    <div class="form-control">{{ $lead->customer->customer_email }}</div>
                                 </div>
                             </div>
                         </div>
