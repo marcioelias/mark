@@ -123,21 +123,21 @@ class DoOnLeadUpdated
      */
     public function getFunnelStep(Postback $postback): FunnelStep
     {
-        $salesFunnel = $this->getFunnel($postback);
-        return FunnelStep::where('funnel_id', $salesFunnel->id)
-                                ->where('postback_event_type_id', $postback->postback_event_type_id)
-                                ->first();
-    }
+        try {
+            $funnelStep = FunnelStep::where('funnel_id', $postback->product->funnel_id)
+                                    ->where('postback_event_type_id', $postback->postback_event_type_id)
+                                    ->first();
 
-    /**
-     * Get the funnel based on the relationship with product present at postback
-     *
-     * @param Postback $postback
-     * @return Funnel
-     */
-    public function getFunnel(Postback $postback): Funnel
-    {
-        return $postback->product->funnel;
+            if ($funnelStep) {
+                Log::info('getFunnelStep()');
+                Lot::info('return => '.$funnelStep);
+                return $funnelStep;
+            } else {
+                throw new Exception('Evento não encontrato para o funil');
+            }
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage);
+        }
     }
 
     /**
