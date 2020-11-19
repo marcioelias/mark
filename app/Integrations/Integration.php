@@ -83,9 +83,14 @@ class Integration {
     }
 
     protected function getProduct() {
+        Log::info('getProduct()');
+        Log::info('plataform_code => '.$this->productCode);
+        Log::info('plataform_config_id => '.$this->plataformConfig->id );
         $product = Product::where('plataform_code', $this->productCode)
                         ->where('plataform_config_id', $this->plataformConfig->id)
                         ->first();
+
+        Log::info('return => '.$product);
         if ($product) {
             return $product;
         } else {
