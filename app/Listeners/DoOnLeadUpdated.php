@@ -136,7 +136,7 @@ class DoOnLeadUpdated
                 throw new Exception('Evento não encontrato para o funil');
             }
         } catch (Exception $e) {
-            Log::emergency($e->getMessage);
+            Log::emergency($e->getMessage());
         }
     }
 
