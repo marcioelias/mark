@@ -11,6 +11,7 @@ use App\Models\User\FunnelStepAction;
 use App\Models\User\FunnelStepLead;
 use App\Models\User\Lead;
 use App\Models\User\Schedule;
+use App\Models\User\SentMessage;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -48,7 +49,7 @@ class SetNotificationDone
     }
 
     private function scheduleNextAction(Schedule $schedule) {
-        $nextAction = $this->getNextAction($schedule->funnelStepAction);
+        $nextAction = $this->getNextAction($schedule);
         if ($nextAction) {
             $this->scheduleAction($schedule, $nextAction);
         }
@@ -69,13 +70,25 @@ class SetNotificationDone
         $schedule->save();
     }
 
-    private function getNextAction(FunnelStepAction $funnelStepAction) {
-        return FunnelStep::find($funnelStepAction->funnel_step_id)
+    private function getNextAction(Schedule $schedule) {
+
+        $actions = FunnelStep::find($schedule->funnelStepAction->funnel_step_id)
                     ->actions()
-                    ->where('seconds_after', '>=', $funnelStepAction->seconds_after)
-                    ->where('schedule_status_id', ScheduleStatus::PENDING)
+                    ->where('seconds_after', '>=', $schedule->funnelStepAction->seconds_after)
                     ->orderBy('seconds_after', 'asc')
-                    ->first();
+                    ->get();
+        if ($actions) {
+            foreach($actions as $action) {
+                $schedule = Schedule::where('lead_id', $schedule->lead_id)
+                                    ->where('funnel_step_action_id', $action->id)
+                                    ->first();
+
+                if (!$schedule) {
+                    return $action;
+                    break;
+                }
+            }
+        }
     }
 
     private function getScheduleStartAt(FunnelStepAction $funnelStepAction, FunnelStepLead $funnelStepLead) {

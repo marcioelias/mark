@@ -35,6 +35,7 @@ class HotmartIntegration extends Integration {
                 break;
 
             case 'billet_printed':
+            case 'wayting_payment':
                 return PostbackEventType::BILLET_PRINTED;
                 break;
 
@@ -44,10 +45,6 @@ class HotmartIntegration extends Integration {
 
             case 'dispute':
                 return PostbackEventType::DISPUTE;
-                break;
-
-            case 'wayting_payment':
-                return PostbackEventType::WAITING_PAYMENT;
                 break;
         }
     }

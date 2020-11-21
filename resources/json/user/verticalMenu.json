@@ -69,6 +69,12 @@
                     "name": "Postbacks",
                     "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
                     "i18n": "nav.sk_layout_2_columns"
+                },
+                {
+                    "url": "sent_message.index",
+                    "name": "Sent Messages",
+                    "activeUrls": ["sent_message", "sent_message/{sent_message}"],
+                    "i18n": "nav.sk_layout_2_columns"
                 }
             ]
         },

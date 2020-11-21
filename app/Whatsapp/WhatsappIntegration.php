@@ -78,11 +78,34 @@ class WhatsappIntegration {
             $response = Http::post($this->getEndpointURL(WhatsappEndpoints::SEND_TEXT), [
                 'to' => $this->formatPhoneNumber($to),
                 'msg' => $msg
-            ])->throw();
+            ]);
 
-            return $response->successful();
+            Log::info('response whatsapp');
+            Log::debug($response);
+
+            if ($response->successful()) {
+                return [
+                    'returnMessage' => 'Whatsapp Enviado com sucesso',
+                    'successful' => true
+                ];
+            } else {
+                if ($response->status() == 401) {
+                    return [
+                        'returnMessage' => 'Instância desconectada, por favor, re-leia o QRCode.',
+                        'successful' => false
+                    ];
+                } else {
+                    return [
+                        'returnMessage' => 'Ocorreu um erro desconhecido. Whatsapp não pode ser enviado.',
+                        'successful' => false
+                    ];
+                }
+            }
         } catch (Exception $e) {
-            return false;
+            return [
+                'returnMessage' => $e->getMessage(),
+                'successful' => false
+            ];
             Log::debug($e);
         }
     }
@@ -90,11 +113,9 @@ class WhatsappIntegration {
     public function sendFile(string $url, string $to) {
         $response = Http::post($this->getEndpointURL(WhatsappEndpoints::SEND_FILE), [
             'to' => $this->formatPhoneNumber($to),
-            'url' => $url,
-            'cap' => 'emoji'
+            'url' => $url
         ]);
 
-        Log::debug($response->body());
         return $response->successful();
     }
 

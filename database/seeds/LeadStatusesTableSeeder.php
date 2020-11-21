@@ -16,11 +16,11 @@ class LeadStatusesTableSeeder extends Seeder
         $leadStatuses = [
             [
                 'id' => LeadStatuses::APPROVED,
-                'status' => 'Aprovado'
+                'status' => 'Compra Efetuada'
             ],
             [
                 'id' => LeadStatuses::CANCELED,
-                'status' => 'Cancelado'
+                'status' => 'Vencido'
             ],
             [
                 'id' => LeadStatuses::BILLET_PRINTED,
@@ -28,17 +28,12 @@ class LeadStatusesTableSeeder extends Seeder
             ],
             [
                 'id' => LeadStatuses::REFUNDED,
-                'status' => 'Devolvido'
+                'status' => 'Reembolsado'
             ],
             [
                 'id' => LeadStatuses::DISPUTE,
-                'status' => 'Disputa'
+                'status' => 'Aguardando Reembolso'
             ],
-            [
-                'id' => LeadStatuses::WAITING_PAYMENT,
-                'status' => 'Aguardando Pagamento'
-            ],
-
         ];
 
         foreach($leadStatuses as $leadStatus) {

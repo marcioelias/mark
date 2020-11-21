@@ -30,7 +30,7 @@
                         <NumberEdit name="days_after" id="days_after" :min="0" :max="30" v-model="options.days_after">Enviar após dias</NumberEdit>
                     </div>
                     <div class="col col-lg-2">
-                        <NumberEdit name="delay_days" id="delay_days" :min="0" :max="15" v-model="options.delay_minutes">Atraso/Minutos</NumberEdit>
+                        <NumberEdit name="delay_minutes" id="delay_minutes" :min="0" :max="15" v-model="options.delay_minutes">Atraso/Minutos</NumberEdit>
                     </div>
                 </template>
 

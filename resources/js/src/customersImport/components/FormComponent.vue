@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-4 col-md-4">
                 <fieldset class="form-group">
                     <label for="basicInputFile">Arquivo CSV</label>
                     <div class="custom-file">
@@ -12,6 +12,14 @@
                         <span v-for="(error, index) in httpErrors.customers" :key="index">{{ error }}</span>
                     </span>
                 </fieldset>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <label>Separador</label>
+                <select name="currentSeparator" id="currentSeparator" class="form-control" v-model="currentSeparator">
+                    <option value="comma">Virtula ( , )</option>
+                    <option value="semicolon">Ponto e vírgula ( ; )</option>
+                    <option value="tab">Tab</option>
+                </select>
             </div>
             <div class="col-lg-3 col-md-3">
                 <label for="customer_status">Status</label>
@@ -73,6 +81,7 @@ export default {
             'firstLineCaption',
             'isLoading',
             'importFile',
+            'separator',
             'httpErrors'
         ]),
         currentStatusId: {
@@ -90,6 +99,14 @@ export default {
             set(value) {
                 this.ActionSetFirstLineCaption(value)
             }
+        },
+        currentSeparator: {
+            get() {
+                return this.separator
+            },
+            set(value) {
+                this.ActionSetSeparator(value)
+            }
         }
     },
     methods: {
@@ -98,7 +115,8 @@ export default {
             'ActionSetStatuses',
             'ActionSetImportFile',
             'ActionFileUpload',
-            'ActionSetFirstLineCaption'
+            'ActionSetFirstLineCaption',
+            'ActionSetSeparator'
         ]),
         loadFile() {
             this.ActionFileUpload({ vm: this })

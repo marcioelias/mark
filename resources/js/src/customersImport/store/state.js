@@ -21,6 +21,7 @@ export default {
     ],
     selectedColumns: [],
     firstLineCaption: false,
+    separator: 'comma',
     order: {
         field: 0,
         type: 'ASC',

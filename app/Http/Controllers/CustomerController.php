@@ -295,8 +295,15 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function upload(Request $request) {
-        if($request->hasFile('file') && $request->file('file')->isValid()) {
-            return response()->json($this->parseCSVFile($request->file('file')));
+        try {
+            Log::debug($request->all());
+            if($request->hasFile('file') && $request->file('file')->isValid()) {
+                return response()->json($this->parseCSVFile($request->file('file'), $request->separator));
+            } else {
+                Log::emergency($request->file('file')->getErrorMessage());
+            }
+        } catch (Exception $e) {
+            Log::emergency($e);
         }
     }
 
@@ -353,23 +360,48 @@ class CustomerController extends Controller
         ]);
     }
 
-    private function parseCSVFile(String $file) {
+    private function parseCSVFile(String $file, string $separator) {
         $res = [];
-        if (($handle = fopen($file, "r")) !== FALSE) {
-            while (($line = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $columns = count($line);
-                $row = [];
-                for ($column = 0; $column < $columns; $column++) {
-                    $row[] = [
-                        'index' => $column,
-                        'column' => '',
-                        'content' => $line[$column]
-                    ];
-                }
-                $res[] = $row;
-            }
-            fclose($handle);
+
+        switch ($separator) {
+            case 'comma':
+                $delimiter = ",";
+                break;
+
+            case 'semicolon':
+                $delimiter = ";";
+                break;
+
+            case 'tab':
+                $delimiter = "\t";
+                break;
         }
-        return $res;
+
+
+        try {
+            $handle = fopen($file, "r");
+            if ($handle) {
+                while ($line = fgetcsv($handle, 1000, $delimiter)) {
+                    if (join($line)) {
+                        $line = array_map("utf8_encode", $line);
+                        $columns = count($line);
+                        $row = [];
+                        for ($column = 0; $column < $columns; $column++) {
+                            $row[] = [
+                                'index' => $column,
+                                'column' => '',
+                                'content' => $line[$column]
+                            ];
+                        }
+                        $res[] = $row;
+                    }
+                }
+                fclose($handle);
+            }
+            return $res;
+        } catch (Exception $e) {
+            return false;
+            Log::debug($e);
+        }
     }
 }

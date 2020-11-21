@@ -48,7 +48,7 @@
             @endif
         </form>
     </div>
-    <div class="table-responsive">
+    <div class="table-responsive-lg">
         <table class="table table-sm table-hover bg-white table-bordered" style="margin: 0px">
             <thead>
                 <tr class="bg-primary text-white">

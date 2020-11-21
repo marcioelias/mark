@@ -58,6 +58,8 @@ class QueueNotifications extends Command
 
     private function handleSchedules() {
         $schedules = Schedule::runnable()->notQueued()->pending()->get();
+        Log::info('obtendo schedules');
+        Log::debug($schedules);
         foreach($schedules as $schedule) {
             if ($this->hasBalance($schedule)) {
 
@@ -83,6 +85,8 @@ class QueueNotifications extends Command
                     DB::rollBack();
                     Log::emergency($e->getMessage());
                 }
+            } else {
+                Log::info('User: '.$schedule->user->name.' without balance to send message');
             }
         }
     }

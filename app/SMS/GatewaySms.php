@@ -24,9 +24,24 @@ class GatewaySms {
 
     public function send() {
         try {
-            return $this->callApi($this->getUrl(self::SEND_SMS), $this->getUrlParameters(self::SEND_SMS));
+            $result = $this->callApi($this->getUrl(self::SEND_SMS), $this->getUrlParameters(self::SEND_SMS));
+
+            if ($result['status'] == 'Sucesso') {
+                return [
+                    'returnMessage' => 'SMS Enviado com sucesso',
+                    'successful' => true
+                ];
+            } else {
+                return [
+                    'returnMessage' => $result['erro'],
+                    'successful' => false
+                ];
+            }
         } catch (\Exception $e) {
-            return false;
+            return [
+                'returnMessage' => $e->getMessage(),
+                'successful' => false
+            ];
             Log::debug($e);
         }
     }
@@ -40,6 +55,7 @@ class GatewaySms {
 
                 case HttpMethods::POST:
                     $response = Http::post($endpoint, $params);
+                    Log::debug($response);
                     break;
             }
 

@@ -158,9 +158,6 @@ class Integration {
             case PostbackEventType::BILLET_PRINTED:
                 return LeadStatuses::BILLET_PRINTED;
                 break;
-            case PostbackEventType::WAITING_PAYMENT:
-                return LeadStatuses::WAITING_PAYMENT;
-                break;
             case PostbackEventType::DISPUTE:
                 return LeadStatuses::DISPUTE;
                 break;

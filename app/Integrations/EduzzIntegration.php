@@ -27,6 +27,7 @@ class EduzzIntegration extends Integration {
     public function getMappedEventType() {
         switch ($this->eventType) {
             case '1':
+            case '15':
                 return PostbackEventType::BILLET_PRINTED;
                 break;
 
@@ -44,10 +45,6 @@ class EduzzIntegration extends Integration {
 
             case '7':
                 return PostbackEventType::REFUNDED;
-                break;
-
-            case '15':
-                return PostbackEventType::WAITING_PAYMENT;
                 break;
         }
     }

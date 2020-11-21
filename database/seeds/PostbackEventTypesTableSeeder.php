@@ -16,11 +16,11 @@ class PostbackEventTypesTableSeeder extends Seeder
         $eventTypes = [
             [
                 'id' => ConstantPostbackEventType::APPROVED,
-                'postback_event_type' => 'Aprovado',
+                'postback_event_type' => 'Compra Efetuada',
             ],
             [
                 'id' => ConstantPostbackEventType::CANCELED,
-                'postback_event_type' => 'Cancelado',
+                'postback_event_type' => 'Vencido',
             ],
             [
                 'id' => ConstantPostbackEventType::BILLET_PRINTED,
@@ -28,16 +28,12 @@ class PostbackEventTypesTableSeeder extends Seeder
             ],
             [
                 'id' => ConstantPostbackEventType::REFUNDED,
-                'postback_event_type' => 'Devolvido',
+                'postback_event_type' => 'Reembolsado',
             ],
             [
                 'id' => ConstantPostbackEventType::DISPUTE,
-                'postback_event_type' => 'Disputa',
+                'postback_event_type' => 'Aguardando Reembolso',
             ],
-            [
-                'id' => ConstantPostbackEventType::WAITING_PAYMENT,
-                'postback_event_type' => 'Aguardando Pagamento',
-            ]
         ];
 
         foreach ($eventTypes as $eventType) {

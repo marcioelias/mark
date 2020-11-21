@@ -71,7 +71,7 @@
                                 <vs-tab v-for="step in OrderedSteps" :key="step.funnel_step_sequence" :label="GetPostbackEventTypeById(step.postback_event_type_id).postback_event_type" icon-pack="fas" icon="fa-angle-right" class="p-0">
                                     <step-component :step="step" />
                                 </vs-tab>
-                                <vs-tab label="Novo Evento" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
+                                <vs-tab v-if="GetPostbackEventTypesForSelect.length > 0" label="Novo Evento" icon-pack="fas" icon="fa-plus-square" @click="addNewStep()" class="p-0">
                                 </vs-tab>
                             </vs-tabs>
                             <new-step-component v-else key="crud" class="mt-1"/>
@@ -134,7 +134,7 @@ export default {
     }, */
     computed: {
         ...mapGetters('funnel', [
-            'GetLeadStatusesForSelect', 'OrderedSteps', 'GetPostbackEventTypeById'
+            'GetLeadStatusesForSelect', 'OrderedSteps', 'GetPostbackEventTypeById', 'GetPostbackEventTypesForSelect'
         ]),
         ...mapState('funnel', [
             'showCrudStep', 'currentStep', 'showCrudAction', 'steps', 'description', 'isSalesFunnel', 'active', 'httpErrors', 'isLoading'

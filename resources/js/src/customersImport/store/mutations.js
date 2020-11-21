@@ -37,5 +37,8 @@ export default {
     },
     [types.SET_ORDER_TYPE] (state, payload) {
         state.order.type = payload
+    },
+    [types.SET_SEPARATOR] (state, payload) {
+        state.separator = payload
     }
 }

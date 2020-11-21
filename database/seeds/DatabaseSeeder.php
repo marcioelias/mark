@@ -52,6 +52,7 @@ class DatabaseSeeder extends Seeder
         DB::table('whatsapp_instance_statuses')->truncate();
         DB::table('transaction_types')->truncate();
         DB::table('marketing_action_statuses')->truncate();
+        DB::table('plataform_configs')->truncate();
         Schema::enableForeignKeyConstraints();
     }
 }

@@ -12,6 +12,7 @@ use App\Models\User\FunnelStepLead;
 use App\Models\User\Postback;
 use App\Models\User\Schedule;
 use Carbon\CarbonImmutable;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Arr;
@@ -47,26 +48,32 @@ class DoOnLeadCreated
      * @return void
      */
     private function addLeadToStep(Postback $postback) {
-        $this->updateCustomerStatus($postback->lead->customer);
-        $salesFunnel = $postback->product->funnel;
-        if ($salesFunnel) {
-            $funnelStep = FunnelStep::where('funnel_id', $salesFunnel->id)
-                                ->where('postback_event_type_id', $postback->postback_event_type_id)
-                                ->first();
-            if ($funnelStep) {
-                $funnelStepLead = new FunnelStepLead([
-                    'user_id' => $postback->user_id,
-                    'funnel_step_id' => $funnelStep->id,
-                    'lead_id' => $postback->lead_id
-                ]);
+        try {
+            $this->updateCustomerStatus($postback->lead->customer);
+            $salesFunnel = $postback->product->funnel;
+            if ($salesFunnel) {
+                Log::info('Encontrou funil de vendas: '.$salesFunnel->id);
+                $funnelStep = FunnelStep::where('funnel_id', $salesFunnel->id)
+                                    ->where('postback_event_type_id', $postback->postback_event_type_id)
+                                    ->first();
+                if ($funnelStep) {
+                    Log::info('Encontrou evento do funil: '.$funnelStep->id);
+                    $funnelStepLead = new FunnelStepLead([
+                        'user_id' => $postback->user_id,
+                        'funnel_step_id' => $funnelStep->id,
+                        'lead_id' => $postback->lead_id
+                    ]);
 
-                $funnelStepLead->save();
+                    $funnelStepLead->save();
 
-                /**
-                 * Dispatch the event indicating that this Lead was assigned with a Funnel Step
-                 */
-                event(new OnAddLeadToStep($postback, $funnelStepLead));
+                    /**
+                     * Dispatch the event indicating that this Lead was assigned with a Funnel Step
+                     */
+                    event(new OnAddLeadToStep($postback, $funnelStepLead));
+                }
             }
+        } catch (Exception $e) {
+            Log::emergency($e);
         }
     }
 

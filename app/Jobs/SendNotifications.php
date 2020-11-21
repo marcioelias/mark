@@ -12,6 +12,7 @@ use App\Models\User\FunnelStepAction;
 use App\Models\User\FunnelStepLead;
 use App\Models\User\Lead;
 use App\Models\User\Schedule;
+use App\Models\User\SentMessage;
 use App\Models\User\SmsUserTransaction;
 use App\Models\Variable;
 use App\SMS\GatewaySms;
@@ -90,7 +91,9 @@ class SendNotifications implements ShouldQueue
     private function sendSMS() {
         $msg = $this->notificationData;
         $to = $this->schedule->lead->customer->customer_phone_number;
-        SmsFactory::getSmsGateway($msg, $to)->send();
+        $result = SmsFactory::getSmsGateway($msg, $to)->send();
+
+        $this->logMessageSent($result['returnMessage'], $result['successful']);
     }
 
     private function sendWhatsapp() {
@@ -99,28 +102,42 @@ class SendNotifications implements ShouldQueue
         $wppInstance = $this->schedule->lead->product->whatsappInstance;
         if ($wppInstance) {
             $wppIntegration = new WhatsappIntegration($wppInstance);
-            $wppIntegration->sendText($msg, $to);
-            /* se configurado para enviar o arquivo do boleto, dispara uma msg com o mesmo */
-            try {
-                if ($this->schedule->action->action_data['data']['options']['send_billet'] ?? false) {
-                    $variables = $this->getVariables();
-                    if ($variables['url_boleto']) {
-                        $wppIntegration->sendFile($variables['url_boleto'], $to);
+            $result = $wppIntegration->sendText($msg, $to);
+            if ($result['successful']) {
+                /* se configurado para enviar o arquivo do boleto, dispara uma msg com o mesmo */
+                try {
+                    if ($this->schedule->action->action_data['options']['send_billet'] ?? false) {
+                        $variables = $this->getVariables();
+                        if ($variables['url_boleto']) {
+                            $wppIntegration->sendFile($variables['url_boleto'], $to);
+                        }
                     }
+                    $this->logMessageSent($result['returnMessage'], true);
+                } catch (Exception $e) {
+                    $this->logMessageSent($e->getMessage(), false);
+                    Log::emergency($e->getMessage());
                 }
-            } catch (Exception $e) {
-                Log::emergency($e->getMessage());
+            } else {
+                $this->logMessageSent($result['returnMessage'], false);
             }
+        } else {
+            $this->logMessageSent('Não há instância de Whatsapp para este Produto', false);
         }
     }
 
     private function sendEmail() {
-        $from = $this->schedule->user->name;
-        $replyTo = $this->schedule->user->email;
-        $to = $this->schedule->lead->customer->customer_email;
-        $subject = $this->getMailSubject();
-        $msg = $this->notificationData;
-        Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+        try {
+            $from = $this->schedule->user->name;
+            $replyTo = $this->schedule->user->email;
+            $to = $this->schedule->lead->customer->customer_email;
+            $subject = $this->getMailSubject();
+            $msg = $this->notificationData;
+            Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+
+            $this->logMessageSent('E-mail enviado com sucesso.', true);
+        } catch (Exception $e) {
+            $this->logMessageSent($e->getMessage(), false);
+        }
     }
 
     private function getNotificationData() {
@@ -255,5 +272,16 @@ class SendNotifications implements ShouldQueue
     private function getAction(FunnelStepLead $funnelStepLead): FunnelStepAction
     {
         return $funnelStepLead->funnelStep->actions()->orderBy('action_sequence', 'asc')->first();
+    }
+
+    private function logMessageSent(string $returnData, bool $success) {
+        SentMessage::create([
+            'user_id' => $this->schedule->user_id,
+            'lead_id' => $this->schedule->lead_id,
+            'funnel_step_action_id' => $this->schedule->funnel_step_action_id,
+            'message_data' => $this->notificationData,
+            'return_data' => $returnData,
+            'is_successful' => $success
+        ]);
     }
 }

@@ -130,7 +130,7 @@ class DoOnLeadUpdated
 
             if ($funnelStep) {
                 Log::info('getFunnelStep()');
-                Lot::info('return => '.$funnelStep);
+                Log::info('return => '.$funnelStep);
                 return $funnelStep;
             } else {
                 throw new Exception('Evento não encontrato para o funil');
@@ -175,7 +175,6 @@ class DoOnLeadUpdated
                 break;
             case PostbackEventType::BILLET_PRINTED:
             case PostbackEventType::DISPUTE:
-            case PostbackEventType::WAITING_PAYMENT:
                 $customer->customer_status_id = CustomerStatuses::ACTIVE;
                 break;
         }

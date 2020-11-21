@@ -20,6 +20,10 @@ export const ActionAddSelectedColumn = ({ commit }, payload) => {
     commit(types.SET_SELECTED_COLUMNS, payload)
 }
 
+export const ActionSetSeparator = ({ commit}, payload) => {
+    commit(types.SET_SEPARATOR, payload)
+}
+
 export const ActionSetImportFile = ({ commit }, payload) => {
     commit(types.SET_IMPORT_FILE, payload)
 }
@@ -47,8 +51,9 @@ export const ActionSetStatuses = ({ commit }, { vm }) => {
 }
 
 export const ActionFileUpload = async ({ state, commit }, { vm }) => {
-    let formData = new FormData();
-    formData.append('file', state.importFile);
+    let formData = new FormData()
+    formData.append('file', state.importFile)
+    formData.append('separator', state.separator)
     commit(types.SET_IS_LOADING, true)
 
     await vm.$http.post('/customers/upload',
