@@ -72,22 +72,22 @@ class SendMarketingAction implements ShouldQueue
         $this->notificationData = $this->getNotificationData();
         switch ($this->marketingAction->action_type_id) {
             case ActionTypes::EMAIL:
-                $this->sendEmail();
+                $result = $this->sendEmail();
                 break;
 
             case ActionTypes::SMS:
-                $this->sendSMS();
+                $result = $this->sendSMS();
                 break;
 
             case ActionTypes::WHATSAPP;
-                $this->sendWhatsapp();
+                $result = $this->sendWhatsapp();
                 break;
         }
 
         $customerMarketingAction = $this->marketingAction->customers->find($this->customer->id);
         $customerMarketingAction->pivot->finished_at = now();
-        $customerMarketingAction->pivot->result_ok = $this->result;
-        $customerMarketingAction->pivot->result_message = $this->resultMsg;
+        $customerMarketingAction->pivot->result_ok = $result['successful'];
+        $customerMarketingAction->pivot->result_message = $result['returnMessage'];
         $customerMarketingAction->pivot->save();
 
         $this->changeMarketingActionStatus();
@@ -96,13 +96,7 @@ class SendMarketingAction implements ShouldQueue
     private function sendSMS() {
         $msg = $this->notificationData;
         $to = $this->customer->customer_phone_number;
-        $response = SmsFactory::getSmsGateway($msg, $to)->send();
-        $this->result = (string) $response['status'] === (string) 'Sucesso';
-        if ($this->result) {
-            $this->resultMsg = 'SMS Enviado.';
-        } else {
-            $this->resultMsg = $response['erro'];
-        }
+        return SmsFactory::getSmsGateway($msg, $to)->send();
     }
 
     private function sendWhatsapp() {
@@ -111,12 +105,7 @@ class SendMarketingAction implements ShouldQueue
         $wppInstance = $this->marketingAction->product->whatsappInstance;
         if ($wppInstance) {
             $wppIntegration = new WhatsappIntegration($wppInstance);
-            $this->result = $wppIntegration->sendText($msg, $to);
-            if ($this->result) {
-                $this->resultMsg = 'Whatsapp Enviado.';
-            } else {
-                $this->resultMsg = 'Erro ao enviar Whatsapp.';
-            }
+            return $wppIntegration->sendText($msg, $to);
         }
     }
 
@@ -127,15 +116,23 @@ class SendMarketingAction implements ShouldQueue
             $to = $this->customer->customer_email;
             $subject = $this->getMailSubject();
             $msg = $this->notificationData;
-            $this->result = Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
-            if ($this->result) {
-                $this->resultMsg = 'E-mail Enviado.';
+            $result = Mail::to($to)->send(new ActionSendEmail($from, $replyTo, $subject, $msg));
+            if ($result) {
+                return [
+                    'returnMessage' => 'E-mail enviado.',
+                    'successful' => true
+                ];
             } else {
-                $this->resultMsg = 'Erro ao enviar E-mail.';
+                return [
+                    'returnMessage' => 'E-mail não pode ser enviado.',
+                    'successful' => false
+                ];
             }
         } catch (Exception $e) {
-            $this->result = false;
-            $this->resultMsg = 'Ocorreu um erro inesperado.';
+            return [
+                'returnMessage' => 'Ocorreu um erro inesperado.',
+                'successful' => false
+            ];
         }
     }
 
