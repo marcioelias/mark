@@ -275,13 +275,17 @@ class SendNotifications implements ShouldQueue
     }
 
     private function logMessageSent(string $returnData, bool $success) {
-        SentMessage::create([
-            'user_id' => $this->schedule->user_id,
-            'lead_id' => $this->schedule->lead_id,
-            'funnel_step_action_id' => $this->schedule->funnel_step_action_id,
-            'message_data' => $this->notificationData,
-            'return_data' => $returnData,
-            'is_successful' => $success
-        ]);
+        try {
+            SentMessage::create([
+                'user_id' => $this->schedule->user_id,
+                'lead_id' => $this->schedule->lead_id,
+                'funnel_step_action_id' => $this->schedule->funnel_step_action_id,
+                'message_data' => $this->notificationData,
+                'return_data' => $returnData,
+                'is_successful' => $success
+            ]);
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+        }
     }
 }
