@@ -296,19 +296,17 @@ class CustomerController extends Controller
      */
     public function upload(Request $request) {
         try {
-            Log::debug($request->all());
             if($request->hasFile('file') && $request->file('file')->isValid()) {
                 return response()->json($this->parseCSVFile($request->file('file'), $request->separator));
             } else {
                 Log::emergency($request->file('file')->getErrorMessage());
             }
         } catch (Exception $e) {
-            Log::emergency($e);
+            Log::emergency($e->getMessage());
         }
     }
 
     public function processImport(Request $request) {
-        //Log::debug($request->all());
         $this->validate($request, [
             'customer_status_id' => 'required',
             'customers' => 'required|min:1'
@@ -348,7 +346,7 @@ class CustomerController extends Controller
                     $ok++;
                 }
             } catch (Exception $e) {
-                Log::debug($e->getMessage());
+                Log::emergency($e->getMessage());
                 $err++;
             }
         }
@@ -401,7 +399,7 @@ class CustomerController extends Controller
             return $res;
         } catch (Exception $e) {
             return false;
-            Log::debug($e);
+            Log::emergency($e->getMessage());
         }
     }
 }

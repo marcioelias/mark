@@ -11,7 +11,7 @@ class GatewaySandbox extends GatewaySandbox {
             return response()->json(['balance' => 999999]);
         } catch (Exception $e) {
             return false;
-            Log::debug($e);
+            Log::emergency($e->getMessage());
         }
     }
 

@@ -27,8 +27,6 @@ class LeadGoToStep
     public function __construct(Lead $lead)
     {
         $this->lead = $lead;
-        // Log::info('Event: LeadGoToStep');
-        // Log::debug($lead);
     }
 
     /**

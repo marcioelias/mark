@@ -42,7 +42,7 @@ class GatewaySms {
                 'returnMessage' => $e->getMessage(),
                 'successful' => false
             ];
-            Log::debug($e);
+            Log::emergency($e->getMessage());
         }
     }
 
@@ -55,7 +55,6 @@ class GatewaySms {
 
                 case HttpMethods::POST:
                     $response = Http::post($endpoint, $params);
-                    Log::debug($response);
                     break;
             }
 
@@ -63,7 +62,7 @@ class GatewaySms {
 
         } catch (\Exception $e) {
             return response()->json(['status' => 'Erro', 'erro' => 'Erro desconhecido'], 500);
-            Log::debug($e);
+            Log::emergency($e->getMessage());
         }
     }
 
@@ -72,7 +71,6 @@ class GatewaySms {
             return $this->callApi($this->getUrl(self::GET_BALANCE), $this->getUrlParameters(self::GET_BALANCE));
         } catch (\Exception $e) {
             return false;
-            Log::debug($e);
         }
     }
 

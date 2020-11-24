@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 class MailTemplateController extends Controller
 {
     public function store(Request $request) {
-        Log::debug(($request->all()));
         if ($request->images) {
             $mailTemplate = MailTemplate::create([
                 'template_name' => $request->template_name,

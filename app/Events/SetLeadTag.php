@@ -27,8 +27,6 @@ class SetLeadTag
     public function __construct(Lead $lead)
     {
         $this->lead = $lead;
-        // Log::info('Event: SetLeadTag');
-        // Log::debug($lead);
     }
 
     /**

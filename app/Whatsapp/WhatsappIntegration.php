@@ -80,9 +80,6 @@ class WhatsappIntegration {
                 'msg' => $msg
             ]);
 
-            Log::info('response whatsapp');
-            Log::debug($response);
-
             if ($response->successful()) {
                 return [
                     'returnMessage' => 'Whatsapp Enviado com sucesso',
@@ -106,7 +103,7 @@ class WhatsappIntegration {
                 'returnMessage' => $e->getMessage(),
                 'successful' => false
             ];
-            Log::debug($e);
+            Log::emergency($e->getMessage());
         }
     }
 
@@ -125,13 +122,9 @@ class WhatsappIntegration {
 
     public function disconnect() {
         $url = $this->apiUrl.WhatsappEndpoints::LOGOFF;
-        Log::info('deslogar Url: '.$url);
         $response = Http::post($url, [
             'pasta' => $this->whatsappInstance->subdomain
         ]);
-
-        Log::info($response->body());
-        Log::info($response->status());
 
         return $response->status() == 200;
     }
@@ -177,7 +170,6 @@ class WhatsappIntegration {
     public function getStatus() {
         try {
             $url = $this->getEndpointURL(WhatsappEndpoints::GET_STATUS, false)."/".$this->whatsappInstance->hash;
-            Log::info('URL Status: '.$url);
             return Http::get($url);
         } catch (Exception $e) {
             Log::emergency($e);

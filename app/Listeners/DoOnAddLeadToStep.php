@@ -47,11 +47,9 @@ class DoOnAddLeadToStep
      * @return void
      */
     private function scheduleAction(Postback $postback, FunnelStepLead $funnelStepLead) {
-        Log::info('Adicionado lead ao passo do funil...');
         $action = $this->getAction($funnelStepLead);
 
         if ($action) {
-            Log::info('Encontrou a ação: '.$action->id);
             $schedule = new Schedule([
                 'user_id' => $postback->user_id,
                 'lead_id' => $postback->lead_id,

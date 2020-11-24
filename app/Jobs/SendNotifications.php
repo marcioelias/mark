@@ -65,7 +65,6 @@ class SendNotifications implements ShouldQueue
     }
 
     private function processJob() {
-        Log::info('process job');
         $this->notificationData = $this->getNotificationData();
         switch ($this->schedule->action->action_type_id) {
             case ActionTypes::EMAIL:

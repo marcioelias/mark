@@ -26,8 +26,6 @@ class NewLeadCreated
     public function __construct(Lead $lead)
     {
         $this->lead = $lead;
-        // Log::info('Event: NewLeadCreated');
-        // Log::debug($lead);
     }
 
     /**

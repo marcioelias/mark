@@ -43,7 +43,6 @@ class DoOnLeadUpdated
             }
         } catch (Exception $e) {
             Log::emergency($e->getMessage());
-            Log::debug($e);
         }
     }
 
@@ -129,8 +128,6 @@ class DoOnLeadUpdated
                                     ->first();
 
             if ($funnelStep) {
-                Log::info('getFunnelStep()');
-                Log::info('return => '.$funnelStep);
                 return $funnelStep;
             } else {
                 throw new Exception('Evento não encontrato para o funil');

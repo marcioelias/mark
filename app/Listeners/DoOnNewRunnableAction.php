@@ -43,11 +43,10 @@ class DoOnNewRunnableAction
                 case ActionTypes::SMS:
                 case ActionTypes::EMAIL:
                 case ActionTypes::WHATSAPP:
-                    Log::info('passou aqui no DoOnNewRunnable');
                     try {
                         SendNotifications::dispatch($event->schedule)->delay(Carbon::now()->addMinutes($event->schedule->delay_before_start ?? 0));
                     } catch (Exception $e) {
-                        Log::debug($e);
+                        Log::emergency($e);
                     }
                     break;
 
@@ -72,15 +71,11 @@ class DoOnNewRunnableAction
                                     ->first();
 
         if ($funnelStepLead) {
-            Log::info('Troca de Funil...');
-            Log::debug($funnelStepLead);
             $funnelStepLead->active = 0;
             $funnelStepLead->save();
         }
 
         $funnel = Funnel::find($schedule->funnelStepAction->action_data['data']);
-        Log::info('codigo do novo funil: '.$schedule->funnelStepAction->action_data['data']);
-        Log::debug($funnel);
         if ($funnel) {
             $funnelStep = $funnel->steps()->first();
             if ($funnelStep) {

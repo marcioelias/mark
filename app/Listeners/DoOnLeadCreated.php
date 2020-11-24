@@ -52,12 +52,10 @@ class DoOnLeadCreated
             $this->updateCustomerStatus($postback->lead->customer);
             $salesFunnel = $postback->product->funnel;
             if ($salesFunnel) {
-                Log::info('Encontrou funil de vendas: '.$salesFunnel->id);
                 $funnelStep = FunnelStep::where('funnel_id', $salesFunnel->id)
                                     ->where('postback_event_type_id', $postback->postback_event_type_id)
                                     ->first();
                 if ($funnelStep) {
-                    Log::info('Encontrou evento do funil: '.$funnelStep->id);
                     $funnelStepLead = new FunnelStepLead([
                         'user_id' => $postback->user_id,
                         'funnel_step_id' => $funnelStep->id,

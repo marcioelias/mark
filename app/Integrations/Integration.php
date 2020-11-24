@@ -83,14 +83,10 @@ class Integration {
     }
 
     protected function getProduct() {
-        Log::info('getProduct()');
-        Log::info('plataform_code => '.$this->productCode);
-        Log::info('plataform_config_id => '.$this->plataformConfig->id );
         $product = Product::where('plataform_code', $this->productCode)
                         ->where('plataform_config_id', $this->plataformConfig->id)
                         ->first();
 
-        Log::info('return => '.$product);
         if ($product) {
             return $product;
         } else {
@@ -115,6 +111,7 @@ class Integration {
 
         } catch (Exception $e) {
             Log::emergency($e);
+            return null;
         }
     }
 
@@ -174,19 +171,23 @@ class Integration {
     }
 
     public function getPostback() {
-        return Postback::firstOrCreate(
-            [
-                'user_id' => $this->getPlataformConfig()->user_id,
-                'product_id' => $this->product->id,
-                'customer_id' => $this->customer->id,
-                'postback_event_type_id' => $this->getMappedEventType(),
-                'transaction_code' => $this->transactionCode,
-                'visible' => ($this->userActive($this->user) && $this->user->postbacksAvailable())
-            ],
-            [
-                'payload' => $this->getPayload()
-            ]
-        );
+        try {
+            return Postback::firstOrCreate(
+                [
+                    'user_id' => $this->getPlataformConfig()->user_id,
+                    'product_id' => $this->product->id,
+                    'customer_id' => $this->customer->id,
+                    'postback_event_type_id' => $this->getMappedEventType(),
+                    'transaction_code' => $this->transactionCode,
+                    'visible' => ($this->userActive($this->user) && $this->user->postbacksAvailable())
+                ],
+                [
+                    'payload' => $this->getPayload()
+                ]
+            );
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function getLead() {

@@ -72,8 +72,6 @@ class MarketingActionController extends Controller
                             ->paginate($this->paginate);
         }
 
-        Log::debug($marketingActions);
-
         return $this->getIndex('user.marketing_actions.index')
                     ->withMarketingActions($marketingActions);
     }
@@ -110,7 +108,6 @@ class MarketingActionController extends Controller
     public function store(Request $request)
     {
         //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
-        //Log::debug($request->all());
         $userId = Auth::user()->id;
         $this->validate($request, [
                 'description' => "required|unique:marketing_actions,marketing_action_description,NULL,NULL,user_id,$userId",
@@ -130,10 +127,8 @@ class MarketingActionController extends Controller
 
         DB::beginTransaction();
         try {
-            Log::debug($request->all());
             $startTime = explode(':', $request->start_time);
             $startAt = Carbon::parse($request->start_date)->setTime($startTime[0], $startTime[1])->toDateTimeString();
-            Log::info('StartAt: '.$startAt);
 
             $images = Arr::get($request->message, 'options.images');
             if ($images) {

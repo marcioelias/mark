@@ -30,17 +30,21 @@ class WebhookCallController extends Controller
         DB::beginTransaction();
         try {
             $customer = $this->integration->getCustomer();
-            $customer->save();
-
             $postback = $this->integration->getPostback();
-            $lead = $this->integration->getLead();
-            $lead->postbacks()->save($postback);
 
-            DB::commit();
+            if ($customer && $postback) {
+                $lead = $this->integration->getLead();
+                $lead->postbacks()->save($postback);
 
-            $this->dispatchEvents($postback);
+                DB::commit();
 
-            return $this->handleTransactionOk($postback);
+                $this->dispatchEvents($postback);
+
+                return $this->handleTransactionOk($postback);
+            } else {
+                DB::rollBack();
+                return $this->handleTransactionDiscarted();
+            }
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -94,5 +98,11 @@ class WebhookCallController extends Controller
                 'postback_id' => $postback->id
             ]
         ], 200);
+    }
+
+    private function handleTransactionDiscarted() {
+        return response()->json([
+            'status' => 'discarted'
+        ], 202);
     }
 }

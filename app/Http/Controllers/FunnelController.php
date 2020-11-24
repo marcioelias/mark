@@ -305,7 +305,6 @@ class FunnelController extends Controller
         DB::beginTransaction();
 
         try {
-            //Log::debug($request->all());
             $funnel->fill([
                 'funnel_description' => $request->description,
                 'is_sales_funnel' => $request->is_sales_funnel,
@@ -416,9 +415,6 @@ class FunnelController extends Controller
         $days = ($data['options']['days_after'] ?? 0) * 86400;
         $minutes = ($data['options']['delay_minutes'] ?? 0) * 60;
 
-        Log::debug($data);
-        Log::info('days: '.$days);
-        Log::info('minutes: '.$minutes);
         return $days+$minutes;
     }
 }

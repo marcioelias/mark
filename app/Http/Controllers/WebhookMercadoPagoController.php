@@ -11,7 +11,6 @@ class WebhookMercadoPagoController extends Controller
 {
     public function receive(Request $request) {
         if ((string) $request->type === 'payment') {
-            Log::debug($request->all());
             ProcessPayment::dispatch($request->data_id);
         }
 

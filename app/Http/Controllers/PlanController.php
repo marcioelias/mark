@@ -179,7 +179,7 @@ class PlanController extends Controller
 
             return response()->json(true);
         } catch (\Exception $e) {
-            Log::debug($e);
+            Log::emergency($e->getMessage());
             DB::rollBack();
         }
     }
