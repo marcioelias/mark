@@ -16,6 +16,7 @@ class WhatsappEndpoints {
     public const GET_QRCODE   = '/getQR';
     public const SEND_TEXT    = '/sendText';
     public const SEND_FILE    = '/sendMediaURL';
+    public const SEND_PDFURL  = '/sendPDFURL';
     public const LOGOFF       = '/deslogar';
     public const GET_STATUS   = '/status';
     public const RECICLE      = '/reciclar';
@@ -109,6 +110,15 @@ class WhatsappIntegration {
 
     public function sendFile(string $url, string $to) {
         $response = Http::post($this->getEndpointURL(WhatsappEndpoints::SEND_FILE), [
+            'to' => $this->formatPhoneNumber($to),
+            'url' => $url
+        ]);
+
+        return $response->successful();
+    }
+
+    public function sendPDF(string $url, string $to) {
+        $response = Http::post($this->getEndpointURL(WhatsappEndpoints::SEND_PDFURL), [
             'to' => $this->formatPhoneNumber($to),
             'url' => $url
         ]);

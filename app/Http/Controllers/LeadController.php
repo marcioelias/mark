@@ -35,8 +35,6 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        //Log::debug($request->all());
-
         $this->breadcrumbs = [
             [
                 'name' => 'Leads'

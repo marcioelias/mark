@@ -108,7 +108,7 @@ class SendNotifications implements ShouldQueue
                     if ($this->schedule->action->action_data['options']['send_billet'] ?? false) {
                         $variables = $this->getVariables();
                         if ($variables['url_boleto']) {
-                            $wppIntegration->sendFile($variables['url_boleto'], $to);
+                            $wppIntegration->sendPDF($variables['url_boleto'], $to);
                         }
                     }
                     $this->logMessageSent($result['returnMessage'], true);

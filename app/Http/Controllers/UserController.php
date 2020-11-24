@@ -110,13 +110,11 @@ class UserController extends Controller
             'password' => 'required|min:6|max:30|confirmed'
         ]);
 
-        Log::debug($request->all());
         $user = new User($request->all());
         $user->active = ($request->active ?? false) ? true : false;
         $user->activated_at = $user->active ? now() : null;
         $user->password = bcrypt($request->password);
 
-        Log::debug($user);
 
         if ($user->save()) {
             $tempPassword = new TempPassword;

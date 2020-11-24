@@ -91,17 +91,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function postbacksAvailable() {
         $postbackFeature = $this->plan->features->find(FeatureTypes::POSTBACKS)->pivot;
         if (!$postbackFeature->enabled) {
-            Log::info('Postbacks disabled');
             return false;
         } else {
             if ((int) $postbackFeature->limit === 0) {
-                Log::info('Postbacks ilimited');
                 return true;
             } else {
                 $postbacksReceiveds = $this->postbacks()->where('created_at', '>=', $this->activated_at)->count() ?? 0;
-                Log::info('Postbacks receiveds: '.$postbacksReceiveds);
-                Log::info('Postbacks limit: '.$postbackFeature->limit);
-                Log::info('Postbacks available: '. max($postbackFeature->limit - $postbacksReceiveds, 0));
                 return max($postbackFeature->limit - $postbacksReceiveds, 0);
             }
         }
@@ -110,17 +105,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function leadsAvailable() {
         $leadFeature = $this->plan->features->find(FeatureTypes::LEADS)->pivot;
         if (!$leadFeature->enabled) {
-            Log::info('Leads disabled');
             return false;
         } else {
             if ((int) $leadFeature->limit === 0) {
-                Log::info('Leads ilimited');
                 return true;
             } else {
                 $LeadsReceiveds = $this->leads()->where('created_at', '>=', $this->activated_at)->count() ?? 0;
-                Log::info('Leads receiveds: '.$LeadsReceiveds);
-                Log::info('Leads limit: '.$leadFeature->limit);
-                Log::info('Leads available: '. max($leadFeature->limit - $LeadsReceiveds, 0));
                 return max($leadFeature->limit - $LeadsReceiveds, 0);
             }
         }
@@ -142,20 +132,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function emailAvailable() {
         $emailFeature = $this->plan->features->find(FeatureTypes::EMAILS)->pivot;
         if (!$emailFeature->enabled) {
-            Log::info('E-mail disabled');
             return false;
         } else {
             if ((int) $emailFeature->limit === 0) {
-                Log::info('E-mail ilimiteds');
                 return true;
             } else {
                 $emailSent = $this->actions()
                                 ->where('excecuted_at', '>=', $this->activated_at)
                                 ->where('action_type_id', ActionTypes::EMAIL)
                                 ->count() ?? 0;
-                Log::info('E-mail sent: '.$emailSent);
-                Log::info('E-mail limit: '.$emailFeature->limit);
-                Log::info('E-mail available: '. max($emailFeature->limit - $emailSent, 0));
                 return max($emailFeature->limit - $emailSent, 0);
             }
         }
@@ -164,20 +149,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function whatsappAvailable() {
         $whatsappFeature = $this->plan->features->find(FeatureTypes::WHATSAPP)->pivot;
         if (!$whatsappFeature->enabled) {
-            Log::info('Whatsapp disabled');
             return false;
         } else {
             if ((int) $whatsappFeature->limit === 0) {
-                Log::info('Whatsapp ilimited');
                 return true;
             } else {
                 $whatsappSent = $this->actions()
                                 ->where('excecuted_at', '>=', $this->activated_at)
                                 ->where('action_type_id', ActionTypes::WHATSAPP)
                                 ->count() ?? 0;
-                Log::info('Whatsapp sent: '.$whatsappSent);
-                Log::info('Whatsapp limit: '.$whatsappFeature->limit);
-                Log::info('Whatsapp available: '. max($whatsappFeature->limit - $whatsappSent, 0));
                 return max($whatsappFeature->limit - $whatsappSent, 0);
             }
         }

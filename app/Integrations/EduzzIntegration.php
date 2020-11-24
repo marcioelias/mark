@@ -15,9 +15,9 @@ class EduzzIntegration extends Integration {
             PostbackField::customerName()->getField()    => 'cus_name',
             PostbackField::customerEmail()->getField()   => 'cus_email',
             PostbackField::customerPhone()->getField()   => 'cus_cel',
-            PostbackField::billetUrl()->getField()       => 'trans_bankslip',
+            PostbackField::billetUrl()->getField()       => 'trans_bankslip', //'billet_url'
             PostbackField::billetBarcode()->getField()   => 'trans_barcode',
-            PostbackField::eventType()->getField()       =>  'billet_url', // verificar esse outro status 'trans_status',
+            PostbackField::eventType()->getField()       => 'trans_status',
             PostbackField::paidAt()->getField()          => ['trans_paiddate', 'trans_paidtime'],
             PostbackField::value()->getField()           => 'trans_value',
             PostbackField::paymentType()->getField()     => 'trans_paymentmethod'

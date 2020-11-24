@@ -186,6 +186,7 @@ class Integration {
                 ]
             );
         } catch (Exception $e) {
+            Log::emergency($e->getMessage());
             return null;
         }
     }
