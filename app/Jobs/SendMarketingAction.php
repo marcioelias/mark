@@ -111,8 +111,8 @@ class SendMarketingAction implements ShouldQueue
 
     private function sendEmail() {
         try {
-            $from = $this->marketingAction->user->name;
-            $replyTo = $this->marketingAction->user->email;
+            $from = $this->schedule->lead->product->email_from_name ?? $this->marketingAction->user->name;
+            $replyTo = $this->schedule->lead->product->email ?? $this->marketingAction->user->email;
             $to = $this->customer->customer_email;
             $subject = $this->getMailSubject();
             $msg = $this->notificationData;

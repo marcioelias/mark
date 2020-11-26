@@ -13,7 +13,7 @@ class Product extends Model
     use MultiTenantable;
 
     protected $fillable = [
-        'user_id', 'plataform_config_id', 'plataform_code', 'product_name', 'product_price', 'funnel_id', 'active'
+        'user_id', 'plataform_config_id', 'plataform_code', 'product_name', 'product_price', 'funnel_id', 'email_from_name', 'email', 'active'
     ];
 
     public function scopeActive($query) {

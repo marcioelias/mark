@@ -126,8 +126,8 @@ class SendNotifications implements ShouldQueue
 
     private function sendEmail() {
         try {
-            $from = $this->schedule->user->name;
-            $replyTo = $this->schedule->user->email;
+            $from = $this->schedule->lead->product->email_from_name ?? $this->schedule->user->name;
+            $replyTo = $this->schedule->lead->product->email ?? $this->schedule->user->email;
             $to = $this->schedule->lead->customer->customer_email;
             $subject = $this->getMailSubject();
             $msg = $this->notificationData;
