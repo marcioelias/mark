@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User\Funnel;
 use App\Models\User\FunnelStep;
 use App\Models\User\FunnelStepAction;
+use App\Models\User\FunnelStepLead;
 use App\Models\User\Product;
+use App\Models\User\Schedule;
 use App\Traits\LayoutConfigTrait;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -320,7 +324,6 @@ class FunnelController extends Controller
                         ],
                         [
                             'funnel_id' => $funnel->id,
-                            //'funnel_step_sequence' => $step['funnel_step_sequence'],
                             'postback_event_type_id' => $step['postback_event_type_id'],
                         ]
                     );
@@ -369,6 +372,23 @@ class FunnelController extends Controller
                                         'deleted' => $action['deleted']
                                     ]
                                 );
+
+                                foreach ($newStepAction->schedule as $schedule) {
+                                    try {
+                                        $funnelStepLead = FunnelStepLead::where('lead_id', $schedule->lead_id)
+                                                                        ->where('funnel_step_id', $schedule->funnel_step_id)
+                                                                        ->firstOrFail();
+
+                                        $schedule->start_at = Carbon::parse($funnelStepLead->created_at)->startOfDay()
+                                                                                                        ->addDays($newStepAction->action_data['options']['days_after'] ?? 0);
+                                        $schedule->start_period = Carbon::parse($newStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
+                                        $schedule->end_period = Carbon::parse($newStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
+                                        $schedule->delay_before_start = $newStepAction->action_data['options']['delay_minutes'] ?? 0;
+                                        $schedule->save();
+                                    } catch (Exception $e) {
+                                        Log::alert($e->getMessage());
+                                    }
+                                }
                             }
                         }
                     }
