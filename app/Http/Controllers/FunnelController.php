@@ -386,7 +386,7 @@ class FunnelController extends Controller
                                         $schedule->delay_before_start = $newStepAction->action_data['options']['delay_minutes'] ?? 0;
                                         $schedule->save();
                                     } catch (Exception $e) {
-                                        Log::alert($e->getMessage());
+                                        Log::alert('Schedule: '.$schedule->id.' => '.$e->getMessage());
                                     }
                                 }
                             }

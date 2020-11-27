@@ -17,14 +17,7 @@ class SmsUserTransaction extends Model
     ];
 
     public function scopeSmsAvailable(Builder $query, User $user) {
-        /* $in = $query->where('user_id', $user->id)
-                    ->where('transaction_type_id', TransactionTypes::IN)
-                    ->sum('quantity'); */
-        /* $in = 5;
-        $out = $query->where('user_id', $user->id)
-                    ->where('transaction_type_id', TransactionTypes::OUT)
-                    ->sum('quantity');*/
-        $balance = $query->select(DB::raw('sum(case when transaction_type_id = \''.TransactionTypes::IN.'\' then quantity else quantity * (-1) end) as total'))
+        $balance = $query->select(DB::raw('sum(case transaction_type_id when \''.TransactionTypes::IN.'\' then quantity else quantity * (-1) end) as total'))
             ->where('user_id', $user->id)
             ->first()->total;
 

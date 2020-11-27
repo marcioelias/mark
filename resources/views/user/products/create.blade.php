@@ -68,4 +68,25 @@
         ]
     ])
     @endcomponent
+    @component('components.form-group', [
+        'inputs' => [
+            [
+                'type' => 'text',
+                'field' => 'email_from_name',
+                'label' => 'Nome Rementente',
+                'required' => true,
+                'inputSize' => 6
+            ],
+        ],
+        'inputs' => [
+            [
+                'type' => 'text',
+                'field' => 'email',
+                'label' => 'E-mail',
+                'required' => true,
+                'inputSize' => 6
+            ],
+        ]
+    ])
+    @endcomponent
 @endsection
