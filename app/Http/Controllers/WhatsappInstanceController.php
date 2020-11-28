@@ -217,11 +217,16 @@ class WhatsappInstanceController extends Controller
      */
     public function destroy(WhatsappInstance $whatsappInstance)
     {
-        DeactivatedWhatsappInstance::create([
-            'subdomain' => $whatsappInstance->subdomain,
-            'port' => $whatsappInstance->port
-        ]);
-        return response()->json($whatsappInstance->delete());
+        try {
+            DeactivatedWhatsappInstance::create([
+                'subdomain' => $whatsappInstance->subdomain,
+                'port' => $whatsappInstance->port
+            ]);
+            return response()->json($whatsappInstance->delete());
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+            return 'Não foi possível excluir a instância!';
+        }
     }
 
     private function getNewInstancePort() {
