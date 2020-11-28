@@ -83,6 +83,8 @@ class QueueNotifications extends Command
                     DB::rollBack();
                     Log::emergency($e->getMessage());
                 }
+            } else {
+                Log::info("Usuário: ".$schedule->user->name." sem saldo para enviar SMS.");
             }
         }
     }

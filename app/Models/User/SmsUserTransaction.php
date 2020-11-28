@@ -7,6 +7,7 @@ use App\Models\User;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SmsUserTransaction extends Model
 {
@@ -20,6 +21,8 @@ class SmsUserTransaction extends Model
         $balance = $query->select(DB::raw('sum(case transaction_type_id when \''.TransactionTypes::IN.'\' then quantity else quantity * (-1) end) as total'))
             ->where('user_id', $user->id)
             ->first()->total;
+
+        Log::info("Saldo de SMS disponível: ".max($balance, 0));
 
         return max($balance, 0);
     }
