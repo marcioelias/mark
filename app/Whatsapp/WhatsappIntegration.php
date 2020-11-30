@@ -7,6 +7,7 @@ use App\Models\DeactivatedWhatsappInstance;
 use App\Models\User\WhatsappInstance;
 use Exception;
 use Illuminate\Http\Client\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +46,7 @@ class WhatsappIntegration {
 
     private function getNewInstance() {
         try {
-            $response = Http::timeout(15)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
+            $response = Http::timeout(10)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
                 'porta' => $this->whatsappInstance->port,
                 'cliente' => $this->whatsappInstance->id
             ]);
@@ -76,29 +77,38 @@ class WhatsappIntegration {
 
     public function sendText(string $msg, string $to) {
         try {
-            $response = Http::timeout(15)->post($this->getEndpointURL(WhatsappEndpoints::SEND_TEXT), [
-                'to' => $this->formatPhoneNumber($to),
-                'msg' => $msg
-            ]);
+            $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_TEXT);
+            if ($endpoint) {
+                $response = Http::timeout(10)->post($endpoint, [
+                    'to' => $this->formatPhoneNumber($to),
+                    'msg' => $msg
+                ]);
 
-            if ($response->successful()) {
-                return [
-                    'returnMessage' => 'Whatsapp Enviado com sucesso',
-                    'successful' => true
-                ];
-            } else {
-                if ($response->status() == 401) {
+                if ($response->successful()) {
                     return [
-                        'returnMessage' => 'Instância desconectada, por favor, re-leia o QRCode.',
-                        'successful' => false
+                        'returnMessage' => 'Whatsapp Enviado com sucesso',
+                        'successful' => true
                     ];
                 } else {
-                    return [
-                        'returnMessage' => 'Ocorreu um erro desconhecido. Whatsapp não pode ser enviado.',
-                        'successful' => false
-                    ];
+                    if ($response->status() == 401) {
+                        return [
+                            'returnMessage' => 'Instância desconectada, por favor, re-leia o QRCode.',
+                            'successful' => false
+                        ];
+                    } else {
+                        return [
+                            'returnMessage' => 'Ocorreu um erro desconhecido. Whatsapp não pode ser enviado.',
+                            'successful' => false
+                        ];
+                    }
                 }
+            } else {
+                return [
+                    'returnMessage' => 'Instância não configurada!',
+                    'successful' => false
+                ];
             }
+
         } catch (Exception $e) {
             return [
                 'returnMessage' => $e->getMessage(),
@@ -109,34 +119,51 @@ class WhatsappIntegration {
     }
 
     public function sendFile(string $url, string $to) {
-        $response = Http::timeout(15)->post($this->getEndpointURL(WhatsappEndpoints::SEND_FILE), [
-            'to' => $this->formatPhoneNumber($to),
-            'url' => $url
-        ]);
+        $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_FILE);
+        if ($endpoint) {
+            $response = Http::timeout(10)->post($endpoint, [
+                'to' => $this->formatPhoneNumber($to),
+                'url' => $url
+            ]);
 
-        return $response->successful();
+            return $response->successful();
+        } else {
+            return false;
+        }
     }
 
     public function sendPDF(string $url, string $to) {
-        $response = Http::timeout(15)->post($this->getEndpointURL(WhatsappEndpoints::SEND_PDFURL), [
-            'to' => $this->formatPhoneNumber($to),
-            'url' => $url
-        ]);
+        $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_PDFURL);
+        if ($endpoint) {
+            $response = Http::timeout(10)->post($endpoint, [
+                'to' => $this->formatPhoneNumber($to),
+                'url' => $url
+            ]);
 
-        return $response->successful();
+            return $response->successful();
+        } else {
+            return false;
+        }
     }
 
     public function getQrCode() {
-        return $this->getEndpointURL(WhatsappEndpoints::GET_QRCODE).'&t='.now()->timestamp;
+        $endpoint = $this->getEndpointURL(WhatsappEndpoints::GET_QRCODE);
+        if ($endpoint) {
+            return $endpoint.'&t='.now()->timestamp;
+        } else {
+            return false;
+        }
     }
 
     public function disconnect() {
-        $url = $this->apiUrl.WhatsappEndpoints::LOGOFF;
-        $response = Http::timeout(15)->post($url, [
-            'pasta' => $this->whatsappInstance->subdomain
-        ]);
+        if ($this->whatsappInstance->url) {
+            $url = $this->apiUrl.WhatsappEndpoints::LOGOFF;
+            $response = Http::timeout(10)->post($url, [
+                'pasta' => $this->whatsappInstance->subdomain
+            ]);
 
-        return $response->status() == 200;
+            return $response->status() == 200;
+        }
     }
 
     private function formatPhoneNumber(string $phoneNumber) {
@@ -154,13 +181,17 @@ class WhatsappIntegration {
     }
 
     private function getEndpointURL(string $endpoint, bool $withToken = true) {
-        $token = $withToken ? '?token='.$this->whatsappInstance->hash : '';
-        return 'https://'.$this->whatsappInstance->url.$endpoint.$token;
+        if ($this->whatsappInstance->url) {
+            $token = $withToken ? '?token='.$this->whatsappInstance->hash : '';
+            return 'https://'.$this->whatsappInstance->url.$endpoint.$token;
+        } else {
+            return false;
+        }
     }
 
     public function recicleInstance(DeactivatedWhatsappInstance $deactivatedWhatsappInstance) {
         try {
-            $response = Http::timeout(15)->post($this->apiUrl.WhatsappEndpoints::RECICLE, [
+            $response = Http::timeout(10)->post($this->apiUrl.WhatsappEndpoints::RECICLE, [
                 'pasta' => $deactivatedWhatsappInstance->subdomain
             ]);
 
@@ -179,8 +210,11 @@ class WhatsappIntegration {
 
     public function getStatus() {
         try {
-            $url = $this->getEndpointURL(WhatsappEndpoints::GET_STATUS, false)."/".$this->whatsappInstance->hash;
-            return Http::timeout(15)->get($url);
+            $endpoint = $this->getEndpointURL(WhatsappEndpoints::GET_STATUS, false);
+            if ($endpoint) {
+                $url = $endpoint."/".$this->whatsappInstance->hash;
+                return Http::timeout(3)->get($url);
+            }
         } catch (Exception $e) {
             Log::emergency($e);
         }
@@ -188,8 +222,10 @@ class WhatsappIntegration {
 
     public function updateInstanceStatus() {
         try {
-            $this->whatsappInstance->whatsapp_instance_status_id = ((string) $this->getStatus() === (string) 'offline') ? WppInstStatuses::DISCONNECTED : WppInstStatuses::CONNECTED;
-            $this->whatsappInstance->save();
+            if ($this->whatsappInstance->url) {
+                $this->whatsappInstance->whatsapp_instance_status_id = ((string) $this->getStatus() === (string) 'offline') ? WppInstStatuses::DISCONNECTED : WppInstStatuses::CONNECTED;
+                $this->whatsappInstance->save();
+            }
         } catch (Exception $e) {
             Log::emergency($e->getMessage());
         }
