@@ -63,7 +63,8 @@
                 'items' => $funnels,
                 'displayField' => 'funnel_description',
                 'keyField' => 'id',
-                'inputSize' => 4
+                'inputSize' => 4,
+                'defaultNone' => true
             ]
         ]
     ])

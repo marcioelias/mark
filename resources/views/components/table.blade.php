@@ -176,7 +176,7 @@ $('.deleteBtn').on('click', function(e) {
     }).catch(function(err) {
         Swal.fire({
             title: 'Não removido',
-            text: err.responseJSON,
+            text: err.responseJSON.message,
             icon: 'error',
             heightAuto: false,
         })

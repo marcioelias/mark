@@ -6,7 +6,7 @@ $configData = Helper::applClasses();
   data-scroll-to-active="true">
   <div class="navbar-header">
     <ul class="nav navbar-nav flex-row">
-      <li class="nav-item mr-auto"><a class="navbar-brand" href="dashboard-analytics">
+      <li class="nav-item mr-auto"><a class="navbar-brand" href="{{ route('admin.index') }}">
           <div class="brand-logo"></div>
           <h2 class="brand-text mb-0">{{ config('app.name', 'Laravel') }}</h2>
         </a></li>

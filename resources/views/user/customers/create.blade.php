@@ -12,7 +12,17 @@
                 'field' => 'customer_name',
                 'label' => 'Nome',
                 'required' => true,
-                'inputSize' => 12
+                'inputSize' => 8
+            ],
+            [
+                'type' => 'select',
+                'field' => 'customer_status_id',
+                'label' => 'Status',
+                'items' => $customerStatuses,
+                'displayField' => 'customer_status',
+                'keyField' => 'id',
+                'inputSize' => 4,
+                'defaultNone' => true
             ]
         ]
     ])

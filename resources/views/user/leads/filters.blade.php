@@ -1,4 +1,4 @@
-<div class="row d-none" id="filter-fields">
+<div class="row d-none mt-1" id="filter-fields">
     <input type="hidden" name="showing_filters" id="showing-filters" value="{{ $_GET['showing_filters'] ?? false }}">
     <div class="col-md-4 mb-1">
         <label for="lead_dt_begin">Data de compra - Início</label>
@@ -41,7 +41,7 @@
         <button class="btn btn-success d-none" id="btn-filter" ><i class="fa fa-filter"></i> Aplicar Filtros</button>
     </div>
 </div>
-<div class="row">
+<div class="row mt-1">
     <div class="col">
         <button class="btn btn-primary btn-sm btn-block pb-0" id="show-filters" data-toggle="tooltip" title="Mostrar opções de filtro"><i class="fa fa-arrow-down fa-2x"></i></button>
         <button class="btn btn-primary btn-sm btn-block pt-0 d-none" id="hide-filters" data-toggle="tooltip" title="Esconder opções de filtro"><i class="fa fa-arrow-up fa-2x"></i></button>

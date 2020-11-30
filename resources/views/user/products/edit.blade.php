@@ -69,7 +69,8 @@
                 'displayField' => 'funnel_description',
                 'keyField' => 'id',
                 'inputSize' => 4,
-                'indexSelected' => $product->funnel_id
+                'indexSelected' => $product->funnel_id,
+                'defaultNone' => true
             ]
         ]
     ])

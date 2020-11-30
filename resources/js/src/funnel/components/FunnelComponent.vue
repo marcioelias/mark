@@ -9,7 +9,7 @@
         <div v-else key="loadedContent">
             <div class="row">
                 <div class="col-md-10">
-                    <template v-if="isEditing">
+                    <!-- <template v-if="isEditing">
                         <template v-if="isSalesFunnel">
                         <label for="product_id">Descrição (Venda)</label>
                         </template>
@@ -18,14 +18,14 @@
                         </template>
                         <div class="form-control">{{ description }}</div>
                     </template>
-                    <template v-else>
+                    <template v-else> -->
                         <label for="product_id">Descrição</label>
                         <input type="text" class="form-control" v-model="funnelDescription" name="description" id="description" />
                         <div class="invalid-feedback"  id="error-description"></div>
                         <span v-show="httpErrors.hasOwnProperty('description')" class="invalid-feedback" style="display: block">
                             <span v-for="(error, index) in httpErrors.description" :key="index">{{ error }}</span>
                         </span>
-                    </template>
+                    <!-- </template> -->
                 </div>
                 <div class="col-md-2">
                     <label>Ativo</label>
