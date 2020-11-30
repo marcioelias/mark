@@ -232,7 +232,7 @@ class WhatsappInstanceController extends Controller
     }
 
     private function getNewInstancePort() {
-        $lastPort = WhatsappInstance::max('port');
+        $lastPort = DB::table('whatsapp_instances')->max('port');
         return $lastPort ? $lastPort + 1 : config('whatsapp-api.port_start');
     }
 
