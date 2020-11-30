@@ -35,10 +35,21 @@ class MessagesAvailable implements Rule
      */
     public function passes($attribute, $value)
     {
-        $available = $this->getMessagesAvailable();
-        $used = $this->getSmsUsed();
+        switch ($this->actionType) {
+            case ActionTypes::EMAIL:
+            case ActionTypes::SMS:
+                # code...
+                $available = $this->getMessagesAvailable();
+                $used = $this->getSmsUsed();
 
-        return $available > 0 && (($available - $used) > (int) $this->total);
+                return ($available > 0 && (($available - $used) > (int) $this->total)) || (int) $available === (int) 0;
+                break;
+
+            default:
+                return true;
+                break;
+        }
+
     }
 
     /**
@@ -60,7 +71,7 @@ class MessagesAvailable implements Rule
         if ($this->actionType === ActionTypes::SMS) {
             return 'SMS';
         } else {
-            return 'de E-mail';
+            return 'de e-mail';
         }
     }
 
