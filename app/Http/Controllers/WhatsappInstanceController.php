@@ -243,14 +243,16 @@ class WhatsappInstanceController extends Controller
 
     public function setStatus(Request $request) {
         try {
-            $whatsappInstance = WhatsappInstance::subdomain($request->PASTA)
-                                            ->hash($request->PASSWORD)
-                                            ->firstOrFail();
-            if ($whatsappInstance) {
-                $whatsappInstance->whatsapp_instance_status_id = $request->STATUS === 'CONECTADO' ? WppInstStatuses::CONNECTED : WppInstStatuses::DISCONNECTED;
-                $whatsappInstance->save();
+            if ($request->PASTA) {
+                $whatsappInstance = WhatsappInstance::subdomain($request->PASTA)
+                                                ->hash($request->PASSWORD)
+                                                ->firstOrFail();
+                if ($whatsappInstance) {
+                    $whatsappInstance->whatsapp_instance_status_id = $request->STATUS === 'CONECTADO' ? WppInstStatuses::CONNECTED : WppInstStatuses::DISCONNECTED;
+                    $whatsappInstance->save();
+                }
+                return response()->json(['status' => 'ok']);
             }
-            return response()->json(['status' => 'ok']);
         } catch (Exception $e) {
             return response()->json(['error' => 'Não autorizado'], 401);
         }

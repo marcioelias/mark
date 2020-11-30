@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User\Customer;
+use App\Models\User\CustomerStatus;
 use App\Models\User\Lead;
 use App\Traits\LayoutConfigTrait;
 use Carbon\Carbon;
@@ -92,7 +93,10 @@ class CustomerController extends Controller
             ]
         ];
 
-        return $this->getView('user.customers.create');
+        $customerStatuses = CustomerStatus::orderBy('customer_status', 'ASC')->get();
+
+        return $this->getView('user.customers.create')
+                    ->withCustomerStatuses($customerStatuses);
     }
 
     /**
@@ -137,7 +141,11 @@ class CustomerController extends Controller
             ]
         ];
 
-        return $this->getView('user.customers.edit')->withCustomer($customer);
+        $customerStatuses = CustomerStatus::orderBy('customer_status', 'ASC')->get();
+
+        return $this->getView('user.customers.edit')
+                    ->withCustomerStatuses($customerStatuses)
+                    ->withCustomer($customer);
     }
 
     /**

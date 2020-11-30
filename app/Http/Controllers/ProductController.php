@@ -7,8 +7,11 @@ use App\Models\User\Funnel;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Product;
 use App\Traits\LayoutConfigTrait;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use PDOException;
 
 class ProductController extends Controller
 {
@@ -200,7 +203,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        return response()->json($product->delete());
+        try {
+            return response()->json($product->delete());
+        } catch (PDOException $pdoException) {
+            if ($pdoException->getCode() == 23000) {
+                return response()->json(['message' => 'Registro não pode ser removido por ter dados relacionados.'], 409);
+            } else {
+                return response()->json(['message' => 'Ocorreu um erro ao remover o registro.'], 500);
+            }
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+            return response()->json(['message' => 'Ocorreu um erro ao remover o registro.'], 500);
+        }
     }
 
     /**

@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Plataform;
 use App\Models\User\PlataformConfig;
 use App\Traits\LayoutConfigTrait;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use PDOException;
 
 class PlataformConfigController extends Controller
 {
@@ -163,7 +166,18 @@ class PlataformConfigController extends Controller
      */
     public function destroy(PlataformConfig $plataformConfig)
     {
-        //
+        try {
+            return response()->json($plataformConfig->delete());
+        } catch (PDOException $pdoException) {
+            if ($pdoException->getCode() == 23000) {
+                return response()->json(['message' => 'Registro não pode ser removido por ter dados relacionados.'], 409);
+            } else {
+                return response()->json(['message' => 'Ocorreu um erro ao remover o registro.'], 500);
+            }
+        } catch (Exception $e) {
+            Log::emergency($e->getMessage());
+            return response()->json(['message' => 'Ocorreu um erro ao remover o registro.'], 500);
+        }
     }
 
     public function getWebhookUrl(PlataformConfig $plataformConfig) {
