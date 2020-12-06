@@ -25,7 +25,8 @@ class GatewaySms {
     public function send() {
         try {
             $result = $this->callApi($this->getUrl(self::SEND_SMS), $this->getUrlParameters(self::SEND_SMS));
-
+            Log::info('Retorno envio de SMS:');
+            Log::debug($result);
             if ($result['status'] == 'Sucesso') {
                 return [
                     'returnMessage' => 'SMS Enviado com sucesso',

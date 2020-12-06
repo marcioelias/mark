@@ -46,7 +46,7 @@ class WhatsappIntegration {
 
     private function getNewInstance() {
         try {
-            $response = Http::timeout(10)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
+            $response = Http::timeout(30)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
                 'porta' => $this->whatsappInstance->port,
                 'cliente' => $this->whatsappInstance->id
             ]);
@@ -79,7 +79,7 @@ class WhatsappIntegration {
         try {
             $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_TEXT);
             if ($endpoint) {
-                $response = Http::timeout(10)->post($endpoint, [
+                $response = Http::timeout(30)->post($endpoint, [
                     'to' => $this->formatPhoneNumber($to),
                     'msg' => $msg
                 ]);
@@ -121,7 +121,7 @@ class WhatsappIntegration {
     public function sendFile(string $url, string $to) {
         $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_FILE);
         if ($endpoint) {
-            $response = Http::timeout(10)->post($endpoint, [
+            $response = Http::timeout(30)->post($endpoint, [
                 'to' => $this->formatPhoneNumber($to),
                 'url' => $url
             ]);
@@ -135,7 +135,7 @@ class WhatsappIntegration {
     public function sendPDF(string $url, string $to) {
         $endpoint = $this->getEndpointURL(WhatsappEndpoints::SEND_PDFURL);
         if ($endpoint) {
-            $response = Http::timeout(10)->post($endpoint, [
+            $response = Http::timeout(30)->post($endpoint, [
                 'to' => $this->formatPhoneNumber($to),
                 'url' => $url
             ]);
@@ -158,7 +158,7 @@ class WhatsappIntegration {
     public function disconnect() {
         if ($this->whatsappInstance->url) {
             $url = $this->apiUrl.WhatsappEndpoints::LOGOFF;
-            $response = Http::timeout(10)->post($url, [
+            $response = Http::timeout(30)->post($url, [
                 'pasta' => $this->whatsappInstance->subdomain
             ]);
 
@@ -191,7 +191,7 @@ class WhatsappIntegration {
 
     public function recicleInstance(DeactivatedWhatsappInstance $deactivatedWhatsappInstance) {
         try {
-            $response = Http::timeout(10)->post($this->apiUrl.WhatsappEndpoints::RECICLE, [
+            $response = Http::timeout(30)->post($this->apiUrl.WhatsappEndpoints::RECICLE, [
                 'pasta' => $deactivatedWhatsappInstance->subdomain
             ]);
 
@@ -213,7 +213,7 @@ class WhatsappIntegration {
             $endpoint = $this->getEndpointURL(WhatsappEndpoints::GET_STATUS, false);
             if ($endpoint) {
                 $url = $endpoint."/".$this->whatsappInstance->hash;
-                return Http::timeout(3)->get($url);
+                return Http::timeout(30)->get($url);
             }
         } catch (Exception $e) {
             Log::emergency($e);
