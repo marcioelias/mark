@@ -291,23 +291,21 @@ export default {
             this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         },
         doOnChangeDelayDays(value) {
-            //console.log(`Dias: ${value}`)
+            //
         },
         doOnChangeDelayHours(value) {
-            //console.log(`Horas: ${value}`)
+            //
         },
         doOnChangeDelayMinutes(value) {
-            //console.log(`Minutos: ${value}`)
+            //
         },
         onInput(event) {
-            //console.log(event.data)
           //event.data contains the value of the textarea
         },
         clearTextarea(){
             this.$refs.whatsapp_message.clear()
         },
         getInputObj() {
-            //console.log(this.$parent.$refs['whatsapp_message'])
             return this.$parent.$refs['whatsapp_message'];
         },
         toogleDialogEmoji() {
@@ -315,9 +313,6 @@ export default {
         },
         onSelectEmoji(emoji) {
             insertTextAtCursor(this.$refs['whatsapp_message'], emoji.data)
-            //this.valueInput += emoji.data;
-            // Optional
-            // this.toogleDialogEmoji();
         }
     },
     mounted() {

@@ -15,25 +15,29 @@ class PlataformSeeder extends Seeder
     {
         $plataforms = [
             [
-                'id' => IntegratedPlataforms::EDUZZ,
-                'plataform_name' => 'Eduzz'
+                ['id' => IntegratedPlataforms::EDUZZ],
+                ['plataform_name' => 'Eduzz']
             ],
             [
-                'id' => IntegratedPlataforms::HOTMART,
-                'plataform_name' => 'Hotmart'
+                ['id' => IntegratedPlataforms::HOTMART],
+                ['plataform_name' => 'Hotmart']
             ],
             [
-                'id' => IntegratedPlataforms::MONETIZZE,
-                'plataform_name' => 'Monetizze'
+                ['id' => IntegratedPlataforms::MONETIZZE],
+                ['plataform_name' => 'Monetizze']
             ],
             [
-                'id' => IntegratedPlataforms::PERFECTPAY,
-                'plataform_name' => 'PerfectPay'
+                ['id' => IntegratedPlataforms::PERFECTPAY],
+                ['plataform_name' => 'PerfectPay']
             ],
+            [
+                ['id' => IntegratedPlataforms::TICTO],
+                ['plataform_name' => 'Ticto']
+            ]
         ];
 
         foreach ($plataforms as $plataform) {
-            (new Plataform($plataform))->save();
+            Plataform::updateOrCreate($plataform[0], $plataform[1]);
         }
     }
 }

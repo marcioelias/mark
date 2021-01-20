@@ -24,6 +24,10 @@ class IntegrationFactory {
             case IntegratedPlataforms::PERFECTPAY:
                 return new PerfectPayIntegration($request, $plataformConfig);
                 break;
+
+            case IntegratedPlataforms::TICTO:
+                return new TictoIntegration($request, $plataformConfig);
+                break;
         }
     }
 }

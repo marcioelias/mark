@@ -120,9 +120,6 @@ export default {
             }
         },
         getActionIndex(id) {
-            console.log('id - '+id)
-            console.log(this.actions.findIndex(item => item.id == id))
-            console.log(this.actions.find(item => item.id == id))
             return this.actions.findIndex(item => item.id == id)
         }
     }

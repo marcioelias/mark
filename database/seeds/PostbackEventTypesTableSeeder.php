@@ -15,29 +15,29 @@ class PostbackEventTypesTableSeeder extends Seeder
     {
         $eventTypes = [
             [
-                'id' => ConstantPostbackEventType::APPROVED,
-                'postback_event_type' => 'Compra Efetuada',
+                ['id' => ConstantPostbackEventType::APPROVED],
+                ['postback_event_type' => 'Compra Efetuada'],
             ],
             [
-                'id' => ConstantPostbackEventType::CANCELED,
-                'postback_event_type' => 'Vencido',
+                ['id' => ConstantPostbackEventType::CANCELED],
+                ['postback_event_type' => 'Vencido'],
             ],
             [
-                'id' => ConstantPostbackEventType::BILLET_PRINTED,
-                'postback_event_type' => 'Boleto Impresso',
+                ['id' => ConstantPostbackEventType::BILLET_PRINTED],
+                ['postback_event_type' => 'Boleto Impresso'],
             ],
             [
-                'id' => ConstantPostbackEventType::REFUNDED,
-                'postback_event_type' => 'Reembolsado',
+                ['id' => ConstantPostbackEventType::REFUNDED],
+                ['postback_event_type' => 'Reembolsado'],
             ],
             [
-                'id' => ConstantPostbackEventType::DISPUTE,
-                'postback_event_type' => 'Aguardando Reembolso',
+                ['id' => ConstantPostbackEventType::DISPUTE],
+                ['postback_event_type' => 'Aguardando Reembolso'],
             ],
         ];
 
         foreach ($eventTypes as $eventType) {
-            PostbackEventType::create($eventType);
+            PostbackEventType::updateOrCreate($eventType[0], $eventType[1]);
         }
     }
 }

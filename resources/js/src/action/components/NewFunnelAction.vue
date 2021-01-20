@@ -159,13 +159,13 @@ export default {
             this.ActionSetActionComponent(componentTypes.ACTIONS_TABLE)
         },
         doOnChangeDelayDays(value) {
-            //console.log(`Dias: ${value}`)
+            //
         },
         doOnChangeDelayHours(value) {
-            //console.log(`Horas: ${value}`)
+            //
         },
         doOnChangeDelayMinutes(value) {
-            //console.log(`Minutos: ${value}`)
+            //
         }
     },
     mounted() {

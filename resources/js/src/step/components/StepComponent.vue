@@ -90,9 +90,6 @@ export default {
             return acts.sort((a, b) => getDelay(a) - getDelay(b) || a.action_sequence - b.action_sequence)
         }
     },
-    mounted() {
-        console.log(this.groupedActions)
-    },
     props: {
         step: {
             type: Object,

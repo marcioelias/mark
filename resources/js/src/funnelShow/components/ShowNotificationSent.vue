@@ -128,7 +128,6 @@ export default {
             'currentSchedule'
         ]),
         title() {
-            //console.log(this.currentSchedule)
             return this.currentSchedule ? this.currentSchedule.action.action_description : ''
         },
         content() {

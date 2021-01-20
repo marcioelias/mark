@@ -82,6 +82,12 @@
             </div>
         </div>
     </div> --}}
+    <x-dashboard.sent-mails-graphic />
+    <div class="row">
+        <div class="col-md-4 col-12">
+
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-4 col-12">
             <x-dashboard.plan-usage />
@@ -98,6 +104,6 @@
 @endsection
 @section('page-script')
 <!-- Page js files -->
-{{-- <script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script> --}}
+<script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script>
 @stack('component-script')
 @endsection

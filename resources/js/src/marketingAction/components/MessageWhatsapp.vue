@@ -137,7 +137,6 @@ export default {
             this.$refs.whatsapp_message.clear()
         },
         getInputObj() {
-            //console.log(this.$parent.$refs['whatsapp_message'])
             return this.$parent.$refs['whatsapp_message'];
         },
         toogleDialogEmoji() {
@@ -145,9 +144,6 @@ export default {
         },
         onSelectEmoji(emoji) {
             insertTextAtCursor(this.$refs['whatsapp_message'], emoji.data)
-            //this.valueInput += emoji.data;
-            // Optional
-            // this.toogleDialogEmoji();
         }
     },
     mounted() {

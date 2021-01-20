@@ -42,10 +42,7 @@ export default {
     showDialog: false,
     i18n
   }),
-  mounted() {
-    //console.log(categoriesDefault);
-    //console.log('Total emojis:', emojisDefault.length)
-  },
+
   methods: {
     toogleDialogEmoji() {
       this.showDialog = !this.showDialog;

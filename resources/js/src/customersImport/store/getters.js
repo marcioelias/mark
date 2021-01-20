@@ -36,34 +36,3 @@ export const GetCustomersForImport = state => {
         return state.customers.slice().sort((a, b) => compare(a[state.order.field]['content'], b[state.order.field]['content'], state.order.type))
     }
 }
-
-
-// export const GetCustomersForPost = (state, getters) => {
-//     let result = []
-//     getters.GetCustomersForImport.forEach(line => {
-//         console.log(line.find(f => f['column'] === 'customer_name'))
-//         result.push({
-//             'customer_name': line.find(f => f['column'] === 'customer_name')['content'],
-//             'customer_email': line.find(f => f['column'] === 'customer_email')['content'],
-//             'customer_phone_numbner': line.find(f => f['column'] === 'customer_phone_numbner')['content']
-//         })
-//     })
-//     return result
-// }
-// export const GetCustomersForPost = (state, getters) => {
-//     let result = []
-//     getters.GetCustomersForImport.forEach(line => {
-
-//         line.forEach(field => {
-//             console.log(field)
-//             if (field) {
-//                 result.push({
-//                     'customer_name': field.find(f => f === 'customer_name')['content'],
-//                     'customer_email': field.find(f => f === 'customer_email')['content'],
-//                     'customer_phone_numbner': field.find(f => f === 'customer_phone_numbner')['content']
-//                 })
-//             }
-//         })
-//     })
-//     return result
-// }

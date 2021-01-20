@@ -65,7 +65,6 @@ $(window).on("load", function () {
         type: 'GET',
         url: '/admin/dasboard/charts/clientes_plano',
         success: function(response) {
-            console.log(response)
             var customerPlanChart = new ApexCharts(document.querySelector("#customerPlanChart"), {
                 series: [{
                     data: response.data
@@ -75,7 +74,6 @@ $(window).on("load", function () {
                     height: 300,
                     events: {
                             click: function(chart, w, e) {
-                            // console.log(chart, w, e)
                         }
                     },
                     toolbar: {

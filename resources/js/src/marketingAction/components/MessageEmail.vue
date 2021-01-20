@@ -351,19 +351,18 @@ export default {
 			}
 		},
 		onEditorBlur(editor) {
-			// console.log('editor blur!', editor)
+			//
 		},
 		onEditorFocus(editor) {
-			// console.log('editor focus!', editor)
+			//
 		},
 		onEditorReady(editor) {
-			// console.log('editor ready!', editor)
+			//
 		},
 	},
 	mounted() {
 		this.addCustomSelectToEditor();
 		if (this.isEditing) {
-			//let data = JSON.parse(this.action_data)
 			Object.assign(this.$data, this.action_data);
 		}
 	},
