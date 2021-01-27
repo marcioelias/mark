@@ -55,6 +55,7 @@ class Integration {
     }
 
     protected function postbackTokenValidate() {
+        Log::debug($this->request->all());
         if ((string) $this->plataformConfig->plataform_key !== (string) Arr::get($this->request, $this->mappedFields[PostbackField::token()->getField()])) {
             throw new Exception('Não autorizado', 401);
         }
@@ -147,7 +148,8 @@ class Integration {
     }
 
     public function getPaidAt() {
-        return $this->paidAt ? Carbon::parse($this->paidAt) : null;
+        $data = $this->paidAt ? Carbon::parse($this->paidAt) : null;
+        return $data->year < 1 ? null : $data;
     }
 
     public function getLeadStatus() {
