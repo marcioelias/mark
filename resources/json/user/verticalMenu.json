@@ -2,7 +2,7 @@
     "menu": [
         {
             "url": "index",
-            "name": "Home",
+            "name": "Dashboard",
             "slug": "home",
             "badge": "",
             "badgeClass": "badge badge-warning badge-pill float-right",
@@ -10,92 +10,88 @@
         },
         {
             "url": "",
-            "name": "Cadastros",
-            "icon": "feather icon-layers",
-            "submenu": [
-                {
-                    "url": "customer.index",
-                    "name": "Customers",
-                    "activeUrls": ["customer", "customer/create", "customer/{customer}/edit", "customers/import"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "customer_status.index",
-                    "name": "Customer Status",
-                    "activeUrls": ["customer_status", "customer_status/create", "customer_status/{customer_status}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "product.index",
-                    "name": "Products",
-                    "activeUrls": ["product", "product/create", "product/{product}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                }
-            ]
+            "navheader": "Cadastro",
+            "icon": ""
+        },
+        {
+            "url": "customer.index",
+            "name": "Customers",
+            "activeUrls": ["customer", "customer/create", "customer/{customer}/edit", "customers/import"],
+            "icon": "feather icon-user"
+        },
+        {
+            "url": "customer_status.index",
+            "name": "Customer Status",
+            "activeUrls": ["customer_status", "customer_status/create", "customer_status/{customer_status}/edit"],
+            "icon": "feather icon-bookmark"
+        },
+        {
+            "url": "product.index",
+            "name": "Products",
+            "activeUrls": ["product", "product/create", "product/{product}/edit"],
+            "icon": "feather icon-box"
+        },
+        {
+            "url": "",
+            "navheader": "Funil de Vendas",
+            "icon": ""
         },
         {
             "url": "funnel.index",
-            "name": "Funnels",
+            "name": "Sales/Remarketing Funnel",
             "icon": "feather icon-filter",
-            "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"],
-            "i18n": "nav.sk_layout_2_columns"
+            "activeUrls": ["funnel", "funnel/create", "funnel/{funnel}/edit", "funnel/{funnel}"]
         },
         {
             "url": "",
+            "navheader": "Lead",
+            "icon": ""
+        },
+        {
+            "url": "lead.index",
             "name": "Leads",
-            "icon": "feather icon-zap",
-            "submenu": [
-                {
-                    "url": "lead.index",
-                    "name": "Leads",
-                    "activeUrls": ["lead", "lead/{lead}/show"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "marketing_action.index",
-                    "name": "Marketing Actions",
-                    "activeUrls": ["marketing_action", "marketing_action/create", "marketing_action/{marketing_action}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                }
-            ]
+            "icon": "feather icon-user",
+            "activeUrls": ["lead", "lead/{lead}/show"]
+        },
+        {
+            "url": "marketing_action.index",
+            "name": "Marketing Actions",
+            "icon": "feather icon-target",
+            "activeUrls": ["marketing_action", "marketing_action/create", "marketing_action/{marketing_action}/edit"]
         },
         {
             "url": "",
-            "name": "Integrations",
-            "icon": "feather icon-cpu",
-            "submenu": [
-                {
-                    "url": "postback.index",
-                    "name": "Postbacks",
-                    "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "sent_message.index",
-                    "name": "Sent Messages",
-                    "activeUrls": ["sent_message", "sent_message/{sent_message}"],
-                    "i18n": "nav.sk_layout_2_columns"
-                }
-            ]
+            "navheader": "Integração",
+            "icon": ""
+        },
+        {
+            "url": "postback.index",
+            "name": "Postbacks",
+            "icon": "feather icon-external-link",
+            "activeUrls": ["postback", "postback/create", "postback/{postback}/edit"]
+        },
+        {
+            "url": "sent_message.index",
+            "name": "Sent Messages",
+            "icon": "feather icon-share",
+            "activeUrls": ["sent_message", "sent_message/{sent_message}"]
         },
         {
             "url": "",
-            "name": "Configurations",
-            "icon": "feather icon-settings",
-            "submenu": [
-                {
-                    "url": "plataform_config.index",
-                    "name": "Plataforms",
-                    "activeUrls": ["plataform_config", "plataform_config/create", "plataform_config/{plataformConfig}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "whatsapp_instance.index",
-                    "name": "Whatsapp Instances",
-                    "activeUrls": ["whatsapp_instance", "whatsapp_instance/create", "whatsapp_instance/{whatsappInstance}/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                }
-            ]
+            "navheader": "Configurações",
+            "icon": ""
+        },
+        {
+            "url": "plataform_config.index",
+            "name": "Plataforms",
+            "icon": "feather icon-server",
+            "activeUrls": ["plataform_config", "plataform_config/create", "plataform_config/{plataformConfig}/edit"]
+        },
+        {
+            "url": "whatsapp_instance.index",
+            "name": "Whatsapp Instances",
+            "icon": "feather icon-message-circle",
+            "activeUrls": ["whatsapp_instance", "whatsapp_instance/create", "whatsapp_instance/{whatsappInstance}/edit"]
         }
     ]
 }

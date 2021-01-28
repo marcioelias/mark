@@ -21,7 +21,7 @@
                 <h4 class="mb-0">Alterar senha</h4>
               </div>
             </div>
-            <p class="px-2 mb-0">Por favor escolha uma senha pessoal para uso como Hotzz.</p>
+            <p class="px-2 mb-0">Por favor escolha uma senha pessoal para uso como ConvertAll.</p>
             <div class="card-content">
               <div class="card-body">
                 @if (session('status'))

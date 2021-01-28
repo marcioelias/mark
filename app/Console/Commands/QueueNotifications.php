@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Constants\ActionTypes;
 use App\Constants\MarketingActionStatuses;
 use App\Constants\TransactionTypes;
+use App\Constants\FeatureTypes;
 use App\Events\NewRunnableAction;
 use App\Jobs\SendMarketingAction;
 use App\Models\User;
@@ -26,7 +27,7 @@ class QueueNotifications extends Command
      *
      * @var string
      */
-    protected $signature = 'hotzz:queue-notifications';
+    protected $signature = 'ConvertAll:queue-notifications';
 
     /**
      * The console command description.
@@ -111,7 +112,7 @@ class QueueNotifications extends Command
     private function hasBalance(Schedule $schedule) {
         switch ($schedule->funnelStepAction->action_type_id) {
             case ActionTypes::SMS:
-                return $this->hasBalanceSms($schedule->user);
+                return ($schedule->user->plan->features()->wherePivot('feature_id', FeatureTypes::SMS)->first()->pivot->limit == 0) || $this->hasBalanceSms($schedule->user);
                 break;
 
             default:

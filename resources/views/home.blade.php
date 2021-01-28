@@ -82,7 +82,38 @@
             </div>
         </div>
     </div> --}}
-    <x-dashboard.sent-mails-graphic />
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-12">
+            <x-dashboard.total-email-messages-sent />
+        </div>
+        <div class="col-lg-3 col-md-6 col-12">
+            <x-dashboard.total-whatsapp-messages-sent />
+        </div>
+        <div class="col-lg-3 col-md-6 col-12">
+            <x-dashboard.total-sms-messages-sent />
+        </div>
+        <div class="col-lg-3 col-md-6 col-12">
+            <x-dashboard.total-customers />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <x-dashboard.paid-billet />
+        </div>
+        <div class="col-md-6 col-12">
+            <x-dashboard.paid-credit />
+        </div>
+    </div>
+    <div class="row">
+        <x-dashboard.monthly-sale />
+    </div>
+    <div class="row">
+        <x-dashboard.monthly-conv />
+    </div>
+    <div class="row">
+        <x-dashboard.last-generated-leads />
+    </div>
+    
     <div class="row">
         <div class="col-md-4 col-12">
 
@@ -104,6 +135,6 @@
 @endsection
 @section('page-script')
 <!-- Page js files -->
-<script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script>
+{{-- <script src="{{ asset(mix('js/scripts/pages/dashboard-analytics.js')) }}"></script> --}}
 @stack('component-script')
 @endsection

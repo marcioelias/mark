@@ -35,4 +35,8 @@ class Product extends Model
     public function whatsappInstance() {
         return $this->hasOne(WhatsappInstance::class);
     }
+
+    public function leads() {
+        return $this->hasMany(Lead::class);
+    }
 }

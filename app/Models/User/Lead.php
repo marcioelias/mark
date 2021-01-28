@@ -29,6 +29,17 @@ class Lead extends Model
         'visible'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'paid_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     public function user() {
         return $this->belongsTo(User::class);
     }

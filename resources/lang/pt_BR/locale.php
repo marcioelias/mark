@@ -22,9 +22,12 @@ return [
     "Message Models" => "Modelos de Msg",
     "Send Whatsapp" => "Enviar Whatsapp",
     "Status" => "Status",
-    "Marketing Actions" => "Ações de Marketing",
+    "Marketing Actions" => "Remarketing",
     "Customers" => "Clientes",
-    "Whatsapp Instances" => "Instâncias Whatsapp",
+    "Whatsapp Instances" => "WhatsApp",
     "Customer Status" => "Status de Cliente",
-    "Sent Messages" => "Mensagens Enviadas"
+    "Sent Messages" => "Enviados",
+    "Sales Funnel" => "Vendas",
+    "Remarketing Funnel" => "Remarketing",
+    "Sales/Remarketing Funnel" => "Vendas e Remarketing"
 ];

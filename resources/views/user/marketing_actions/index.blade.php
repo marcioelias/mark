@@ -2,7 +2,7 @@
     'captions' => $fields,
     'rows' => $marketingActions,
     'model' => 'marketing_action',
-    'tableTitle' => 'Ações de Marketing',
+    'tableTitle' => 'Remarketing',
     'displayField' => 'marketing_action_description',
     'actions' => ['show', 'destroy'],
     'orderData' => $orderData ?? false

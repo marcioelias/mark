@@ -46,7 +46,7 @@ class MarketingActionController extends Controller
                 'name' => 'Leads'
             ],
             [
-                'name' => "Ações de Marketing"
+                'name' => "Remarketing"
             ],
         ];
 
@@ -229,7 +229,7 @@ class MarketingActionController extends Controller
             if ($marketingAction->marketing_action_status_id === MarketingActionStatuses::PENDING) {
                 return response()->json($marketingAction->delete());
             } else {
-                throw new Exception('Não é possível remover Ações de Marketing com status diferente de Pendente.');
+                throw new Exception('Não é possível remover Remarketing com status diferente de Pendente.');
             }
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 403);

@@ -21,6 +21,7 @@ class WebhookCallController extends Controller
     private $integration;
 
     public function receiveUserWebhook(Request $request, PlataformConfig $plataformConfig) {
+        Log::debug($request->all());
         $this->integration = IntegrationFactory::getIntegration($request, $plataformConfig);
 
         return $this->proccessReceivedCall();

@@ -45,7 +45,7 @@ class WhatsappInstanceController extends Controller
                 'name' => 'Configurações'
             ],
             [
-                'name' => "Instâncias Whatsapp"
+                'name' => "WhatsApp"
             ],
         ];
 
@@ -91,7 +91,7 @@ class WhatsappInstanceController extends Controller
             ],
             [
                 'link' => "/whatsapp_instance",
-                'name' => "Instâncias Whatsapp"
+                'name' => "WhatsApp"
             ],
             [
                 'name' => "Novo"
@@ -156,7 +156,7 @@ class WhatsappInstanceController extends Controller
             ],
             [
                 'link' => "/whatsapp_instance",
-                'name' => "Instâncias Whatsapp"
+                'name' => "WhatsApp"
             ],
             [
                 'name' => "Alterar"

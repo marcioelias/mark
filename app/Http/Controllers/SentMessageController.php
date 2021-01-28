@@ -33,7 +33,7 @@ class SentMessageController extends Controller
     {
         $this->breadcrumbs = [
             [
-                'name' => 'Mensagens Enviadas'
+                'name' => 'Enviados'
             ],
         ];
 

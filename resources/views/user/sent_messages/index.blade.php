@@ -2,7 +2,7 @@
     'captions' => $fields,
     'rows' => $sentMessages,
     'model' => 'sent_message',
-    'tableTitle' => 'Mensagens Enviadas',
+    'tableTitle' => 'Enviados',
     'displayField' => 'id',
     'actions' => ['show'],
     'orderData' => $orderData ?? false

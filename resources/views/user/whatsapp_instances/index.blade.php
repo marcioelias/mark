@@ -2,7 +2,7 @@
     'captions' => $fields,
     'rows' => $whatsappInstances,
     'model' => 'whatsapp_instance',
-    'tableTitle' => 'Instâncias Whatsapp',
+    'tableTitle' => 'WhatsApp',
     'displayField' => 'description',
     'actions' => [['custom_action' => 'components.customActions.whatsapp-connect'], 'edit', 'destroy'],
     'orderData' => $orderData ?? false
