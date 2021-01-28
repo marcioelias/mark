@@ -55,7 +55,10 @@ class Integration {
     }
 
     protected function postbackTokenValidate() {
-        Log::debug($this->request->all());
+        if (config('app.debug', false)) {
+            Log::debug($this->request->all());
+        }
+
         if ((string) $this->plataformConfig->plataform_key !== (string) Arr::get($this->request, $this->mappedFields[PostbackField::token()->getField()])) {
             throw new Exception('Não autorizado', 401);
         }
