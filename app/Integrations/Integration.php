@@ -149,7 +149,7 @@ class Integration {
 
     public function getPaidAt() {
         $data = $this->paidAt ? Carbon::parse($this->paidAt) : null;
-        return $data->year < 1 ? null : $data;
+        return ($data->year ?? 0) < 1 ? null : $data;
     }
 
     public function getLeadStatus() {
