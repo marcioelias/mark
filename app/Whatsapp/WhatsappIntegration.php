@@ -37,10 +37,14 @@ class WhatsappIntegration {
     }
 
     public function createInstance() {
-        if (DeactivatedWhatsappInstance::count()) {
-            $this->storeInstance($this->recicleInstance(DeactivatedWhatsappInstance::first()));
-        } else {
-            $this->storeInstance($this->getNewInstance());
+        try {
+            if (DeactivatedWhatsappInstance::count()) {
+                $this->storeInstance($this->recicleInstance(DeactivatedWhatsappInstance::first()));
+            } else {
+                $this->storeInstance($this->getNewInstance());
+            }
+        } catch (Exception $e) {
+            Log::debug($e);
         }
     }
 
@@ -63,15 +67,19 @@ class WhatsappIntegration {
     }
 
     private function storeInstance(Response $response) {
-        if ($response) {
-            $this->whatsappInstance->url = $response['URL'];
-            $this->whatsappInstance->subdomain = $response['PASTA'];
-            $this->whatsappInstance->hash = $response['password'];
-            $this->whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::DISCONNECTED;
+        try {
+            if ($response) {
+                $this->whatsappInstance->url = $response['URL'];
+                $this->whatsappInstance->subdomain = $response['PASTA'];
+                $this->whatsappInstance->hash = $response['password'];
+                $this->whatsappInstance->whatsapp_instance_status_id = WppInstStatuses::DISCONNECTED;
 
-            return $this->whatsappInstance->save();
-        } else {
-            return false;
+                return $this->whatsappInstance->save();
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
