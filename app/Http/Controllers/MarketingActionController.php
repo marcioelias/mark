@@ -61,7 +61,6 @@ class MarketingActionController extends Controller
                             ->join('marketing_action_statuses', 'marketing_action_statuses.id', 'marketing_actions.marketing_action_status_id')
                             ->where('marketing_actions.marketing_action_description', 'like', "%$request->searchField%")
                             ->orWhere('products.product_name', 'like', "%$request->searchField%")
-                            ->orWhere('funnels.funnel_description', 'like', "%$request->searchField%")
                             ->orderBy($this->orderField, $this->orderType)
                             ->paginate($this->paginate);
         } else {
@@ -128,6 +127,7 @@ class MarketingActionController extends Controller
         DB::beginTransaction();
         try {
             $startTime = explode(':', $request->start_time);
+            Log::debug($request->all());
             $startAt = Carbon::parse($request->start_date)->setTime($startTime[0], $startTime[1])->toDateTimeString();
 
             $images = Arr::get($request->message, 'options.images');
