@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Constants\TransactionTypes;
+use App\Models\SmsPackage;
 use App\Models\User;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,9 @@ class SmsUserTransaction extends Model
     protected $fillable = [
         'user_id',
         'quantity',
-        'transaction_type_id'
+        'transaction_type_id',
+        'sms_package_id',
+        'obs'
     ];
 
     public function scopeSmsAvailable(Builder $query, User $user) {
@@ -33,5 +36,9 @@ class SmsUserTransaction extends Model
 
     public function smsTransactionType() {
         return $this->belongsTo(SmsUserTransaction::class);
+    }
+
+    public function smsPackage() {
+        return $this->belongsTo(SmsPackage::class);
     }
 }

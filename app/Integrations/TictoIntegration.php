@@ -45,6 +45,10 @@ class TictoIntegration extends Integration {
             case 'chargeback':
                 return PostbackEventType::DISPUTE;
                 break;
+
+            case 'abandoned_cart':
+                return PostbackEventType::ABANDONED_CART;
+                break;
         }
     }
 

@@ -115,6 +115,10 @@ class WhatsappInstanceController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::user()->whatsappAvailable()) {
+            abort(402, 'Você esgotou o número de Instâncias de Whatsapp permitidas para o Plano contratado. Entre em contato maiores informações.');
+        }
+
         $userId = Auth::user()->id;
         $this->validate($request, [
             'description' => "required|unique:whatsapp_instances,description,NULL,NULL,user_id,$userId",

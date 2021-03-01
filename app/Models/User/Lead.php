@@ -2,8 +2,6 @@
 
 namespace App\Models\User;
 
-use App\Constants\LeadStatus as ConstantsLeadStatus;
-use App\Models\LeadStatus;
 use App\Models\PaymentType;
 use App\Models\User;
 use App\Traits\ModelUtilsTrait;

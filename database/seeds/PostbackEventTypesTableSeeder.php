@@ -34,6 +34,10 @@ class PostbackEventTypesTableSeeder extends Seeder
                 ['id' => ConstantPostbackEventType::DISPUTE],
                 ['postback_event_type' => 'Aguardando Reembolso'],
             ],
+            [
+                ['id' => ConstantPostbackEventType::ABANDONED_CART],
+                ['postback_event_type' => 'Abandono de Carrinho'],
+            ],
         ];
 
         foreach ($eventTypes as $eventType) {

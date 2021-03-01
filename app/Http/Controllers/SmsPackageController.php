@@ -7,6 +7,7 @@ use App\Events\OnBuySMSPackage;
 use App\MercadoPago\MercadoPago;
 use App\Models\SmsPackage;
 use App\Models\TransactionType;
+use App\Models\User;
 use App\Models\User\SmsUserTransaction;
 use App\Traits\LayoutConfigTrait;
 use Illuminate\Http\Request;
@@ -201,5 +202,21 @@ class SmsPackageController extends Controller
                 break;
 
         }
+    }
+
+    public function SellPackageView() {
+        $packages = SmsPackage::where('active', true)
+                                ->orderBy('sms_amount', 'ASC')
+                                ->get();
+        $users = User::where('active', true)
+                    ->orderBy('name', 'ASC')
+                    ->get();
+        return $this->getView('sms_packages.sell_package')
+                    ->withPackages($packages)
+                    ->withUsers($users);
+    }
+
+    public function SellPackage(Request $request) {
+
     }
 }

@@ -12,7 +12,7 @@ trait LayoutConfigTrait {
 
     public $pageConfigs = [
         'theme' => 'light',
-        'navbarColor' => 'bg-primary',
+        'navbarColor' => 'bg-light',
         'navbarType' => 'floating',
         'footerType' => 'static',
         'bodyClass' => 'testClass'

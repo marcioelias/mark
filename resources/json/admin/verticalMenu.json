@@ -1,8 +1,8 @@
 {
     "menu": [
         {
-            "url": "admin.index",
-            "name": "Home",
+            "url": "index",
+            "name": "Dashboard",
             "slug": "home",
             "badge": "",
             "badgeClass": "badge badge-warning badge-pill float-right",
@@ -10,41 +10,48 @@
         },
         {
             "url": "",
-            "name": "Cadastros",
-            "icon": "feather icon-zap",
-            "submenu": [
-                {
-                    "url": "user.index",
-                    "name": "Clientes",
-                    "activeUrls": ["admin/user", "admin/user/create", "admin/user/edit"],
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "plan.index",
-                    "activeUrls": ["admin/plan", "admin/plan/create", "admin/plan/edit"],
-                    "name": "Planos",
-                    "i18n": "nav.sk_layout_fixed_navbar"
-                }
-            ]
+            "navheader": "Cadastros",
+            "icon": ""
+        },
+        {
+            "url": "user.index",
+            "name": "Clientes",
+            "activeUrls": ["admin/user", "admin/user/create", "admin/user/edit"],
+            "i18n": "nav.sk_layout_2_columns",
+            "icon": "feather icon-users"
+        },
+        {
+            "url": "plan.index",
+            "activeUrls": ["admin/plan", "admin/plan/create", "admin/plan/edit"],
+            "name": "Planos",
+            "i18n": "nav.sk_layout_fixed_navbar",
+            "icon": "feather icon-grid"
         },
         {
             "url": "",
-            "name": "Text",
-            "icon": "feather icon-message-square",
-            "submenu": [
-                {
-                    "url": "sms_buy.index",
-                    "activeUrls": ["admin/sms_buy", "admin/sms_buy/create"],
-                    "name": "Buy",
-                    "i18n": "nav.sk_layout_2_columns"
-                },
-                {
-                    "url": "sms_package.index",
-                    "activeUrls": ["admin/sms_package", "admin/sms_package/create", "admin/sms_package/edit"],
-                    "name": "Packages",
-                    "i18n": "nav.sk_layout_fixed_navbar"
-                }
-            ]
+            "navheader": "SMS",
+            "icon": ""
+        },    
+        {
+            "url": "sms_buy.index",
+            "activeUrls": ["admin/sms_buy", "admin/sms_buy/create"],
+            "name": "Buy",
+            "i18n": "nav.sk_layout_2_columns",
+            "icon": "feather icon-shopping-cart"
+        },
+        {
+            "url": "sms_sale.index",
+            "activeUrls": ["admin/sms_sale", "admin/sms_sale/create"],
+            "name": "Sell",
+            "i18n": "nav.sk_layout_2_columns",
+            "icon": "feather icon-dollar-sign"
+        },
+        {
+            "url": "sms_package.index",
+            "activeUrls": ["admin/sms_package", "admin/sms_package/create", "admin/sms_package/edit"],
+            "name": "Packages",
+            "i18n": "nav.sk_layout_fixed_navbar",
+            "icon": "feather icon-briefcase"
         }
     ]
 }

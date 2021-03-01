@@ -28,7 +28,7 @@
 					:language="ptBR"
 					format="dd/MM/yyyy"
 					:disabledDates="{
-						to: new Date() //$moment().subtract(1, 'days')._d
+						to: $moment().subtract(1, 'days')._d
 					}">
 				</datepicker>
 				<!-- <input type="text" v-model="start_date" id="start_at" name="start_at" class="form-control pickadate"> -->

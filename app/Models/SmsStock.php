@@ -13,4 +13,8 @@ class SmsStock extends Model
     public function smsBuy() {
         return $this->belongsTo(SmsBuy::class);
     }
+
+    public function smsSale() {
+        return $this->belongsTo(SmsSale::class);
+    }
 }

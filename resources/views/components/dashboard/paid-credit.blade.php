@@ -30,15 +30,9 @@
     var $label_color = '#e7eef7';
     var $white = '#fff';
 
-    var dataSeries = {!! json_encode($series) !!};
-    var dataLabels = {!! json_encode($labels) !!};
+    var data = {!! json_encode($graphData) !!}
 
-    var totalLabel = function() {
-      let tmp = dataSeries
-      let max = tmp.sort((a, b) => b - a)[0]  
-      let idx = dataSeries.findIndex(a => a === max)
-      return dataLabels[idx]
-    }
+    data.sort((a, b) => b.value - a.value)
 
     var paidCreditGraphOptions = {
         chart: {
@@ -51,10 +45,10 @@
     dataLabels: {
       enabled: false
     },
-    series: dataSeries,
+    series: data.map(a => a.value),
     legend: { show: false },
     comparedResult: [2, -3, 8],
-    labels: dataLabels,
+    labels: data.map(a => a.label),
     stroke: { width: 0 },
     //colors: ['#c3f3f9','#92f0fb', $info], 
     theme: {
@@ -92,12 +86,20 @@
             total: {
               show: true,
               offsetY: 15,
-              label: totalLabel(),
+              label: data[0]['label'],
               formatter: function (w) {
-                return parseFloat(w.globals.series.sort((a, b) => b - a)[0]) + '%';
+                return parseFloat(w.globals.series[0]) + '%';
               }
             }
           }
+        }
+      }
+    },
+    tooltip: {
+      y: {
+        show: true,
+        formatter: function (val) {
+                return val + '%';
         }
       }
     },

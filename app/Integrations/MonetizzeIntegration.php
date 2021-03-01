@@ -45,6 +45,10 @@ class MonetizzeIntegration extends Integration {
             case '5':
                 return PostbackEventType::DISPUTE;
                 break;
+        
+            case '7':
+                return PostbackEventType::ABANDONED_CART;
+                break;
         }
     }
 

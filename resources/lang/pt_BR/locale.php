@@ -6,8 +6,9 @@ return [
     "Clientes" => "Clientes",
     "Planos" => "Planos",
     "Home" => "Home",
-    "Text" => "SMS",
+    "SMS" => "SMS",
     "Buy" => "Comprar",
+    "Sell" => "Vender",
     "Packages" => "Pacotes",
     "Tags" => "Tags",
     "Products" => "Produtos",
@@ -29,5 +30,7 @@ return [
     "Sent Messages" => "Enviados",
     "Sales Funnel" => "Vendas",
     "Remarketing Funnel" => "Remarketing",
-    "Sales/Remarketing Funnel" => "Vendas e Remarketing"
+    "Sales/Remarketing Funnel" => "Vendas e Remarketing",
+    "Buy SMS" => "Comprar SMS",
+    "Sell SMS" => "Vender SMS"
 ];

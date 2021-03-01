@@ -92,6 +92,17 @@
             "name": "Whatsapp Instances",
             "icon": "feather icon-message-circle",
             "activeUrls": ["whatsapp_instance", "whatsapp_instance/create", "whatsapp_instance/{whatsappInstance}/edit"]
+        },
+        {
+            "url": "",
+            "navheader": "SMS",
+            "icon": ""
+        },
+        {
+            "url": "sms.buy",
+            "name": "Buy SMS",
+            "icon": "feather icon-message-square",
+            "activeUrls": ["sms.buy"]
         }
     ]
 }

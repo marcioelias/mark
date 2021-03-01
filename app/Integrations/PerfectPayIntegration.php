@@ -45,6 +45,11 @@ class PerfectPayIntegration extends Integration {
             case '7':
                 return PostbackEventType::REFUNDED;
                 break;
+
+            case '12':
+            case '14':
+                return PostbackEventType::ABANDONED_CART;
+                break;
         }
     }
 

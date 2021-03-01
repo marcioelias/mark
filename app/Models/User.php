@@ -154,11 +154,13 @@ class User extends Authenticatable implements MustVerifyEmail
             if ((int) $whatsappFeature->limit === 0) {
                 return true;
             } else {
-                $whatsappSent = $this->actions()
-                                ->where('excecuted_at', '>=', $this->activated_at)
-                                ->where('action_type_id', ActionTypes::WHATSAPP)
-                                ->count() ?? 0;
-                return max($whatsappFeature->limit - $whatsappSent, 0);
+                // $whatsappSent = $this->actions()
+                //                 ->where('excecuted_at', '>=', $this->activated_at)
+                //                 ->where('action_type_id', ActionTypes::WHATSAPP)
+                //                 ->count() ?? 0;
+                // return max($whatsappFeature->limit - $whatsappSent, 0);
+                $whatsappInstancesCount = $this->whatsappInstances->count();
+                return max($whatsappFeature->limit - $whatsappInstancesCount, 0);
             }
         }
     }

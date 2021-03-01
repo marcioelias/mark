@@ -4,8 +4,8 @@
         <p class="font-medium-5 mb-0"><i class="feather icon-help-circle text-muted cursor-pointer"></i></p>
     </div>
     <div class="card-content">
-        <div class="card-body px-0 pb-0">
-            <div id="goal-overview-chart" class="mt-75"></div>
+        <div class="card-body p-0">
+            <div id="goal-overview-chart" class="my-3"></div>
             <div class="row text-center mx-0">
                 <div class="col-6 border-top border-right d-flex align-items-between flex-column py-1">
                     <p class="mb-50">Novos Leads</p>
@@ -35,12 +35,14 @@
     var $label_color = '#e7eef7';
     var $purple = '#df87f2';
     var $white = '#fff';
+    var $strokeColor = '#ebe9f1';
+    var $textHeadingColor = '#5e5873';
     // Goal Overview  Chart
     // -----------------------------
 
     var goalChartoptions = {
       chart: {
-        height: 250,
+        height: 245,
         type: 'radialBar',
         sparkline: {
             enabled: true,
@@ -56,27 +58,27 @@
       colors: [$success],
       plotOptions: {
           radialBar: {
-              size: 110,
-              startAngle: -150,
-              endAngle: 150,
-              hollow: {
-                  size: '77%',
-              },
-              track: {
-                  background: $strok_color,
-                  strokeWidth: '50%',
-              },
-              dataLabels: {
-                  name: {
-                      show: false
-                  },
-                  value: {
-                      offsetY: 18,
-                      color: $strok_color,
-                      fontSize: '4rem'
-                  }
-              }
-          }
+            offsetY: -10,
+            startAngle: -150,
+            endAngle: 150,
+            hollow: {
+                size: '77%'
+            },
+            track: {
+                background: $strokeColor,
+                strokeWidth: '50%'
+            },
+            dataLabels: {
+                name: {
+                    show: false
+                },
+                value: {
+                    color: $textHeadingColor,
+                    fontSize: '2.86rem',
+                    fontWeight: '600'
+                }
+            }
+        }
       },
       fill: {
           type: 'gradient',
@@ -95,6 +97,11 @@
       stroke: {
         lineCap: 'round'
       },
+      grid: {
+        padding: {
+            bottom: 30
+        }
+      }
 
     }
 

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\TransactionTypes;
 use App\Models\Plan;
+use App\Models\SmsBuy;
 use App\Models\User;
+use App\Models\User\SmsUserTransaction;
 use App\Traits\LayoutConfigTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +19,8 @@ class AdminHomeController extends Controller
     use LayoutConfigTrait;
 
     public $breadcrumbs = [];
+    public $smsBuyed = 0;
+    public $smsSales = 0;
 
     /**
      * Show the application dashboard.
@@ -35,9 +40,14 @@ class AdminHomeController extends Controller
     }
 
     public function getStatistics() {
+        $this->getSmsBuyed();
+        $this->getSmsSales();
         return array_merge(
             ['clientByStatus' => $this->getClientStatistics()],
-            ['monthlyInvoicing' => $this->getMounthlyInvoicing()]
+            ['monthlyInvoicing' => $this->getMounthlyInvoicing()],
+            ['smsAdquiridos' => $this->smsBuyed],
+            ['smsVendidos'=> $this->smsSales],
+            ['smsSaldo' => $this->getSmsBalance()]
         );
     }
 
@@ -77,5 +87,23 @@ class AdminHomeController extends Controller
         }
 
         return response()->json($result);
+    }
+
+    public function getSmsBuyed() {
+        $startDate = Carbon::now()->subMonth();
+        $this->smsBuyed = SmsBuy::where('created_at', '>=', $startDate)->sum('amount');
+    }
+
+    public function getSmsSales() {
+        $startDate = Carbon::now()->subMonth();
+        $this->smsSales = SmsUserTransaction::where('created_at', '>=', $startDate)
+                            ->where('transaction_type_id', TransactionTypes::IN)
+                            ->sum('quantity');
+    }
+
+    public function getSmsBalance() {
+        $buy = SmsBuy::sum('amount');
+        $sale = SmsUserTransaction::where('transaction_type_id', TransactionTypes::IN)->sum('quantity');
+        return $buy - $sale;
     }
 }

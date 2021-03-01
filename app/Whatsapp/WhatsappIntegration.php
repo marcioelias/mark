@@ -37,6 +37,8 @@ class WhatsappIntegration {
     }
 
     public function createInstance() {
+        if (config('app.debug', false)) return;
+        Log::info('ops...');
         try {
             if (DeactivatedWhatsappInstance::count()) {
                 $this->storeInstance($this->recicleInstance(DeactivatedWhatsappInstance::first()));

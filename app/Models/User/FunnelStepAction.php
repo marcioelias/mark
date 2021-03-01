@@ -17,7 +17,7 @@ class FunnelStepAction extends Model implements HasMedia
     ];
 
     protected $casts = [
-        'action_data' => 'array'
+        'action_data' => 'json'
     ];
 
     public function user() {

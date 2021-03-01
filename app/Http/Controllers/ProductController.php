@@ -7,6 +7,7 @@ use App\Models\User\Funnel;
 use App\Models\User\PlataformConfig;
 use App\Models\User\Product;
 use App\Traits\LayoutConfigTrait;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -183,10 +184,10 @@ class ProductController extends Controller
         //unique:table[,column[,ignore value[,ignore column[,where column,where value]...]]]
         $userId = Auth::user()->id;
         $this->validate($request, [
-            'product_name' => "required|unique:products,product_name,$product->id,id,user_id,$userId",
+            'product_name' => "required|unique:products,product_name,$product->id,id,user_id,$userId,deleted_at,NULL",
             'product_price' => 'required|min:0',
             'plataform_config_id' => 'required',
-            'plataform_code' => "required|unique:products,plataform_code,$product->id,id,user_id,$userId,plataform_config_id,$request->plataform_config_id",
+            'plataform_code' => "required|unique:products,plataform_code,$product->id,id,user_id,$userId,plataform_config_id,$request->plataform_config_id,deleted_at,NULL",
             'funnel_id' => 'required'
         ]);
 

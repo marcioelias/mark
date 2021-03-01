@@ -191,6 +191,9 @@ class Integration {
                 ]
             );
         } catch (Exception $e) {
+            if (config('app.debug',false)) {
+                Log::debug($e);
+            }
             Log::emergency($e->getMessage());
             return null;
         }

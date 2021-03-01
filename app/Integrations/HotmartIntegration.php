@@ -31,7 +31,7 @@ class HotmartIntegration extends Integration {
                 break;
 
             case 'canceled':
-                return PostbackEventType::CANCELED;
+                return PostbackEventType::ABANDONED_CART;
                 break;
 
             case 'billet_printed':

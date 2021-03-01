@@ -43,6 +43,11 @@ Route::prefix('admin')->group(function() {
 		Route::resource('sms_buy', 'SmsBuyController')->except(['show', 'edit', 'update']);
 		Route::resource('sms_package', 'SmsPackageController')->except('show');
 		Route::resource('user', 'UserController')->except('show');
+		Route::resource('sms_sale', 'SmsSaleController')->except(['show', 'edit', 'update']);
+
+		/* Route::get('sms/sell', 'SmsSaleController@index')->name('sms_sale.index');
+		Route::post('sms/sell', 'SmsSaleController@store')->name('sms_sale.store'); */
+
 
 		Route::get('profile', 'AdminController@profile')->name('admin.profile');
 		Route::patch('profile/{admin}', 'AdminController@updateProfile')->name('admin.profile.update');

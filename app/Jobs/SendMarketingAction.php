@@ -146,6 +146,7 @@ class SendMarketingAction implements ShouldQueue
 
     private function getVariables() {
         $result['nome_cliente'] = $this->customer->customer_name;
+        $result['primeiro_nome'] = strtok($this->customer->customer_name);
         $result['telefone_cliente'] = $this->customer->customer_phone_number;
         $result['email_cliente'] = $this->customer->customer_email;
         $result['url_boleto'] = '';

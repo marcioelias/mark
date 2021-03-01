@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Constants\SmsTransactionObs;
 use App\Constants\TransactionTypes;
 use App\Events\OnMercadoPagoPaymentReceived;
 use App\Models\SmsPackage;
@@ -60,7 +61,9 @@ class DoOnMercadoPagoPaymentReceived
             SmsUserTransaction::create([
                 'user_id' => $data['user_id'],
                 'quantity' => $smsPackage->sms_amount,
-                'transaction_type_id' => TransactionTypes::IN
+                'transaction_type_id' => TransactionTypes::IN,
+                'sms_package_id' => $smsPackage->id,
+                'obs' => SmsTransactionObs::SMS_OBS_API
             ]);
         } catch (Exception $e) {
             throw $e;

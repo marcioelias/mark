@@ -9,3 +9,4 @@ class LeadStatuses {
     public const REFUNDED           = 'c82f0164-d5cc-4e1c-988a-fe7fd27cde1a';
     public const DISPUTE            = 'aa155ef4-b295-4db5-a1ec-f6398118079e';
 }
+ 

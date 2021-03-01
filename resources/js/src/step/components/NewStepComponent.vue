@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label for="postback_event_type_id">Tipo de Postback</label>
-                    <Select2 v-model="step.postback_event_type_id" name="postback_event_type_id" id="postback_event_type_id" :options="GetPostbackEventTypesForSelect" />
+                    <Select2 v-model="curStep.postback_event_type_id" name="postback_event_type_id" id="postback_event_type_id" :options="GetPostbackEventTypesForSelect" />
                 </div>
             </div>
         </div>
@@ -46,18 +46,20 @@ import ActionButton from '../../actionButton/components/ActionButton'
 import * as componentTypes from '../../action/component-types'
 import { ACTION } from '../../../user/constants'
 
-const iniData = {
+const iniData = () => {
+    return {
         id: null,
         funnel_step_sequence: null,
         postback_event_type_id: null
     }
+} 
 
 const originalSteps = {}
 
 export default {
     data() {
         return {
-            step: { ...iniData },
+            curStep: { ...iniData },
             actionComponentTypes: { ...componentTypes }
         }
     },
@@ -83,7 +85,7 @@ export default {
     },
     methods: {
         ...mapActions('funnel', [
-            'ActionSetShowCrudStep', 'ActionAddNewStep', 'ActionUpdateStep', 'ActionSetCurrentStep', 'ActionSetSteps', 'ActionClearState'
+            'ActionSetShowCrudStep', 'ActionAddNewStep', 'ActionUpdateStep', 'ActionSetCurrentStep', 'ActionSetSteps', 'ActionClearState', 'ActionIsEditingStep'
         ]),
         ...mapActions('step', [
             'ActionSetActionComponent', 'ActionClearState',
@@ -92,15 +94,16 @@ export default {
             if (this.isEditingStep) {
                 this.ActionUpdateStep({
                     index: this.currentStep,
-                    data: { ...this.step, actions: [ ...this.actions ]}
+                    data: { ...this.curStep, actions: [ ...this.actions ]}
                 })
                 .then(() => {
                     if (this.isSalesFunnel) {
                         this.clearForm()
+                        this.ActionIsEditingStep(false)
                     }
                 })
             } else {
-                this.ActionAddNewStep({ ...this.step, actions: [ ...this.actions ]})
+                this.ActionAddNewStep({ ...this.curStep, actions: [ ...this.actions ]})
                     .then(() => this.clearForm())
             }
         },
@@ -117,6 +120,8 @@ export default {
                     if (result.value) {
                         this.ActionSetCurrentStep(0)
                         this.ActionSetShowCrudStep(false)
+                        this.ActionIsEditingStep(false)
+                        this.clearForm()
                     }
                 })
         },
@@ -144,10 +149,10 @@ export default {
     },
     mounted() {
         if (this.isEditingStep) {
-            Object.assign(this.step, { ...this.$store.state.step })
+            Object.assign(this.curStep, { ...this.$store.state.step })
             Object.assign(originalSteps, this.steps)
             this.doOnAddActionClick(this.initialAction)
-        }
+        } 
     }
 }
 </script>

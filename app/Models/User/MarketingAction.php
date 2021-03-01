@@ -8,12 +8,13 @@ use App\Models\User;
 use App\Traits\MultiTenantable;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class MarketingAction extends Model implements HasMedia
 {
-    use MultiTenantable, InteractsWithMedia;
+    use MultiTenantable, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -28,6 +29,8 @@ class MarketingAction extends Model implements HasMedia
     protected $casts = [
         'action_message' => 'array'
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function user() {
         return $this->belongsTo(User::class);

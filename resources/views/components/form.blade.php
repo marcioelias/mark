@@ -75,17 +75,36 @@
                 }
             })
         } catch (err) {
-            Swal.fire({
-                title: 'Oops...',
-                text: 'Algo deu errado!',
-                icon: 'error'
-            }).then(function() {
-                const errors = err.responseJSON.errors
-                $.each(errors, function(k, v) {
-                    $('#'+k).addClass('is-invalid')
-                    $('#error-'+k).html(v)
+            console.log(err)
+            switch(err.status) {
+                case 402: 
+                    Swal.fire({
+                        title: 'Oops...',
+                        text: err.responseJSON.message,
+                        icon: 'error'
+                    }).then(function() {
+                        const errors = err.responseJSON.errors
+                        $.each(errors, function(k, v) {
+                            $('#'+k).addClass('is-invalid')
+                            $('#error-'+k).html(v)
+                        })
+                    })
+                    break;
+                default: 
+                Swal.fire({
+                    title: 'Oops...',
+                    text: 'Algo deu errado!',
+                    icon: 'error'
+                }).then(function() {
+                    const errors = err.responseJSON.errors
+                    $.each(errors, function(k, v) {
+                        $('#'+k).addClass('is-invalid')
+                        $('#error-'+k).html(v)
+                    })
                 })
-            })
+                break;
+            }
+            
         }
     })
 @endpush

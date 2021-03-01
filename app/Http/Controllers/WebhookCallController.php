@@ -61,7 +61,7 @@ class WebhookCallController extends Controller
 
             default:
                 event(new OnLeadUpdated($postback));
-                break;
+                break; 
         }
     }
 

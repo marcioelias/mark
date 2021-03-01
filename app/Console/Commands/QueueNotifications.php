@@ -6,6 +6,7 @@ use App\Constants\ActionTypes;
 use App\Constants\MarketingActionStatuses;
 use App\Constants\TransactionTypes;
 use App\Constants\FeatureTypes;
+use App\Constants\SmsTransactionObs;
 use App\Events\NewRunnableAction;
 use App\Jobs\SendMarketingAction;
 use App\Models\User;
@@ -72,7 +73,8 @@ class QueueNotifications extends Command
                         SmsUserTransaction::create([
                             'user_id' => $schedule->user_id,
                             'quantity' => 1,
-                            'transaction_type_id' => TransactionTypes::OUT
+                            'transaction_type_id' => TransactionTypes::OUT,
+                            'obs' => SmsTransactionObs::SMS_OBS_SENT
                         ]);
                     }
 

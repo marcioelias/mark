@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ActionTypes;
+use App\Constants\SmsTransactionObs;
 use App\Constants\TransactionTypes;
 use App\Contracts\Postback;
 use App\Mail\NewUserCreated;
@@ -105,7 +106,8 @@ class WebhookMonetizzeController extends Controller implements Postback
         SmsUserTransaction::create([
             'user_id' => $user->id,
             'quantity' => $plan->features->where('action_type_id', ActionTypes::SMS)->first()->pivot->limit,
-            'transaction_type_id' => TransactionTypes::IN
+            'transaction_type_id' => TransactionTypes::IN,
+            'obs' => SmsTransactionObs::SMS_OBS_PLAN
         ]);
     }
 }

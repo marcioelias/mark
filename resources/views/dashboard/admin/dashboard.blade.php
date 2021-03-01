@@ -31,7 +31,7 @@
                                         <i class="feather icon-users text-primary font-medium-5"></i>
                                     </div>
                                 </div>
-                                <h2 class="text-bold-700 mt-1">{{ $stats['clientByStatus']['1']['total'] }}</h2>
+                                <h2 class="text-bold-700 mt-1">{{ $stats['clientByStatus']['1']['total'] ?? 0 }}</h2>
                                 <p class="mb-0">Clientes Ativos</p>
                             </div>
                         </div>
@@ -83,15 +83,15 @@
                                     <div class="chart-info d-flex justify-content-between">
                                         <div class="text-center mt-1">
                                             <p class="mb-50">Adquiridos</p>
-                                            <span class="font-large-1">100.000</span>
+                                            <span class="font-large-1">{{ $stats['smsAdquiridos'] }}</span>
                                         </div>
                                         <div class="text-center mt-1">
                                             <p class="mb-50">Vendidos</p>
-                                            <span class="font-large-1">45.000</span>
+                                            <span class="font-large-1">{{ $stats['smsVendidos'] }}</span>
                                         </div>
                                         <div class="text-center mt-1">
                                             <p class="mb-50">Disponíveis</p>
-                                            <span class="font-large-1">55.000</span>
+                                            <span class="font-large-1">{{ $stats['smsSaldo'] }}</span>
                                         </div>
                                     </div>
                                 </div>
