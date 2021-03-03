@@ -26,7 +26,7 @@ class FunnelStepActionController extends Controller
 
     private function getVariables(Lead $lead) {
         $result['nome_cliente'] = $lead->customer->customer_name;
-        $result['primeiro_nome'] = strtok($lead->customer->customer_name);
+        $result['primeiro_nome'] = strtok($lead->customer->customer_name, ' ');
         $result['telefone_cliente'] = $lead->customer->customer_phone_number;
         $result['email_cliente'] = $lead->customer->customer_email;
         $result['url_boleto'] = $lead->billet_url;
