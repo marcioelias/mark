@@ -40,7 +40,7 @@ class MercadoPago {
         $preference->back_urls = $this->getBackUrls();
         $preference->payer = $this->getPayer();
         $preference->external_reference = json_encode(['product_id' => $item->id, 'user_id' => Auth::user()->id]);
-        $preference->notification_url = 'https://c6e6ce6f737b.ngrok.io/webhook/system/mercadopago';
+        $preference->notification_url = config('app.url').'/webhook/system/mercadopago';
         $preference->save();
         return $preference;
     }

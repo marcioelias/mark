@@ -6,6 +6,9 @@
 <div class="card pb-0">
     <div class="card-body">
         <div class="row">
+            @if (count($packages) < 1)
+                <h3>Nenhum pacote disponível para compra!</h3>
+            @endif
             @foreach ($packages as $package)
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card text-white bg-gradient-primary text-center mb-0">
