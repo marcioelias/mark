@@ -158,7 +158,7 @@ class SendNotifications implements ShouldQueue
         return $result;
     }
 
-    private function replaceVariables(string $message) {
+    public function replaceVariables(string $message) {
         $regex = '~\{([\s\w]*)\}~';
         $variables = $this->getVariables();
         return preg_replace_callback($regex, function($match) use ($variables) {

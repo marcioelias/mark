@@ -206,7 +206,6 @@ class WhatsappIntegration {
             ]);
 
             Log::info('Reciclando instância de Whatsapp ID: '.$deactivatedWhatsappInstance->subdomain);
-            Log::debug($response->body());
 
             if ($response->successful()) {
                 $this->whatsappInstance->port = $deactivatedWhatsappInstance->port;

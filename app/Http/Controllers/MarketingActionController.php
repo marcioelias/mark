@@ -127,7 +127,6 @@ class MarketingActionController extends Controller
         DB::beginTransaction();
         try {
             $startTime = explode(':', $request->start_time);
-            Log::debug($request->all());
             $startAt = Carbon::parse($request->start_date)->setTime($startTime[0], $startTime[1])->toDateTimeString();
 
             $images = Arr::get($request->message, 'options.images');

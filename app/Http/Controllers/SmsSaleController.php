@@ -77,8 +77,6 @@ class SmsSaleController extends Controller
                                 ->orderBy($this->orderField, $this->orderType)
                                 ->paginate($this->paginate);
         }
-
-        Log::debug($smsSales);
         return $this->getIndex('sms_sale.index')
                     ->withSmsSales($smsSales);
     }
