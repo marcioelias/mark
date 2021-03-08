@@ -35,6 +35,7 @@ class MercadoPago {
     }
 
     public function getPreferenceItem(Item $item) {
+        Log::debug($item);
         $preference = new Preference();
         $preference->items = array($item);
         $preference->back_urls = $this->getBackUrls();
