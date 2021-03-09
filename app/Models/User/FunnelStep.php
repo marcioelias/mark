@@ -37,4 +37,8 @@ class FunnelStep extends Model
     public function firstAction() {
         $this->actions()->orderBy('action_sequence', 'asc')->first();
     }
+
+    public function leads() {
+        return $this->belongsToMany(Lead::class, 'funnel_step_leads');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ScheduleStatus;
 use App\Models\User\Funnel;
 use App\Models\User\FunnelStep;
 use App\Models\User\FunnelStepAction;
@@ -320,7 +321,7 @@ class FunnelController extends Controller
                 foreach ($request->steps as $step) {
                     $newStep = FunnelStep::updateOrCreate(
                         [
-                            'id' => $step['id']
+                            'id' => $step['id'] ?? null
                         ],
                         [
                             'funnel_id' => $funnel->id,
@@ -359,6 +360,27 @@ class FunnelController extends Controller
                                 $newStepAction->action_data = $jsonData;
 
                                 $newStepAction->save();
+
+                                $schedules = $newStepAction->schedule->where('shedule_status_id', ScheduleStatus::PENDING);
+
+                                foreach ($schedules as $schedule) {
+                                    try {
+                                        $funnelStepLead = FunnelStepLead::where('lead_id', $schedule->lead_id)
+                                                                        ->where('funnel_step_id', $schedule->funnel_step_id)
+                                                                        ->first();
+
+                                        if ($funnelStepLead) {
+                                            $schedule->start_at = Carbon::parse($funnelStepLead->created_at)->startOfDay()
+                                                                                                            ->addDays($newStepAction->action_data['options']['days_after'] ?? 0);
+                                            $schedule->start_period = Carbon::parse($newStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
+                                            $schedule->end_period = Carbon::parse($newStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
+                                            $schedule->delay_before_start = $newStepAction->action_data['options']['delay_minutes'] ?? 0;
+                                            $schedule->save();
+                                        }
+                                    } catch (Exception $e) {
+                                        Log::alert('Schedule: '.$schedule->id.' => '.$e->getMessage());
+                                    }
+                                }
                             } else {
                                 $newStepAction = FunnelStepAction::updateOrCreate(
                                     ['id' => $action['id']],
@@ -373,18 +395,22 @@ class FunnelController extends Controller
                                     ]
                                 );
 
-                                foreach ($newStepAction->schedule as $schedule) {
+                                $schedules = $newStepAction->schedule->where('shedule_status_id', ScheduleStatus::PENDING);
+
+                                foreach ($schedules as $schedule) {
                                     try {
                                         $funnelStepLead = FunnelStepLead::where('lead_id', $schedule->lead_id)
                                                                         ->where('funnel_step_id', $schedule->funnel_step_id)
-                                                                        ->firstOrFail();
+                                                                        ->first();
 
-                                        $schedule->start_at = Carbon::parse($funnelStepLead->created_at)->startOfDay()
-                                                                                                        ->addDays($newStepAction->action_data['options']['days_after'] ?? 0);
-                                        $schedule->start_period = Carbon::parse($newStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
-                                        $schedule->end_period = Carbon::parse($newStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
-                                        $schedule->delay_before_start = $newStepAction->action_data['options']['delay_minutes'] ?? 0;
-                                        $schedule->save();
+                                        if ($funnelStepLead) {
+                                            $schedule->start_at = Carbon::parse($funnelStepLead->created_at)->startOfDay()
+                                                                                                            ->addDays($newStepAction->action_data['options']['days_after'] ?? 0);
+                                            $schedule->start_period = Carbon::parse($newStepAction->action_data['options']['start_time'] ?? '00:00')->toTimeString();
+                                            $schedule->end_period = Carbon::parse($newStepAction->action_data['options']['end_time'] ?? '23:59')->toTimeString();
+                                            $schedule->delay_before_start = $newStepAction->action_data['options']['delay_minutes'] ?? 0;
+                                            $schedule->save();
+                                        }
                                     } catch (Exception $e) {
                                         Log::alert('Schedule: '.$schedule->id.' => '.$e->getMessage());
                                     }
