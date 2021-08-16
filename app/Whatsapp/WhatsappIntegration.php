@@ -37,8 +37,6 @@ class WhatsappIntegration {
     }
 
     public function createInstance() {
-        if (config('app.debug', false)) return;
-        Log::info('ops...');
         try {
             if (DeactivatedWhatsappInstance::count()) {
                 $this->storeInstance($this->recicleInstance(DeactivatedWhatsappInstance::first()));
@@ -52,10 +50,12 @@ class WhatsappIntegration {
 
     private function getNewInstance() {
         try {
-            $response = Http::timeout(30)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, [
+            $data = [
                 'porta' => $this->whatsappInstance->port,
                 'cliente' => $this->whatsappInstance->id
-            ]);
+            ];
+
+            $response = Http::timeout(30)->post($this->apiUrl.WhatsappEndpoints::NEW_INSTANCE, $data);            
 
             if ($response->successful()) {
                 return $response;
